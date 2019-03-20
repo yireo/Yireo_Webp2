@@ -20,3 +20,7 @@ Check whether the module is succesfully installed in **Admin > Stores > Configur
 
 Done.
 
+### Todo
+- Try to replace images within the product gallery (Fotorama)
+
+
