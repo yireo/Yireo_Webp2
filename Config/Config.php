@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\WebP2\Config;
+namespace Yireo\Webp2\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Class Config
  *
- * @package Yireo\WebP2\Config
+ * @package Yireo\Webp2\Config
  */
 class Config
 {

@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\WebP2\Image;
+namespace Yireo\Webp2\Image;
 
 use Exception;
 use WebPConvert\WebPConvert;
-use Yireo\WebP2\Config\Config;
-use Yireo\WebP2\Resolver\UrlToPathResolver;
+use Yireo\Webp2\Config\Config;
+use Yireo\Webp2\Resolver\UrlToPathResolver;
 
 /**
  * Class Convertor
  *
- * @package Yireo\WebP2\Image
+ * @package Yireo\Webp2\Image
  */
 class Convertor
 {

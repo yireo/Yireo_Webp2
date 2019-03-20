@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\WebP2\Plugin;
+namespace Yireo\Webp2\Plugin;
 
 use Magento\Framework\View\LayoutInterface;
 use Psr\Log\LoggerInterface;
-use Yireo\WebP2\Block\Picture;
-use Yireo\WebP2\Image\Convertor;
-use Yireo\WebP2\Image\File;
+use Yireo\Webp2\Block\Picture;
+use Yireo\Webp2\Image\Convertor;
+use Yireo\Webp2\Image\File;
 
 /**
  * Class ReplaceTags
  *
- * @package Yireo\WebP2\Plugin
+ * @package Yireo\Webp2\Plugin
  */
 class ReplaceTags
 {

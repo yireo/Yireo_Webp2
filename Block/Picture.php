@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\WebP2\Block;
+namespace Yireo\Webp2\Block;
 
 use Magento\Framework\View\Element\Template;
 
 /**
  * Class Picture
  *
- * @package Yireo\WebP2\Block
+ * @package Yireo\Webp2\Block
  */
 class Picture extends Template
 {

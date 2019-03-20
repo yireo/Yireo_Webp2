@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\WebP2\Image;
+namespace Yireo\Webp2\Image;
 
 use Exception;
 use Magento\Framework\Filesystem\DirectoryList;
@@ -9,7 +9,7 @@ use Magento\Framework\Filesystem\DirectoryList;
 /**
  * Class File
  *
- * @package Yireo\WebP2\Image
+ * @package Yireo\Webp2\Image
  */
 class File
 {

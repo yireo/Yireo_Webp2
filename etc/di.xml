@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Framework\View\LayoutInterface">
-        <plugin name="yireo_webp2_replace_tags" type="Yireo\WebP2\Plugin\ReplaceTags"/>
+        <plugin name="yireo_webp2_replace_tags" type="Yireo\Webp2\Plugin\ReplaceTags"/>
     </type>
 </config>
