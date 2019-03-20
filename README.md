@@ -9,7 +9,7 @@ Use composer to install this extension. First make sure that Magento is installe
 
 Next, install our module using the following command:
 
-    composer require --dev yireo/magento2-webp2
+    composer require yireo/magento2-webp2
 
 Next, install the new module into Magento itself:
 
