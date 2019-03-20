@@ -4,6 +4,7 @@
         <sequence>
             <module name="Magento_Catalog" />
             <module name="Magento_Store" />
+            <module name="Magento_Theme" />
         </sequence>
     </module>
 </config>

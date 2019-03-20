@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace Yireo\WebP2\Image;
 
+use Exception;
 use WebPConvert\WebPConvert;
 use Yireo\WebP2\Config\Config;
+use Yireo\WebP2\Resolver\UrlToPathResolver;
 
 /**
  * Class Convertor
@@ -19,25 +21,46 @@ class Convertor
     private $config;
 
     /**
+     * @var File
+     */
+    private $file;
+
+    /**
      * Convertor constructor.
      *
      * @param Config $config
+     * @param File $file
      */
     public function __construct(
-        Config $config
+        Config $config,
+        File $file
     ) {
         $this->config = $config;
+        $this->file = $file;
     }
 
     /**
-     * @param string $sourceImageFilename
-     * @param string $destinationImageFilename
+     * @param string $sourceImageUrl
+     * @param string $destinationImageUrl
      *
      * @return bool
      */
-    public function convert(string $sourceImageFilename, string $destinationImageFilename): bool
+    public function convert(string $sourceImageUrl, string $destinationImageUrl): bool
     {
+        $sourceImageFilename = $this->getPathFromUrl($sourceImageUrl);
+        $destinationImageFilename = $this->getPathFromUrl($destinationImageUrl);
+
         return WebPConvert::convert($sourceImageFilename, $destinationImageFilename, $this->getOptions());
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return string
+     */
+    private function getPathFromUrl(string $url): string
+    {
+        return $this->file->resolve($url);
     }
 
     /**

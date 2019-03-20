@@ -1,0 +1,11 @@
+<?php
+/** @var $block \Yireo\WebP2\Block\Picture */
+?>
+<!--
+<?= $block->getOriginalTag() ?>
+-->
+<picture>
+    <source srcset="<?= $block->getWebpImage() ?>" type="image/webp">
+    <source srcset="<?= $block->getOriginalImage() ?>" type="<?= $block->getOriginalImageType() ?>">
+    <img src="<?= $block->getOriginalImage() ?>" alt="<?= $block->getAltText() ?>">
+</picture>
