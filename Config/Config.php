@@ -44,4 +44,12 @@ class Config
     {
         return ['cwebp', 'gd', 'imagick', 'wpc', 'ewww'];
     }
+
+    /**
+     * @return bool
+     */
+    public function isDebugging(): bool
+    {
+        return true;
+    }
 }

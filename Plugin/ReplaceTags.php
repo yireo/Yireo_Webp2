@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace Yireo\Webp2\Plugin;
 
 use Magento\Framework\View\LayoutInterface;
-use Psr\Log\LoggerInterface;
 use Yireo\Webp2\Block\Picture;
 use Yireo\Webp2\Image\Convertor;
 use Yireo\Webp2\Image\File;
+use Yireo\Webp2\Logger\Debugger;
 
 /**
  * Class ReplaceTags
@@ -20,30 +20,32 @@ class ReplaceTags
      * @var Convertor
      */
     private $convertor;
+
     /**
      * @var File
      */
     private $file;
+
     /**
-     * @var LoggerInterface
+     * @var Debugger
      */
-    private $logger;
+    private $debugger;
 
     /**
      * ReplaceTags constructor.
      *
      * @param Convertor $convertor
      * @param File $file
-     * @param LoggerInterface $logger
+     * @param Debugger $debugger
      */
     public function __construct(
         Convertor $convertor,
         File $file,
-        LoggerInterface $logger
+        Debugger $debugger
     ) {
         $this->convertor = $convertor;
         $this->file = $file;
-        $this->logger = $logger;
+        $this->debugger = $debugger;
     }
 
     /**
@@ -68,7 +70,7 @@ class ReplaceTags
             try {
                 $this->convertor->convert($imageUrl, $webpUrl);
             } catch (\Exception $e) {
-                $this->logger->debug($e->getMessage());
+                $this->debugger->debug($e->getMessage(), [$imageUrl, $webpUrl]);
                 continue;
             }
 
