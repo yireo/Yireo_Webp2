@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Yireo\Webp2\Browser;
 
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\HTTP\Header;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 
@@ -22,19 +23,26 @@ class BrowserSupport
      * @var CookieManagerInterface
      */
     private $cookieManager;
+    /**
+     * @var RequestInterface
+     */
+    private $request;
 
     /**
      * BrowserSupport constructor.
      *
      * @param Header $headerService
      * @param CookieManagerInterface $cookieManager
+     * @param RequestInterface $request
      */
     public function __construct(
         Header $headerService,
-        CookieManagerInterface $cookieManager
+        CookieManagerInterface $cookieManager,
+        RequestInterface $request
     ) {
         $this->headerService = $headerService;
         $this->cookieManager = $cookieManager;
+        $this->request = $request;
     }
 
     /**
@@ -42,6 +50,10 @@ class BrowserSupport
      */
     public function hasWebpSupport(): bool
     {
+        if (strstr('image/webp', $this->request->getHeader('ACCEPT'))) {
+            return true;
+        }
+
         if ($this->isChromeBrowser()) {
             return true;
         }
