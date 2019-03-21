@@ -6,6 +6,7 @@ namespace Yireo\Webp2\Plugin;
 use Magento\Catalog\Block\Product\View\Gallery;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\DataObject;
+use Yireo\Webp2\Browser\BrowserSupport;
 use Yireo\Webp2\Image\Convertor;
 use Yireo\Webp2\Image\File;
 use Yireo\Webp2\Logger\Debugger;
@@ -31,6 +32,10 @@ class ReplaceGalleryImages
      * @var Debugger
      */
     private $debugger;
+    /**
+     * @var BrowserSupport
+     */
+    private $browserSupport;
 
     /**
      * ReplaceGalleryImages constructor.
@@ -38,15 +43,18 @@ class ReplaceGalleryImages
      * @param Convertor $convertor
      * @param File $file
      * @param Debugger $debugger
+     * @param BrowserSupport $browserSupport
      */
     public function __construct(
         Convertor $convertor,
         File $file,
-        Debugger $debugger
+        Debugger $debugger,
+        BrowserSupport $browserSupport
     ) {
         $this->convertor = $convertor;
         $this->file = $file;
         $this->debugger = $debugger;
+        $this->browserSupport = $browserSupport;
     }
 
     /**
@@ -57,6 +65,10 @@ class ReplaceGalleryImages
      */
     public function afterGetGalleryImages(Gallery $gallery, $images): array
     {
+        if ($this->browserSupport->hasWebpSupport() === false) {
+            return $images;
+        }
+
         $newImages = [];
 
         foreach ($images as $image) {
@@ -88,7 +100,7 @@ class ReplaceGalleryImages
             $image->setData($imageType, $webpUrl);
         }
 
-        $this->debugger->debug('Image',$image->getData());
+        $this->debugger->debug('Image', $image->getData());
         return $image;
     }
 }
