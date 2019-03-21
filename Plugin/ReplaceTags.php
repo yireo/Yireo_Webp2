@@ -68,9 +68,13 @@ class ReplaceTags
             $altText = $this->getAltText($htmlTag);
 
             try {
-                $this->convertor->convert($imageUrl, $webpUrl);
+                $result = $this->convertor->convert($imageUrl, $webpUrl);
             } catch (\Exception $e) {
                 $this->debugger->debug($e->getMessage(), [$imageUrl, $webpUrl]);
+                continue;
+            }
+
+            if (!$result) {
                 continue;
             }
 

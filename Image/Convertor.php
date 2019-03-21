@@ -6,7 +6,6 @@ namespace Yireo\Webp2\Image;
 use Exception;
 use WebPConvert\WebPConvert;
 use Yireo\Webp2\Config\Config;
-use Yireo\Webp2\Resolver\UrlToPathResolver;
 
 /**
  * Class Convertor
@@ -44,11 +43,16 @@ class Convertor
      * @param string $destinationImageUrl
      *
      * @return bool
+     * @throws Exception
      */
     public function convert(string $sourceImageUrl, string $destinationImageUrl): bool
     {
         $sourceImageFilename = $this->getPathFromUrl($sourceImageUrl);
         $destinationImageFilename = $this->getPathFromUrl($destinationImageUrl);
+
+        if(!$this->file->isNewerThan($sourceImageFilename, $destinationImageFilename)) {
+            return false;
+        }
 
         return WebPConvert::convert($sourceImageFilename, $destinationImageFilename, $this->getOptions());
     }
@@ -57,6 +61,7 @@ class Convertor
      * @param string $url
      *
      * @return string
+     * @throws Exception
      */
     private function getPathFromUrl(string $url): string
     {

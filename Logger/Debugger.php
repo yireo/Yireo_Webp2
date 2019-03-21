@@ -42,17 +42,17 @@ class Debugger
      *
      * @return bool
      */
-    public function debug(string $msg, array $data = []): bool
+    public function debug(string $msg, $data = null): bool
     {
         if ($this->config->isDebugging() === false) {
             return false;
         }
 
-        if (empty($data)) {
+        if (!empty($data)) {
             $msg .= ': '.var_export($data, true);
         }
 
-        $this->logger->debug($msg);
+        $this->logger->notice($msg);
         return true;
     }
 }
