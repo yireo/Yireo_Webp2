@@ -4,10 +4,11 @@ declare(strict_types=1);
 namespace Yireo\Webp2\Plugin;
 
 use Magento\Framework\View\LayoutInterface;
-use Psr\Log\LoggerInterface;
 use Yireo\Webp2\Block\Picture;
+use Yireo\Webp2\Config\Config;
 use Yireo\Webp2\Image\Convertor;
 use Yireo\Webp2\Image\File;
+use Yireo\Webp2\Logger\Debugger;
 
 /**
  * Class ReplaceTags
@@ -20,30 +21,39 @@ class ReplaceTags
      * @var Convertor
      */
     private $convertor;
+
     /**
      * @var File
      */
     private $file;
+
     /**
-     * @var LoggerInterface
+     * @var Debugger
      */
-    private $logger;
+    private $debugger;
+    /**
+     * @var Config
+     */
+    private $config;
 
     /**
      * ReplaceTags constructor.
      *
      * @param Convertor $convertor
      * @param File $file
-     * @param LoggerInterface $logger
+     * @param Debugger $debugger
+     * @param Config $config
      */
     public function __construct(
         Convertor $convertor,
         File $file,
-        LoggerInterface $logger
+        Debugger $debugger,
+        Config $config
     ) {
         $this->convertor = $convertor;
         $this->file = $file;
-        $this->logger = $logger;
+        $this->debugger = $debugger;
+        $this->config = $config;
     }
 
     /**
@@ -54,6 +64,10 @@ class ReplaceTags
      */
     public function afterGetOutput(LayoutInterface $layout, string $output): string
     {
+        if ($this->config->enabled() === false) {
+            return $output;
+        }
+
         if (preg_match_all('/<([^<]+)\ src=\"([^\"]+)\.(png|jpg|jpeg)([^>]+)>/i', $output, $matches) === false) {
             return $output;
         }
@@ -66,9 +80,13 @@ class ReplaceTags
             $altText = $this->getAltText($htmlTag);
 
             try {
-                $this->convertor->convert($imageUrl, $webpUrl);
+                $result = $this->convertor->convert($imageUrl, $webpUrl);
             } catch (\Exception $e) {
-                $this->logger->debug($e->getMessage());
+                $this->debugger->debug($e->getMessage(), [$imageUrl, $webpUrl]);
+                continue;
+            }
+
+            if (!$result) {
                 continue;
             }
 

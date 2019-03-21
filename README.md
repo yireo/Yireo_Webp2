@@ -16,11 +16,6 @@ Next, install the new module into Magento itself:
     ./bin/magento module:enable Yireo_WebP2
     ./bin/magento setup:upgrade
 
-Check whether the module is succesfully installed in **Admin > Stores > Configuration > Advanced > Advanced**.
+Enable the module by toggling the setting in **Stores > Configuration > Advanced > System > Yireo WebP > Enabled**.
 
 Done.
-
-### Todo
-- Try to replace images within the product gallery (Fotorama)
-
-

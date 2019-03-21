@@ -29,6 +29,14 @@ class Config
     }
 
     /**
+     * @return bool
+     */
+    public function enabled(): bool
+    {
+        return (bool)$this->scopeConfig->getValue('system/yireo_webp/enabled');
+    }
+
+    /**
      * @return int
      */
     public function getQualityLevel(): int
@@ -43,5 +51,13 @@ class Config
     public function getConvertors(): array
     {
         return ['cwebp', 'gd', 'imagick', 'wpc', 'ewww'];
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDebugging(): bool
+    {
+        return (bool)$this->scopeConfig->getValue('system/yireo_webp/debug');
     }
 }
