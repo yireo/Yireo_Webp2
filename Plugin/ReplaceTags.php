@@ -5,6 +5,7 @@ namespace Yireo\Webp2\Plugin;
 
 use Magento\Framework\View\LayoutInterface;
 use Yireo\Webp2\Block\Picture;
+use Yireo\Webp2\Config\Config;
 use Yireo\Webp2\Image\Convertor;
 use Yireo\Webp2\Image\File;
 use Yireo\Webp2\Logger\Debugger;
@@ -30,6 +31,10 @@ class ReplaceTags
      * @var Debugger
      */
     private $debugger;
+    /**
+     * @var Config
+     */
+    private $config;
 
     /**
      * ReplaceTags constructor.
@@ -37,15 +42,18 @@ class ReplaceTags
      * @param Convertor $convertor
      * @param File $file
      * @param Debugger $debugger
+     * @param Config $config
      */
     public function __construct(
         Convertor $convertor,
         File $file,
-        Debugger $debugger
+        Debugger $debugger,
+        Config $config
     ) {
         $this->convertor = $convertor;
         $this->file = $file;
         $this->debugger = $debugger;
+        $this->config = $config;
     }
 
     /**
@@ -56,6 +64,10 @@ class ReplaceTags
      */
     public function afterGetOutput(LayoutInterface $layout, string $output): string
     {
+        if ($this->config->enabled() === false) {
+            return $output;
+        }
+
         if (preg_match_all('/<([^<]+)\ src=\"([^\"]+)\.(png|jpg|jpeg)([^>]+)>/i', $output, $matches) === false) {
             return $output;
         }
