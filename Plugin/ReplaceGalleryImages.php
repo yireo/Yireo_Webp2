@@ -71,7 +71,7 @@ class ReplaceGalleryImages
      *
      * @return array
      */
-    public function afterGetGalleryImages(Gallery $gallery, $images): array
+    public function afterGetGalleryImages(Gallery $gallery, $images)
     {
         if ($this->config->enabled() === false) {
             return $images;
