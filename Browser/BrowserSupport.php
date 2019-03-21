@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Yireo\Webp2\Browser;
 
 use Magento\Framework\HTTP\Header;
+use Magento\Framework\Stdlib\CookieManagerInterface;
 
 /**
  * Class BrowserSupport
@@ -18,14 +19,22 @@ class BrowserSupport
     private $headerService;
 
     /**
+     * @var CookieManagerInterface
+     */
+    private $cookieManager;
+
+    /**
      * BrowserSupport constructor.
      *
      * @param Header $headerService
+     * @param CookieManagerInterface $cookieManager
      */
     public function __construct(
-        Header $headerService
+        Header $headerService,
+        CookieManagerInterface $cookieManager
     ) {
         $this->headerService = $headerService;
+        $this->cookieManager = $cookieManager;
     }
 
     /**
@@ -37,7 +46,12 @@ class BrowserSupport
             return true;
         }
 
-        return true;
+
+        if ((int)$this->cookieManager->getCookie('webp') === 1) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
