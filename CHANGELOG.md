@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix for Fotorama gallery
 - Check via timestamps for new and modified files
 - Check for browser support via cookie and Chrome-check
+- Inspect ACCEPT header for image/webp support
+- Implement detect.js script to detect WebP support and set a cookie
 
 ## [0.0.2] - 2019-03-20
 - Temporary release for CI purpose

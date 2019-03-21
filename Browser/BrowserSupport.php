@@ -6,13 +6,14 @@ namespace Yireo\Webp2\Browser;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\HTTP\Header;
 use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
  * Class BrowserSupport
  *
  * @package Yireo\Webp2\Browser
  */
-class BrowserSupport
+class BrowserSupport implements ArgumentInterface
 {
     /**
      * @var Header
@@ -23,6 +24,7 @@ class BrowserSupport
      * @var CookieManagerInterface
      */
     private $cookieManager;
+
     /**
      * @var RequestInterface
      */
@@ -50,7 +52,7 @@ class BrowserSupport
      */
     public function hasWebpSupport(): bool
     {
-        if (strstr('image/webp', $this->request->getHeader('ACCEPT'))) {
+        if ($this->acceptsWebpHeader()) {
             return true;
         }
 
@@ -59,7 +61,7 @@ class BrowserSupport
         }
 
 
-        if ((int)$this->cookieManager->getCookie('webp') === 1) {
+        if ($this->hasCookie()) {
             return true;
         }
 
@@ -69,7 +71,19 @@ class BrowserSupport
     /**
      * @return bool
      */
-    protected function isChromeBrowser(): bool
+    public function acceptsWebpHeader(): bool
+    {
+        if (strstr('image/webp', $this->request->getHeader('ACCEPT'))) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isChromeBrowser(): bool
     {
         $userAgent = $this->headerService->getHttpUserAgent();
 
@@ -78,6 +92,18 @@ class BrowserSupport
             if ($match[1] > 9) {
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasCookie(): bool
+    {
+        if ((int)$this->cookieManager->getCookie('webp') === 1) {
+            return true;
         }
 
         return false;
