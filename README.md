@@ -19,3 +19,6 @@ Next, install the new module into Magento itself:
 Enable the module by toggling the setting in **Stores > Configuration > Advanced > System > Yireo WebP > Enabled**.
 
 Done.
+
+### Todo
+- Check if compatible with FPC
