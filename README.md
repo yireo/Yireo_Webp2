@@ -6,9 +6,11 @@ This module adds WebP support to Magento 2. Currently, it ships with the followi
 - For the default Magento 2 product gallery (Fotorama), the WebP images are replaced. Please note that this is NOT compatible with the Full Page Cache!
 
 ### System requirements
-Make sure your PHP environment supports WebP: This means that the function `imagewebp` should exist in PHP. We hope to add more checks for this in the extension itself soon. For now, just open up a PHP `phpinfo()` page and check for WebP support.
+Make sure your PHP environment supports WebP: This means that the function `imagewebp` should exist in PHP. We hope to add more checks for this in the extension itself soon. For now, just open up a PHP `phpinfo()` page and check for WebP support. Please note that installing `libwebp` on your system is not the same as having PHP support WebP. Check the `phpinfo()` file and add new PHP modules to PHP if needed. If in doubt, simple create a PHP script `test.php` and a line `<?php echo (int)function_exists('imagewebp');` to it: A `1` indicates that the function is available, a `0` indicates that it is not.
 
 An alternative is that the `cwebp` binary from the WebP project is uploaded to your server and placed in a generic folder like `/usr/local/bin`.
+
+We recommend you to work on making all options work, not just one.
 
 Please note that both tasks should be simple for developers and system administrator, but might be magical for non-technical people. If this extension is not working out of the box for you, most likely a technical person needs to take a look at your hosting environment.
 
@@ -28,9 +30,20 @@ Enable the module by toggling the setting in **Stores > Configuration > Advanced
 
 Done.
 
+### Requesting support
+Feel free to open an **Issue** here on GitHub. However, do make sure to be thorough and mention the following:
+- Your browser;
+- Your Magento version;
+- Your PHP version including an indication of it supporting WebP;
+- The location of the `cwebp` binary on your system;
+- Preferably an URL to a live demo;
+- An indication on which Magento caches are enabled or disabled;
+
 ### FAQ
 #### How do I know WebP is used?
 Make sure to test things with the obvious caches disabled (Full Page Cache, Block HTML Cache). Once this extension is working, catalog images (like on a category page) should be replaced with: Their `<img>` tag should be replaced with a `<picture>` tag that lists both the old image and the new WebP image. If the conversion from the old image to WebP goes well.
+
+You can expect the HTML to be changed, so inspecting the HTML source gives a good impression. You can also use the Error Console to inspect network traffic: If some `webp` images are flying be in a default Magento environment, this usually proofs that the extension is working to some extent.
 
 #### After installation, I'm still seeing only PNG and JPEG images
 This could mean that the conversion failed. New WebP images are stored in the same path as the original path (somewhere in `pub/`) which means that all folders need to be writable by the webserver. Specifically, if your deployment is based on artifacts, this could be an issue.
