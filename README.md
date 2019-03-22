@@ -1,7 +1,9 @@
 # Magento 2 module for WebP
 This module adds WebP support to Magento 2. Currently, it ships with the following features:
 
+- Browser-support for WebP is detected in various ways: A simple check for Chrome, an ACCEPT header sent by the browser and a JavaScript check generating a `webp` cookie for all browsers that remain.
 - When `<img>` tags are found on the page, the corresponding JPG or PNG is converted into WebP and a corresponding `<picture` tag is used to replace the original `<img>` tag.
+- For the default Magento 2 product gallery (Fotorama), the WebP images are replaced. Please note that this is NOT compatible with the Full Page Cache!
 
 ### System requirements
 Make sure your PHP environment supports WebP: This means that the function `imagewebp` should exist in PHP. We hope to add more checks for this in the extension itself soon. For now, just open up a PHP `phpinfo()` page and check for WebP support.
@@ -43,4 +45,4 @@ Not all JPEG and PNG images are fit for conversion to WebP. In the past, WebP ha
 Make sure your `cwebp` binary and PHP environment are up-to-date.
 
 ### Todo
-- Check if compatible with FPC
+- Add a workaround for FPC with Fotorama
