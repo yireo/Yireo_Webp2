@@ -32,6 +32,7 @@ Done.
 
 ### Requesting support
 Feel free to open an **Issue** here on GitHub. However, do make sure to be thorough and mention the following:
+
 - Your browser;
 - Your Magento version;
 - Your PHP version including an indication of it supporting WebP;
