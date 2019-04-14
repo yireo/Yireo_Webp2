@@ -13,7 +13,6 @@ An alternative is that the `cwebp` binary from the WebP project is uploaded to y
 We recommend you to work on making all options work, not just one.
 
 Please note that both tasks should be simple for developers and system administrator, but might be magical for non-technical people. If this extension is not working out of the box for you, most likely a technical person needs to take a look at your hosting environment.
->>>>>>> 26ff27d3d816e192030309ab3fa64e9e81f38ea2
 
 ### Instructions for using composer
 Use composer to install this extension. First make sure that Magento is installed via composer, and that there is a valid `composer.json` file present.
