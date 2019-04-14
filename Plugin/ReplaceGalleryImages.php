@@ -33,10 +33,12 @@ class ReplaceGalleryImages
      * @var Debugger
      */
     private $debugger;
+
     /**
      * @var BrowserSupport
      */
     private $browserSupport;
+
     /**
      * @var Config
      */
@@ -66,6 +68,8 @@ class ReplaceGalleryImages
     }
 
     /**
+     * Hook into the getGalleryImages() method to add WebP support
+     *
      * @param Gallery $gallery
      * @param Collection|array $images
      *
@@ -74,6 +78,10 @@ class ReplaceGalleryImages
     public function afterGetGalleryImages(Gallery $gallery, $images)
     {
         if ($this->config->enabled() === false) {
+            return $images;
+        }
+
+        if ($this->config->hasFullPageCacheEnabled($gallery->getLayout()) === true) {
             return $images;
         }
 
