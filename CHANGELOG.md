@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2019-04-28
+### Fixed
+- Fix issue with additional images not being converted if already converted
+- Make sure to enable cookie-check whenever FPC is enabled
+
+### Added
+- Actual meaningful integration test for browsing product page
+
 ## [0.1.1] - 2019-04-12
 ### Fixed
 - Disable gallery fix if FPC is enabled
