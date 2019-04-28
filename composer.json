@@ -3,7 +3,7 @@
   "license": "OSL-3.0",
   "version": "0.2.0",
   "type": "magento2-module",
-  "homepage": "https://github.com/yireo/Yireo_Webp2",
+  "homepage": "https://www.yireo.com/software/magento-extensions/webp2",
   "description": "Magento 2 module to add WebP support to the Magento frontend",
   "keywords": [
     "composer-installer",
