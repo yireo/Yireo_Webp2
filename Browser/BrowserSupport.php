@@ -7,6 +7,8 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\HTTP\Header;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Magento\Framework\View\LayoutInterface;
+use Yireo\Webp2\Config\Config;
 
 /**
  * Class BrowserSupport
@@ -29,6 +31,14 @@ class BrowserSupport implements ArgumentInterface
      * @var RequestInterface
      */
     private $request;
+    /**
+     * @var Config
+     */
+    private $config;
+    /**
+     * @var LayoutInterface
+     */
+    private $layout;
 
     /**
      * BrowserSupport constructor.
@@ -36,15 +46,21 @@ class BrowserSupport implements ArgumentInterface
      * @param Header $headerService
      * @param CookieManagerInterface $cookieManager
      * @param RequestInterface $request
+     * @param Config $config
+     * @param LayoutInterface $layout
      */
     public function __construct(
         Header $headerService,
         CookieManagerInterface $cookieManager,
-        RequestInterface $request
+        RequestInterface $request,
+        Config $config,
+        LayoutInterface $layout
     ) {
         $this->headerService = $headerService;
         $this->cookieManager = $cookieManager;
         $this->request = $request;
+        $this->config = $config;
+        $this->layout = $layout;
     }
 
     /**
@@ -52,6 +68,10 @@ class BrowserSupport implements ArgumentInterface
      */
     public function hasWebpSupport(): bool
     {
+        if ($this->config->hasFullPageCacheEnabled($this->layout) === true) {
+            return false;
+        }
+
         if ($this->acceptsWebpHeader()) {
             return true;
         }
