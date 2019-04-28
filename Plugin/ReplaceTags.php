@@ -31,6 +31,7 @@ class ReplaceTags
      * @var Debugger
      */
     private $debugger;
+
     /**
      * @var Config
      */
@@ -68,7 +69,7 @@ class ReplaceTags
             return $output;
         }
 
-        if (preg_match_all('/<([^<]+)\ src=\"([^\"]+)\.(png|jpg|jpeg)([^>]+)>/i', $output, $matches) === false) {
+        if (preg_match_all('/<([^<]+)\ src=\"([^\"]+)\.(png|jpg|jpeg)([^>]+)>/mi', $output, $matches) === false) {
             return $output;
         }
 
@@ -83,10 +84,9 @@ class ReplaceTags
                 $result = $this->convertor->convert($imageUrl, $webpUrl);
             } catch (\Exception $e) {
                 $this->debugger->debug($e->getMessage(), [$imageUrl, $webpUrl]);
-                continue;
             }
 
-            if (!$result) {
+            if (!$result && !$this->convertor->urlExists($webpUrl)) {
                 continue;
             }
 

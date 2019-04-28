@@ -50,11 +50,33 @@ class Convertor
         $sourceImageFilename = $this->getPathFromUrl($sourceImageUrl);
         $destinationImageFilename = $this->getPathFromUrl($destinationImageUrl);
 
-        if(!$this->file->isNewerThan($sourceImageFilename, $destinationImageFilename)) {
+        if (!$this->needsConversion($sourceImageFilename, $destinationImageFilename)) {
             return false;
         }
 
         return WebPConvert::convert($sourceImageFilename, $destinationImageFilename, $this->getOptions());
+    }
+
+    /**
+     * @param string $sourceImageFilename
+     * @param string $destinationImageFilename
+     * @return bool
+     */
+    private function needsConversion(string $sourceImageFilename, string $destinationImageFilename): bool
+    {
+        if (!file_exists($sourceImageFilename)) {
+            return false;
+        }
+
+        if (!file_exists($destinationImageFilename)) {
+            return true;
+        }
+
+        if ($this->file->isNewerThan($destinationImageFilename, $sourceImageFilename)) {
+            return false;
+        }
+
+        return false;
     }
 
     /**
@@ -66,6 +88,22 @@ class Convertor
     private function getPathFromUrl(string $url): string
     {
         return $this->file->resolve($url);
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public function urlExists(string $url): bool
+    {
+        $filePath = $this->file->resolve($url);
+        if (file_exists($filePath)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
