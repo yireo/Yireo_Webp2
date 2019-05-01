@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Yireo\Webp2\Image;
 
 use Exception;
+use Magento\Framework\View\Asset\File\NotFoundException;
 use WebPConvert\WebPConvert;
 use Yireo\Webp2\Config\Config;
 
@@ -65,7 +66,7 @@ class Convertor
     private function needsConversion(string $sourceImageFilename, string $destinationImageFilename): bool
     {
         if (!file_exists($sourceImageFilename)) {
-            return false;
+            throw new NotFoundException($sourceImageFilename . ' is not found');
         }
 
         if (!file_exists($destinationImageFilename)) {
