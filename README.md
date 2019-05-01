@@ -5,6 +5,7 @@ This module adds WebP support to Magento 2. Currently, it ships with the followi
 - [Usage](USAGE.md)
 - [Installation](INSTALL.md)
 - [FAQ](FAQ.md)
+- [Support](SUPPORT.md)
 - [TODO](TODO.md)
 
 ## Requesting support
