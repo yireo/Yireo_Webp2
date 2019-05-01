@@ -69,13 +69,16 @@ class ReplaceTags
             return $output;
         }
 
-        if (preg_match_all('/<([^<]+)\ src=\"([^\"]+)\.(png|jpg|jpeg)([^>]+)>/mi', $output, $matches) === false) {
+        if (preg_match_all('/<([^<]+)\ src=\"([^\"]+)\.(png|jpg|jpeg)([^>]+)>/mi', $output, $matches, PREG_OFFSET_CAPTURE) === false) {
             return $output;
         }
-
+        
+		$accum_change = 0;
+		
         foreach ($matches[0] as $index => $match) {
-            $htmlTag = $matches[0][$index];
-            $imageUrl = $matches[2][$index] . '.' . $matches[3][$index];
+	        $offset = $match[1] + $accum_change;
+            $htmlTag = $matches[0][$index][0];
+            $imageUrl = $matches[2][$index][0] . '.' . $matches[3][$index][0];
 
             $webpUrl = $this->file->toWebp($imageUrl);
             $altText = $this->getAltText($htmlTag);
@@ -97,7 +100,8 @@ class ReplaceTags
                 ->setOriginalTag($htmlTag)
                 ->toHtml();
 
-            $output = str_replace($htmlTag, $newHtmlTag, $output);
+            $output = substr_replace($output, $newHtmlTag, $offset, strlen($htmlTag));
+            $accum_change = $accum_change + (strlen($newHtmlTag) - strlen($htmlTag));
         }
 
         return $output;
