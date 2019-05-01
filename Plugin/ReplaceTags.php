@@ -85,6 +85,7 @@ class ReplaceTags
             $imageUrl = $matches[2][$index][0] . '.' . $matches[3][$index][0];
 
             $webpUrl = $this->file->toWebp($imageUrl);
+
             $altText = $this->getAttributeText($htmlTag, 'alt');
             $width = $this->getAttributeText($htmlTag, 'width');
             $height = $this->getAttributeText($htmlTag, 'height');
@@ -92,6 +93,10 @@ class ReplaceTags
             try {
                 $result = $this->convertor->convert($imageUrl, $webpUrl);
             } catch (ExceptionAlias $e) {
+                if ($this->config->isDebugging()) {
+                    throw $e;
+                }
+
                 $this->debugger->debug($e->getMessage(), [$imageUrl, $webpUrl]);
             }
 
