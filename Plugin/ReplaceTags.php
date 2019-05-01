@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Yireo\Webp2\Plugin;
 
+use Exception as ExceptionAlias;
 use Magento\Framework\View\LayoutInterface;
 use Yireo\Webp2\Block\Picture;
 use Yireo\Webp2\Config\Config;
@@ -58,10 +59,12 @@ class ReplaceTags
     }
 
     /**
+     * Interceptor of getOutput()
+     *
      * @param LayoutInterface $layout
      * @param string $output
-     *
      * @return string
+     * @throws ExceptionAlias
      */
     public function afterGetOutput(LayoutInterface $layout, string $output): string
     {
@@ -69,23 +72,26 @@ class ReplaceTags
             return $output;
         }
 
-        if (preg_match_all('/<([^<]+)\ src=\"([^\"]+)\.(png|jpg|jpeg)([^>]+)>/mi', $output, $matches, PREG_OFFSET_CAPTURE) === false) {
+        $regex = '/<([^<]+)\ src=\"([^\"]+)\.(png|jpg|jpeg)([^>]+)>/mi';
+        if (preg_match_all($regex, $output, $matches, PREG_OFFSET_CAPTURE) === false) {
             return $output;
         }
-        
-		$accum_change = 0;
-		
+
+        $accum_change = 0;
+
         foreach ($matches[0] as $index => $match) {
-	        $offset = $match[1] + $accum_change;
+            $offset = $match[1] + $accum_change;
             $htmlTag = $matches[0][$index][0];
             $imageUrl = $matches[2][$index][0] . '.' . $matches[3][$index][0];
 
             $webpUrl = $this->file->toWebp($imageUrl);
-            $altText = $this->getAltText($htmlTag);
+            $altText = $this->getAttributeText($htmlTag, 'alt');
+            $width = $this->getAttributeText($htmlTag, 'width');
+            $height = $this->getAttributeText($htmlTag, 'height');
 
             try {
                 $result = $this->convertor->convert($imageUrl, $webpUrl);
-            } catch (\Exception $e) {
+            } catch (ExceptionAlias $e) {
                 $this->debugger->debug($e->getMessage(), [$imageUrl, $webpUrl]);
             }
 
@@ -98,6 +104,8 @@ class ReplaceTags
                 ->setWebpImage($webpUrl)
                 ->setAltText($altText)
                 ->setOriginalTag($htmlTag)
+                ->setWidth($width)
+                ->setHeight($height)
                 ->toHtml();
 
             $output = substr_replace($output, $newHtmlTag, $offset, strlen($htmlTag));
@@ -109,12 +117,12 @@ class ReplaceTags
 
     /**
      * @param string $htmlTag
-     *
+     * @param string $attribute
      * @return string
      */
-    private function getAltText(string $htmlTag): string
+    private function getAttributeText(string $htmlTag, string $attribute): string
     {
-        if (preg_match('/\ alt=\"([^\"]+)/', $htmlTag, $match)) {
+        if (preg_match('/\ ' . $attribute . '=\"([^\"]+)/', $htmlTag, $match)) {
             $altText = $match[1];
             $altText = strtr($altText, ['"' => '', "'" => '']);
             return $altText;
@@ -124,8 +132,9 @@ class ReplaceTags
     }
 
     /**
-     * @param LayoutInterface $layout
+     * Get Picture Block-class from the layout
      *
+     * @param LayoutInterface $layout
      * @return Picture
      */
     private function getPictureBlock(LayoutInterface $layout): Picture
