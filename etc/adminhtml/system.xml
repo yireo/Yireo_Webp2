@@ -16,6 +16,14 @@
                     <label>GD support</label>
                     <frontend_model>Yireo\Webp2\Block\Adminhtml\System\Config\Gd</frontend_model>
                 </field>
+                <field id="php_version" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>PHP version</label>
+                    <frontend_model>Yireo\Webp2\Block\Adminhtml\System\Config\PhpVersion</frontend_model>
+                </field>
+                <field id="module_version" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Module version</label>
+                    <frontend_model>Yireo\Webp2\Block\Adminhtml\System\Config\ModuleVersion</frontend_model>
+                </field>
             </group>
         </section>
     </system>
