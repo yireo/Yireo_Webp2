@@ -1,0 +1,11 @@
+<?php
+/** @var $block \Magento\Framework\View\Element\Template */
+/** @var $imageProvider \Yireo\Webp2\Test\ImageProvider */
+$imageProvider = $block->getImageProvider();
+$images = $imageProvider->getImages();
+?>
+<?php foreach ($images as $image) : ?>
+<div style="float:left">
+    <img src="<?= $block->getViewFileUrl($image) ?>" width="100" height="100" />
+</div>
+<?php endforeach; ?>
