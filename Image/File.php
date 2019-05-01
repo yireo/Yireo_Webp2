@@ -49,6 +49,7 @@ class File
         $parsedUrl = parse_url($url);
         $path = $parsedUrl['path'];
         $path = preg_replace('/^\/pub\//', '/', $path);
+        $path = preg_replace('/\/static\/version([0-9]+\/)/', '/static/', $path);
         $path = $this->getAbsolutePathFromImagePath($path);
 
         return $path;
