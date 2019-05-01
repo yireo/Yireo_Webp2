@@ -31,10 +31,12 @@ class BrowserSupport implements ArgumentInterface
      * @var RequestInterface
      */
     private $request;
+
     /**
      * @var Config
      */
     private $config;
+
     /**
      * @var LayoutInterface
      */
@@ -79,7 +81,6 @@ class BrowserSupport implements ArgumentInterface
         if ($this->isChromeBrowser()) {
             return true;
         }
-
 
         if ($this->hasCookie()) {
             return true;
