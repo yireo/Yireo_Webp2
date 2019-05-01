@@ -48,6 +48,11 @@ class Picture extends Template
     private $originalTag = '';
 
     /**
+     * @var bool
+     */
+    private $debug = false;
+
+    /**
      * @return string
      */
     public function getWebpImage(): string
@@ -173,5 +178,21 @@ class Picture extends Template
         }
 
         return '';
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDebug()
+    {
+        return $this->debug;
+    }
+
+    /**
+     * @param bool $debug
+     */
+    public function setDebug(bool $debug)
+    {
+        $this->debug = $debug;
     }
 }

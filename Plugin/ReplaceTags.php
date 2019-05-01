@@ -139,6 +139,9 @@ class ReplaceTags
      */
     private function getPictureBlock(LayoutInterface $layout): Picture
     {
-        return $layout->createBlock(Picture::class);
+        /** @var Picture $block */
+        $block = $layout->createBlock(Picture::class);
+        $block->setDebug($this->config->isDebugging());
+        return $block;
     }
 }
