@@ -44,6 +44,7 @@ class Convertor
      * @param string $destinationImageUrl
      *
      * @return bool
+     * @throws NotFoundException
      * @throws Exception
      */
     public function convert(string $sourceImageUrl, string $destinationImageUrl): bool
@@ -62,6 +63,7 @@ class Convertor
      * @param string $sourceImageFilename
      * @param string $destinationImageFilename
      * @return bool
+     * @throws NotFoundException
      */
     private function needsConversion(string $sourceImageFilename, string $destinationImageFilename): bool
     {
