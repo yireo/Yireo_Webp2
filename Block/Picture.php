@@ -35,6 +35,16 @@ class Picture extends Template
     /**
      * @var string
      */
+    private $width = '';
+
+    /**
+     * @var string
+     */
+    private $height = '';
+
+    /**
+     * @var string
+     */
     private $originalTag = '';
 
     /**
@@ -91,6 +101,42 @@ class Picture extends Template
     public function setAltText(string $altText)
     {
         $this->altText = $altText;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWidth(): string
+    {
+        return $this->width;
+    }
+
+    /**
+     * @param string $width
+     * @return Picture
+     */
+    public function setWidth(string $width)
+    {
+        $this->width = $width;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHeight(): string
+    {
+        return $this->height;
+    }
+
+    /**
+     * @param string $height
+     * @return Picture
+     */
+    public function setHeight(string $height)
+    {
+        $this->height = $height;
         return $this;
     }
 
