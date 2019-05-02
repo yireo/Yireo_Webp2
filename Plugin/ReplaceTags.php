@@ -97,6 +97,7 @@ class ReplaceTags
                     throw $e;
                 }
 
+                $result = false;
                 $this->debugger->debug($e->getMessage(), [$imageUrl, $webpUrl]);
             }
 

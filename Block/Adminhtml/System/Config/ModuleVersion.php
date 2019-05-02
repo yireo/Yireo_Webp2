@@ -20,6 +20,7 @@ class ModuleVersion extends Field
      * @var ComponentRegistrar
      */
     private $componentRegistrar;
+
     /**
      * @var ModuleListInterface
      */

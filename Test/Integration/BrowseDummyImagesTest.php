@@ -27,7 +27,6 @@ class BrowseDummyImagesTest extends Common
         $body = $layout->getOutput();
 
         $this->assertImageTagsExist($body, $this->getImageProvider()->getImages());
-
     }
 
     /**
