@@ -40,8 +40,13 @@ class Images extends Action
         $page = $this->pageFactory->create();
 
         $case = (string) $this->_request->getParam('case');
+
         if ($case == 'multiple') {
             $page->addHandle('webp_test_images_multiple');
+        }
+
+        if ($case == 'multiple_same') {
+            $page->addHandle('webp_test_images_multiple_same');
         }
 
         return $page;
