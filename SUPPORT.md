@@ -1,6 +1,5 @@
 # Requesting support
-Feel free to open an **Issue** in the GitHub project of this extension.
-However, do make sure to be thorough and answer the following:
+Feel free to open an **Issue** in the GitHub project of this extension. Or send a mail to support@yireo.com. However, do make sure to be thorough and answer the following:
 
 - What browser did you test this with?
 - What is your Magento version?
