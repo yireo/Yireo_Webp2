@@ -17,9 +17,9 @@ class ImageProvider implements ArgumentInterface
     public function getImages(): array
     {
         return [
-            'Yireo_Webp2/images/test/flowers.jpg',
-            'Yireo_Webp2/images/test/goku.jpg',
-            'Yireo_Webp2/images/test/transparent-dragon.png',
+            'images/test/flowers.jpg',
+            'images/test/goku.jpg',
+            'images/test/transparent-dragon.png',
         ];
     }
 
@@ -37,6 +37,6 @@ class ImageProvider implements ArgumentInterface
      */
     public function getNonExistingImage(): string
     {
-        return 'Yireo_Webp2/images/test/non-existing.jpg';
+        return 'images/test/non-existing.jpg';
     }
 }

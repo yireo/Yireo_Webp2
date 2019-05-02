@@ -42,7 +42,6 @@ class Convertor
     /**
      * @param string $sourceImageUrl
      * @param string $destinationImageUrl
-     *
      * @return bool
      * @throws NotFoundException
      * @throws Exception
@@ -84,7 +83,6 @@ class Convertor
 
     /**
      * @param string $url
-     *
      * @return string
      * @throws Exception
      */
@@ -95,7 +93,6 @@ class Convertor
 
     /**
      * @param string $url
-     *
      * @return bool
      * @throws Exception
      */
