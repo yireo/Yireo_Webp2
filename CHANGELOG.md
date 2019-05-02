@@ -5,8 +5,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-- Fix issue with additional images not being converted if already converted @jove4015
+### Fixed
+- Fix issue with additional images not being converted if already converted (@jove4015)
+- Fix issue with static versioning not being reckognized
+- Make sure src, width and height still remain in picture-tag
+
+### Added
+- Integration test for multiple instances of same image
 - Add fields in backend for PHP version and module version
+- Integration Test to test conversion of test-files
+- Throw an exception of source file is not found
+- Add provider of dummy images
+- Add integration test of dummy images page
+- Add test page with dummy images
+- Only show original image in HTML source when debugging
 
 ## [0.2.0] - 2019-04-28
 ### Fixed
