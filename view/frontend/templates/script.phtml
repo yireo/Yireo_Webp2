@@ -1,20 +1,22 @@
 <?php
-/** @var $block Template */
-/** @var $browserSupport BrowserSupport */
+declare(strict_types=1);
 
 use Magento\Framework\View\Element\Template;
 use Yireo\Webp2\Browser\BrowserSupport;
 
+/** @var $block Template */
+/** @var $browserSupport BrowserSupport */
 $browserSupport = $block->getBrowserSupport();
+if ($browserSupport->hasWebpSupport()) {
+    return;
+}
 ?>
-<?php if (!$browserSupport->hasWebpSupport()): ?>
 <script type="text/x-magento-init">
     {
         "*": {
             "webp-detect": {
-                "image": "<?= $block->getViewFileUrl('Yireo_Webp2/images/test.webp') ?>"
+                "image": "<?= $block->escapeUrl($block->getViewFileUrl('Yireo_Webp2/images/test.webp')) ?>"
             }
         }
     }
 </script>
-<?php endif; ?>
