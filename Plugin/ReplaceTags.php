@@ -77,10 +77,10 @@ class ReplaceTags
             return $output;
         }
 
-        $accum_change = 0;
+        $accumulatedChange = 0;
 
         foreach ($matches[0] as $index => $match) {
-            $offset = $match[1] + $accum_change;
+            $offset = $match[1] + $accumulatedChange;
             $htmlTag = $matches[0][$index][0];
             $imageUrl = $matches[2][$index][0] . '.' . $matches[3][$index][0];
 
@@ -115,7 +115,7 @@ class ReplaceTags
                 ->toHtml();
 
             $output = substr_replace($output, $newHtmlTag, $offset, strlen($htmlTag));
-            $accum_change = $accum_change + (strlen($newHtmlTag) - strlen($htmlTag));
+            $accumulatedChange = $accumulatedChange + (strlen($newHtmlTag) - strlen($htmlTag));
         }
 
         return $output;
