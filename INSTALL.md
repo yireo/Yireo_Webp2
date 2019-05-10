@@ -7,7 +7,7 @@ Next, install our module using the following command:
 
 Next, install the new module into Magento itself:
 
-    ./bin/magento module:enable Yireo_WebP2
+    ./bin/magento module:enable Yireo_Webp2
     ./bin/magento setup:upgrade
 
 Enable the module by toggling the setting in **Stores > Configuration > Advanced > System > Yireo WebP > Enabled**.
