@@ -13,7 +13,7 @@ class BrowseTest extends AbstractController
 {
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_image.php
-     * @magentoAdminConfigFixture system/yireo_webp/enabled 1
+     * @magentoAdminConfigFixture yireo_webp2/settings/enabled 1
      */
     public function testIfHtmlContainsWebpImages()
     {
@@ -30,7 +30,7 @@ class BrowseTest extends AbstractController
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_image.php
-     * @magentoAdminConfigFixture system/yireo_webp/enabled 0
+     * @magentoAdminConfigFixture yireo_webp2/settings/enabled 0
      */
     public function testIfHtmlContainsNoWebpImages()
     {

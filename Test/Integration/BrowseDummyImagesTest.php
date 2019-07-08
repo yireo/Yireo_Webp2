@@ -12,8 +12,8 @@ use Magento\Framework\View\LayoutInterface;
 class BrowseDummyImagesTest extends Common
 {
     /**
-     * @magentoAdminConfigFixture system/yireo_webp/enabled 1
-     * @magentoAdminConfigFixture system/yireo_webp/debug 1
+     * @magentoAdminConfigFixture yireo_webp2/settings/enabled 1
+     * @magentoAdminConfigFixture yireo_webp2/settings/debug 1
      */
     public function testIfHtmlContainsWebpImages()
     {
@@ -30,8 +30,8 @@ class BrowseDummyImagesTest extends Common
     }
 
     /**
-     * @magentoAdminConfigFixture system/yireo_webp/enabled 1
-     * @magentoAdminConfigFixture system/yireo_webp/debug 1
+     * @magentoAdminConfigFixture yireo_webp2/settings/enabled 1
+     * @magentoAdminConfigFixture yireo_webp2/settings/debug 1
      */
     public function testIfHtmlContainsSingleWebpImage()
     {
