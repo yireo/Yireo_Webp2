@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Yireo Webp2 for Magento
+ *
+ * @package     Yireo_Webp2
+ * @author      Yireo (https://www.yireo.com/)
+ * @copyright   Copyright 2019 Yireo (https://www.yireo.com/)
+ * @license     Open Source License (OSL v3)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <yireo_webp2>
+            <settings>
+                <enabled>1</enabled>
+                <debug>0</debug>
+                <quality_level>80</quality_level>
+            </settings>
+        </yireo_webp2>
+    </default>
+</config>

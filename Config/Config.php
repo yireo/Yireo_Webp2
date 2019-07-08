@@ -18,6 +18,7 @@ class Config
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
+
     /**
      * @var DepersonalizeChecker
      */
@@ -42,7 +43,7 @@ class Config
      */
     public function enabled(): bool
     {
-        return (bool)$this->scopeConfig->getValue('system/yireo_webp/enabled');
+        return (bool)$this->scopeConfig->getValue('yireo_webp2/settings/enabled');
     }
 
     /**
@@ -63,8 +64,7 @@ class Config
      */
     public function getQualityLevel(): int
     {
-        // @todo: Convert this into config value
-        return 80;
+        return (int)$this->scopeConfig->getValue('yireo_webp2/settings/quality_level');
     }
 
     /**
@@ -80,6 +80,6 @@ class Config
      */
     public function isDebugging(): bool
     {
-        return (bool)$this->scopeConfig->getValue('system/yireo_webp/debug');
+        return (bool)$this->scopeConfig->getValue('yireo_webp2/settings/debug');
     }
 }
