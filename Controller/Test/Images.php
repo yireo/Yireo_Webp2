@@ -10,6 +10,7 @@ use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Class Images
+ *
  * @package Mageplaza\HelloWorld\Controller\Index
  */
 class Images extends Action
@@ -21,7 +22,8 @@ class Images extends Action
 
     /**
      * Index constructor.
-     * @param Context $context
+     *
+     * @param Context     $context
      * @param PageFactory $pageFactory
      */
     public function __construct(
@@ -39,15 +41,9 @@ class Images extends Action
     {
         $page = $this->pageFactory->create();
 
-        $case = (string) $this->_request->getParam('case');
-
-        if ($case == 'multiple') {
-            $page->addHandle('webp_test_images_multiple');
-        }
-
-        if ($case == 'multiple_same') {
-            $page->addHandle('webp_test_images_multiple_same');
-        }
+        $case = (string)$this->_request->getParam('case');
+        $handle = 'webp_test_images_' . $case;
+        $page->addHandle($handle);
 
         return $page;
     }
