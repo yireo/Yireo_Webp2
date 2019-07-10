@@ -42,7 +42,7 @@ class Images extends Action
         $page = $this->pageFactory->create();
 
         $case = strtolower($this->_request->getParam('case'));
-        $case = preg_match('/([^a-z\ ]+)/', '', $case);
+        $case = preg_replace('/([^a-z\_]+)/', '', $case);
         $handle = 'webp_test_images_' . $case;
         $page->addHandle($handle);
 
