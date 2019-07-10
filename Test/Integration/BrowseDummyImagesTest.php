@@ -20,7 +20,7 @@ class BrowseDummyImagesTest extends Common
         $this->fixtureImageFiles();
 
         $this->getResponse()->setHeader('Accept', 'image/webp');
-        $this->dispatch('webp/test/images/case/multiple');
+        $this->dispatch('webp/test/images/case/multiple_images');
 
         /** @var LayoutInterface $layout */
         $layout = $this->_objectManager->get(LayoutInterface::class);
@@ -38,13 +38,32 @@ class BrowseDummyImagesTest extends Common
         $this->fixtureImageFiles();
 
         $this->getResponse()->setHeader('Accept', 'image/webp');
-        $this->dispatch('webp/test/images/case/multiple_same');
+        $this->dispatch('webp/test/images/case/multiple_images_same');
 
         /** @var LayoutInterface $layout */
         $layout = $this->_objectManager->get(LayoutInterface::class);
         $body = $layout->getOutput();
 
         $this->assertImageTagsExist($body, [$this->getImageProvider()->getImage()]);
+    }
+
+    /**
+     * @magentoAdminConfigFixture yireo_webp2/settings/enabled 1
+     * @magentoAdminConfigFixture yireo_webp2/settings/debug 1
+     */
+    public function testIfHtmlContainsImageWithCustomStyle()
+    {
+        $this->fixtureImageFiles();
+
+        $this->getResponse()->setHeader('Accept', 'image/webp');
+        $this->dispatch('webp/test/images/case/image_with_custom_style');
+
+        /** @var LayoutInterface $layout */
+        $layout = $this->_objectManager->get(LayoutInterface::class);
+        $body = $layout->getOutput();
+
+        $this->assertImageTagsExist($body, [$this->getImageProvider()->getImage()]);
+        $this->assertContains('style="display:insane; opacity:666;"', $body);
     }
 
     /**
