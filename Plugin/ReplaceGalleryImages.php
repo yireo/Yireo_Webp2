@@ -5,6 +5,7 @@ namespace Yireo\Webp2\Plugin;
 
 use Magento\Catalog\Block\Product\View\Gallery;
 use Magento\Framework\Data\Collection;
+use Magento\Framework\Data\CollectionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Yireo\Webp2\Browser\BrowserSupport;
@@ -46,6 +47,11 @@ class ReplaceGalleryImages
     private $config;
 
     /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
+
+    /**
      * ReplaceGalleryImages constructor.
      *
      * @param Convertor $convertor
@@ -53,19 +59,22 @@ class ReplaceGalleryImages
      * @param Debugger $debugger
      * @param BrowserSupport $browserSupport
      * @param Config $config
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         Convertor $convertor,
         File $file,
         Debugger $debugger,
         BrowserSupport $browserSupport,
-        Config $config
+        Config $config,
+        CollectionFactory $collectionFactory
     ) {
         $this->convertor = $convertor;
         $this->file = $file;
         $this->debugger = $debugger;
         $this->browserSupport = $browserSupport;
         $this->config = $config;
+        $this->collectionFactory = $collectionFactory;
     }
 
     /**
@@ -74,7 +83,7 @@ class ReplaceGalleryImages
      * @param Gallery $gallery
      * @param Collection $images
      *
-     * @return array
+     * @return Collection
      * @throws LocalizedException
      */
     public function afterGetGalleryImages(Gallery $gallery, $images)
@@ -91,10 +100,11 @@ class ReplaceGalleryImages
             return $images;
         }
 
-        $newImages = [];
+        /** @var Collection $newImages */
+        $newImages = $this->collectionFactory->create();
 
         foreach ($images as $image) {
-            $newImages[] = $this->convertImage($image);
+            $newImages->addItem($this->convertImage($image));
         }
 
         return $newImages;
