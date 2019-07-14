@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="main">
+            <block name="webp-multiple-image-with-custom-style" template="Yireo_Webp2::test/image_with_custom_style.phtml" before="-">
+                <arguments>
+                    <argument name="image_provider" xsi:type="object">Yireo\Webp2\Test\ImageProvider</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

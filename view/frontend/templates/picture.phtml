@@ -11,5 +11,5 @@ $altText = ($block->getAltText()) ? ' alt="' . $block->getAltText() . '"' : '';
 <picture<?= $altText ?>>
     <source type="image/webp" srcset="<?= $block->getWebpImage() ?>">
     <source type="<?= $block->getOriginalImageType() ?>" srcset="<?= $block->getOriginalImage() ?>">
-    <img src="<?= $block->getOriginalImage() ?>" <?= $altText ?><?= $width ?><?= $height ?>>
+    <?= $block->getOriginalTag() ?>
 </picture>
