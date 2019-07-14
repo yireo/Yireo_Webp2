@@ -6,6 +6,7 @@ namespace Yireo\Webp2\Plugin;
 use Magento\Catalog\Block\Product\View\Gallery;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Yireo\Webp2\Browser\BrowserSupport;
 use Yireo\Webp2\Config\Config;
 use Yireo\Webp2\Image\Convertor;
@@ -71,9 +72,10 @@ class ReplaceGalleryImages
      * Hook into the getGalleryImages() method to add WebP support
      *
      * @param Gallery $gallery
-     * @param Collection|array $images
+     * @param Collection $images
      *
      * @return array
+     * @throws LocalizedException
      */
     public function afterGetGalleryImages(Gallery $gallery, $images)
     {
