@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - July 14th, 2019
+### Fixed
+- Make sure modified gallery images are returned as Collection, not an array
+- Test with Aimes_Notorama
+
 ## [0.4.0] - July 2019
 ### Added
 - Move configuration to separate **Yireo** section
