@@ -4,7 +4,13 @@
 - The Fotorama gallery of the Magento core product pages is replaced with WebP images, as long as the Full Page Cache is disabled. Unfortunately, with the FPC, the whole JavaScript needs to be refactored.
 
 # System requirements
-Make sure your PHP environment supports WebP: This means that the function `imagewebp` should exist in PHP. We hope to add more checks for this in the extension itself soon. For now, just open up a PHP `phpinfo()` page and check for WebP support. Please note that installing `libwebp` on your system is not the same as having PHP support WebP. Check the `phpinfo()` file and add new PHP modules to PHP if needed. If in doubt, simple create a PHP script `test.php` and a line `<?php echo (int)function_exists('imagewebp');` to it: A `1` indicates that the function is available, a `0` indicates that it is not.
+Make sure your PHP environment supports WebP: This means that the function `imagewebp` should exist in PHP. We hope to add
+more checks for this in the extension itself soon. For now, just open up a PHP `phpinfo()` page and check for WebP
+support. Please note that installing `libwebp` on your system is not the same as having PHP support WebP. Check the
+`phpinfo()` file and add new PHP modules to PHP if needed. If in doubt, simple create a PHP script `test.php` and a line
+`<?php echo (int)function_exists('imagewebp');` to it: A `1` indicates that the function is available, a `0` indicates
+that it is not. Alternatively you can check for WebP using the command `php -r 'var_dump(gd_info());'`. Make sure your CLI
+binary is the same as the one being called by the webserver though.
 
 An alternative is that the `cwebp` binary from the WebP project is uploaded to your server and placed in a generic folder like `/usr/local/bin`. Make sure to grab a copy from this binary from the [rosell-dk/webp-convert](https://github.com/rosell-dk/webp-convert/tree/master/src/Convert/Converters/Binaries) project. This method is preferred because it is the fastest. But it assumes also that the binary is placed in a folder by the server administrator.
 
