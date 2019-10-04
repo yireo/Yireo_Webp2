@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.3] - October 4th, 2019
+### Added
+- Add controller for email testing
+
+### Fixed
+- Do not apply WebP if no handles
+
 ## [0.4.2] - July 14th, 2019
 ### Fixed
 - Make sure modified gallery images are returned as Collection, not an array
