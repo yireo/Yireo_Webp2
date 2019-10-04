@@ -68,6 +68,11 @@ class ReplaceTags
      */
     public function afterGetOutput(LayoutInterface $layout, string $output): string
     {
+        $handles = $layout->getUpdate()->getHandles();
+        if (empty($handles)) {
+            return $output;
+        }
+
         if ($this->config->enabled() === false) {
             return $output;
         }

@@ -11,7 +11,7 @@ use Magento\Framework\View\Result\PageFactory;
 /**
  * Class Images
  *
- * @package Mageplaza\HelloWorld\Controller\Index
+ * @package Yireo\Webp2\Controller\Test
  */
 class Images extends Action
 {
@@ -41,7 +41,7 @@ class Images extends Action
     {
         $page = $this->pageFactory->create();
 
-        $case = strtolower($this->_request->getParam('case'));
+        $case = strtolower((string)$this->_request->getParam('case'));
         $case = preg_replace('/([^a-z\_]+)/', '', $case);
         $handle = 'webp_test_images_' . $case;
         $page->addHandle($handle);
