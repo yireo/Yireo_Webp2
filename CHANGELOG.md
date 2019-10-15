@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.4] - October 15th, 2019
+### Fixed
+- Dirty workaround for email layout 
+ 
 ## [0.4.3] - October 4th, 2019
 ### Added
 - Add controller for email testing
