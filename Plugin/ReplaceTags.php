@@ -73,6 +73,10 @@ class ReplaceTags
             return $output;
         }
 
+        if (in_array('sales_email_order_invoice_items', $handles)) {
+            return $output;
+        }
+
         if ($this->config->enabled() === false) {
             return $output;
         }
