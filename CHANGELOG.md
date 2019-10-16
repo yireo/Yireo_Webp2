@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.5] - October 16th, 2019
+### Added
+- Add check for additional layout handle `webp_skip` 
+
 ## [0.4.4] - October 15th, 2019
 ### Fixed
 - Dirty workaround for email layout 
