@@ -19,3 +19,8 @@ Make sure your `cwebp` binary and PHP environment are up-to-date.
 Don't complain to us. Instead, ask the other browser vendors to support this as well. And don't say this
 is not worth implementing, because I bet more than 25% of your sites visitors will benefit from WebP. Not
 offering this to them, is wasting additional bandwidth.
+
+# Some emails are also displaying WebP
+It could be that your transactional email templates are including XML layout handles that suddenly introduce this extensions functionality, while actually adding WebP to emails is a bad idea (because most email clients will not support anything of the like). 
+
+If you encounter such an email, find out which XML layout handle is the cause of this (`{handle layout="foobar"}`). Next, create a new XML layout file with that name (`foobar.xml`) and call the `webp_skip` handle from it (`<update handle="webp_skip" />`). So this instructs the WebP extension to skip loading itself.
