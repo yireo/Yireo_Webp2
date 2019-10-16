@@ -73,7 +73,11 @@ class ReplaceTags
             return $output;
         }
 
-        if (in_array('sales_email_order_invoice_items', $handles)) {
+        $skippedHandles = [
+            'webp_skip',
+            'sales_email_order_invoice_items'
+        ];
+        if (array_intersect($skippedHandles, $handles)) {
             return $output;
         }
 
