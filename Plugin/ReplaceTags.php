@@ -102,6 +102,7 @@ class ReplaceTags
             $altText = $this->getAttributeText($htmlTag, 'alt');
             $width = $this->getAttributeText($htmlTag, 'width');
             $height = $this->getAttributeText($htmlTag, 'height');
+            $class = $this->getAttributeText($htmlTag, 'class');
 
             try {
                 $result = $this->convertor->convert($imageUrl, $webpUrl);
