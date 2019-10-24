@@ -53,6 +53,11 @@ class Picture extends Template
     private $debug = false;
 
     /**
+     * @var string
+     */
+    private $class = '';
+
+    /**
      * @return string
      */
     public function getWebpImage(): string
@@ -194,5 +199,25 @@ class Picture extends Template
     public function setDebug(bool $debug)
     {
         $this->debug = $debug;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClass(): string
+    {
+        return $this->class;
+    }
+
+    /**
+     * @param string $class
+     *
+     * @return Picture
+     */
+    public function setClass(string $class)
+    {
+        $this->class = $class;
+
+        return $this;
     }
 }
