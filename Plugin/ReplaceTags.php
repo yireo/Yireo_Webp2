@@ -123,6 +123,7 @@ class ReplaceTags
                 ->setWebpImage($webpUrl)
                 ->setAltText($altText)
                 ->setOriginalTag($htmlTag)
+                ->setClass($class)
                 ->setWidth($width)
                 ->setHeight($height)
                 ->toHtml();
