@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.6] - November 23rd, 2019
+### Fixed
+- Raise requirements for proper support of ViewModels
+
 ## [0.4.5] - October 16th, 2019
 ### Added
 - Add check for additional layout handle `webp_skip` 
