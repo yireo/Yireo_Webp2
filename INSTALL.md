@@ -12,3 +12,19 @@ Next, install the new module into Magento itself:
 
 Enable the module by toggling the setting in **Stores > Configuration > Advanced > System > Yireo WebP > Enabled**.
 
+# Instructions for using ExtDN installer
+First install the ExtDN installer:
+
+	wget https://github.com/extdn/installer-m2/raw/master/build/extdn_installer.phar
+	chmod 755 extdn_installer.phar 
+
+We recommend moving the PHAR file to a global location like `/usr/local/bin/extdn_installer`:
+
+    sudo mv extdn_installer.phar /usr/local/bin/extdn_installer
+
+Next, install this extension:
+
+	extdn_installer install yireo/magento2-webp2
+
+Done.
+
