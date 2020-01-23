@@ -9,15 +9,19 @@ Feel free to open an **Issue** in the GitHub project of this extension. Or send 
     - Which composer command did you use, or did you copy files? 
     - What did you do to enable the module?
 - Have you tested this after flushing all caches?
+- Have you tested this after disabling all caches, especially the Full Page Cache?
+    - The Full Page Cache will prevent you from seeing dynamic results. The Full Page Cache works with our extension, it just pointless to troubleshoot things with FPC enabled, unless you are troubleshooting FPC itself.
 - Are you testing this in the Developer Mode or in the Production Mode?
-- Under **Stores > Configuration > Advanced > System > WebP**, what settings do you see?
+    - We recommend you to use the Developer Mode. Do not use the Default Mode anywhere. Do not use the Production Mode to make modifications to Magento.
+- Under **Stores > Configuration > Yireo > Yireo WebP2**, what settings do you see?
     - Value of **Enabled** 
     - Value of **Debug log**
-    - Information on GD support
+    - Value of **GD support**
+    - Value of **PHP version**
+    - Value of **Module version**
 - What is the location of the `cwebp` binary on your system?
+    - Run `whereis cwebp` or provide an alternative path.
 - Could you supply a URL to a live demo?
 
-Please note that we never recommend Windows to be used to run Magento.
-Magento itself is not supporting Windows either. If you are stuck with
-Windows, make sure to use the WSL (Windows Subsystem for Linux) and use
-the Linux layer instead.
+Please note that we never recommend Windows to be used to run Magento. Magento itself is not supporting Windows either. If you are stuck with Windows, make sure to use the WSL (Windows Subsystem for Linux) and use the Linux layer instead.
+
