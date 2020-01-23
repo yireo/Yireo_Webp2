@@ -22,6 +22,9 @@ Feel free to open an **Issue** in the GitHub project of this extension. Or send 
 - What is the location of the `cwebp` binary on your system?
     - Run `whereis cwebp` or provide an alternative path.
 - Could you supply a URL to a live demo?
+- Could you please supply a snapshot of the HTML source of a product page?
 
 Please note that we never recommend Windows to be used to run Magento. Magento itself is not supporting Windows either. If you are stuck with Windows, make sure to use the WSL (Windows Subsystem for Linux) and use the Linux layer instead.
+
+If the WebP configuration section is showing in the backend, but the HTML source in the frontend is not modified, please send the output of the command `bin/magento dev:di:info "\Magento\Framework\View\LayoutInterface"`.
 
