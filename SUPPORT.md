@@ -16,3 +16,8 @@ Feel free to open an **Issue** in the GitHub project of this extension. Or send 
     - Information on GD support
 - What is the location of the `cwebp` binary on your system?
 - Could you supply a URL to a live demo?
+
+Please note that we never recommend Windows to be used to run Magento.
+Magento itself is not supporting Windows either. If you are stuck with
+Windows, make sure to use the WSL (Windows Subsystem for Linux) and use
+the Linux layer instead.
