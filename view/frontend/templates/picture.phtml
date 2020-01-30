@@ -10,7 +10,7 @@ $class = ($block->getClass()) ? ' class="' . $block->getClass() . '"' : '';
 <?php if ($block->getDebug()) : ?>
         <!-- <?= $block->getOriginalTag() ?> -->
 <?php endif; ?>
-<picture<?= $altText ?>>
+<picture<?= $altText ?><?= $class ?>>
     <source type="image/webp" srcset="<?= $block->getWebpImage() ?>">
     <source type="<?= $block->getOriginalImageType() ?>" srcset="<?= $block->getOriginalImage() ?>">
     <?= $block->getOriginalTag() ?>
