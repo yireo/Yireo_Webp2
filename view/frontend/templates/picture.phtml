@@ -8,10 +8,10 @@ $class = ($block->getClass()) ? ' class="' . $block->getClass() . '"' : '';
 
 ?>
 <?php if ($block->getDebug()) : ?>
-        <!-- <?= $block->getOriginalTag() ?> -->
+        <!-- <?= /* @noEscape */ $block->getOriginalTag() ?> -->
 <?php endif; ?>
-<picture<?= $altText ?><?= $class ?>>
-    <source type="image/webp" srcset="<?= $block->getWebpImage() ?>">
-    <source type="<?= $block->getOriginalImageType() ?>" srcset="<?= $block->getOriginalImage() ?>">
-    <?= $block->getOriginalTag() ?>
+<picture<?= /* @noEscape */ $altText ?><?= /* @noEscape */ $class ?>>
+    <source type="image/webp" srcset="<?= /* @noEscape */ $block->getWebpImage() ?>">
+    <source type="<?= /* @noEscape */ $block->getOriginalImageType() ?>" srcset="<?= /* @noEscape */ $block->getOriginalImage() ?>">
+    <?= /* @noEscape */ $block->getOriginalTag() ?>
 </picture>

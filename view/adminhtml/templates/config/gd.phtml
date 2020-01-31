@@ -3,10 +3,10 @@
 ?>
 <?php if ($block->hasGdSupport()) : ?>
     <div class="message message-success">
-        <?= __('WebP is supported by GD') ?>
+        <?= /* @noEscape */ __('WebP is supported by GD') ?>
     </div>
 <?php else : ?>
     <div class="message message-warning">
-        <?= __('WebP is not supported by GD') ?>
+        <?= /* @noEscape */ __('WebP is not supported by GD') ?>
     </div>
 <?php endif; ?>

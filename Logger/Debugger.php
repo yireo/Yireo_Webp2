@@ -17,6 +17,7 @@ class Debugger
      * @var Config
      */
     private $config;
+
     /**
      * @var LoggerInterface
      */

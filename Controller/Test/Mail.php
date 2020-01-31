@@ -112,7 +112,6 @@ class Mail extends Action
             'email' => $this->scopeConfig->getValue('trans_email_ident/general/email'),
         ];
 
-
         $senderInfo = [
             'name' => $this->scopeConfig->getValue('trans_email_ident/general/name'),
             'email' => $this->scopeConfig->getValue('trans_email_ident/general/email'),
