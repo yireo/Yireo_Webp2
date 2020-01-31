@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.7] - January 31st, 2020
+### Added
+- Add class attribute in picture (PR from itsazzad)
+- Better support info
+- Raise framework requirements for proper support of ViewModels
+- Added logic for fetching the css class from the original image (PR from duckchip)
+- Added missing  variable in the ReplaceTags plugin (PR from duckchip)
+
 ## [0.4.6] - November 23rd, 2019
 ### Fixed
 - Raise requirements for proper support of ViewModels
