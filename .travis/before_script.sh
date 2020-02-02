@@ -11,6 +11,6 @@ fi
 
 if [[ ${TEST_SUITE} = "integration" ]]; then
     echo "Prepare for running integration tests"
-    cp -R .magento/dev/* magento2/dev/
+    cp -R .magento/dev/* /tmp/magento2/dev/
     source .travis/scripts/prepare-integration-tests.sh
 fi

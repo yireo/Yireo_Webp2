@@ -4,7 +4,7 @@
 #
 
 set -e
-pushd magento2
+pushd /tmp/magento2
 
 if [ $TEST_SUITE == 'unit' ]; then
     vendor/bin/phpunit -c .magento/dev/tests/unit/phpunit.xml;
