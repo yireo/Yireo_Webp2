@@ -2,7 +2,7 @@
 pushd /tmp/magento2
 
 echo 'Creating magento-integration-test database'
-mysql -uroot -e 'CREATE DATABASE "magento-integration-test";'
+mysql -uroot -e 'CREATE DATABASE `magento-integration-test`;'
 echo "USE mysql;\nUPDATE user SET password=PASSWORD('root') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
 
 phpenv config-rm xdebug.ini
