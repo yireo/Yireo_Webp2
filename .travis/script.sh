@@ -7,6 +7,8 @@ set -e
 pushd /tmp/magento2
 
 if [ $TEST_SUITE == 'unit' ]; then
+    echo "Prepare for running unit tests"
+    source .travis/scripts/prepare-unit-tests.sh
     vendor/bin/phpunit -c .magento/dev/tests/unit/phpunit.xml;
 fi
 
@@ -20,6 +22,8 @@ if [ $TEST_SUITE == 'static' ]; then
 fi
 
 if [ $TEST_SUITE == 'integration' ]; then
+    cp -R .magento/dev/* /tmp/magento2/dev/
+    source .travis/scripts/prepare-integration-tests.sh
     vendor/bin/phpunit -c .magento/dev/tests/integration/phpunit.xml;
 fi
 

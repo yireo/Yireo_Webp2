@@ -12,6 +12,7 @@ addons:
     - magento2.test
 services:
   - docker
+  - mysql
 language: php
 php:
   #- 7.1
@@ -34,12 +35,8 @@ matrix:
 cache:
   directories:
     - $HOME/.composer/cache
-before_install:
-  - bash -x .travis/before_install.sh
 install:
   - bash -x .travis/install.sh
-before_script:
-  - bash -x .travis/before_script.sh
 script:
   - bash -x .travis/script.sh
 after_success:
