@@ -15,5 +15,6 @@ cp -R * /tmp/magento2/app/code/${EXTENSION_VENDOR}/${EXTENSION_NAME}/
 
 pushd /tmp/magento2
 composer install --prefer-dist
+test -f bin/magento || exit 1
 popd
 
