@@ -31,7 +31,7 @@ mkdir -p /tmp/magento2/app/code/${EXTENSION_VENDOR}/${EXTENSION_NAME}
 cp -R * /tmp/magento2/app/code/${EXTENSION_VENDOR}/${EXTENSION_NAME}/
 
 pushd /tmp/magento2
-composer install --prefer-dist
+composer install --dev --prefer-dist --optimize-autoloader
 test -f bin/magento || exit 1
 popd
 
