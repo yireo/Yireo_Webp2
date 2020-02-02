@@ -1,0 +1,48 @@
+sudo: required
+dist: trusty
+group: edge
+addons:
+  apt:
+    packages:
+      - mysql-server-5.6
+      - mysql-client-core-5.6
+      - mysql-client-5.6
+      - postfix
+  hosts:
+    - magento2.test
+services:
+  - docker
+language: php
+php:
+  #- 7.1
+  #- 7.2
+  - 7.3
+env:
+  global:
+    - MAGENTO_HOST_NAME="magento2.test"
+    - MAGENTO_PROTOCOL="https"
+    - MAGENTO_BACKEND="backend"
+    - MAGENTO_ADMIN_USERNAME="admin"
+    - MAGENTO_ADMIN_PASSWORD="123123q"
+  matrix:
+    #- TEST_SUITE=unit
+    - TEST_SUITE=integration
+    #- TEST_SUITE=phpstan
+    #- TEST_SUITE=static
+matrix:
+  fast_finish: true
+cache:
+  directories:
+    - $HOME/.composer/cache
+before_install:
+  - bash -x .travis/before_install.sh
+install:
+  - bash -x .travis/install.sh
+before_script:
+  - bash -x .travis/before_script.sh
+script:
+  - bash -x .travis/script.sh
+after_success:
+  - if [ $TEST_SUITE == 'unit' ]; then travis_retry coveralls; fi
+after_script:
+    - bash -x .travis/after_script.sh
