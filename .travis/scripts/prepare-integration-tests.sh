@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+pushd /tmp/magento2
+
 echo 'Creating magento2 database'
 mysql -uroot -e 'CREATE DATABASE magento2;'
 
@@ -31,5 +33,9 @@ php bin/magento deploy:mode:set developer
 php bin/magento config:set cms/wysiwyg/enabled disabled
 php bin/magento config:set admin/security/admin_account_sharing 1
 php bin/magento config:set admin/security/use_form_key 0
+    
+ls vendor/
+ls vendor/bin
+vendor/bin/phpunit -c dev/tests/integration/phpunit.xml;
     
 popd
