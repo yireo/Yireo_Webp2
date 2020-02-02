@@ -1,17 +1,6 @@
 #!/usr/bin/env bash
 echo 'Creating magento2 database'
-#mysql -uroot -e 'CREATE DATABASE magento2;'
-docker run \
-    --name=mysql \
-    --rm -it -d \
-    -p 3306 \
-    -e MYSQL_ROOT_PASSWORD=root \
-    -e MYSQL_DATABASE=magento2 \
-    -e MYSQL_SQL_TO_RUN='GRANT ALL ON *.* TO "root"@"%";' \
-    --tmpfs /var/lib/mysql:rw \
-    --tmpfs /tmp:rw \
-    --cpus=2 \
-    mysql:5.7
+mysql -uroot -e 'CREATE DATABASE magento2;'
 
 phpenv config-rm xdebug.ini
 
