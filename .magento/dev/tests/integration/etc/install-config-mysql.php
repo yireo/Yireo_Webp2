@@ -8,7 +8,7 @@ return [
     'db-host' => '127.0.0.1',
     'db-user' => 'root',
     'db-password' => 'root',
-    'db-name' => 'magento2',
+    'db-name' => 'magento-integration-test',
     'db-prefix' => '',
     'backend-frontname' => 'backend',
     'admin-user' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
