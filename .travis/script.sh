@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+#
+# Travis main script
+#
 
 set -e
 pushd magento2

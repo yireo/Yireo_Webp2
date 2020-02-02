@@ -4,7 +4,7 @@ set -e
 trap '>&2 echo Error: Command \`$BASH_COMMAND\` on line $LINENO failed with exit code $?' ERR
 
 if [[ ${TEST_SUITE} == "integration" ]]; then
-    source ./scripts/mock-mail.sh
+    source .travis/scripts/mock-mail.sh
 fi
 
 # disable xdebug and adjust memory limit
@@ -13,7 +13,4 @@ if [[ ${TEST_SUITE} != "unit" ]]; then
 fi
 echo 'memory_limit = -1' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 phpenv rehash;
-
-composer config --global http-basic.repo.magento.com "$MAGENTO_USERNAME" "$MAGENTO_PASSWORD"
-git clone --depth 1 https://github.com/magento/magento2
 
