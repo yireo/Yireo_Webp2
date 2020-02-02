@@ -13,66 +13,15 @@
          stderr="true"
 >
     <testsuites>
-        <testsuite name="YireoEmailTester2">
-            <directory suffix="Test.php">../../../vendor/yireo/magento2-emailtester2/Test/Integration</directory>
-        </testsuite>
-        <testsuite name="YireoCheckoutTester2">
-            <directory suffix="Test.php">../../../vendor/yireo/magento2-checkouttester2/Test/Integration</directory>
-        </testsuite>
-        <testsuite name="YireoSalesBlock2">
-            <directory suffix="Test.php">../../../vendor/yireo/magento2-salesblock2/Test/Integration</directory>
-        </testsuite>
-        <testsuite name="YireoGoogleTagManager2">
-            <directory suffix="Test.php">../../../vendor/yireo/magento2-googletagmanager2/Test/Integration</directory>
-        </testsuite>
-        <testsuite name="YireoWebp2">
-            <directory suffix="Test.php">../../../vendor/yireo/magento2-webp2/Test/Integration</directory>
-        </testsuite>
-        <testsuite name="YireoCommonViewModels">
-            <directory suffix="Test.php">../../../vendor/yireo/magento2-common-view-models/Test/Integration</directory>
-        </testsuite>
-        <testsuite name="YireoExampleDealers">
-            <directory suffix="Test.php">../../../vendor/yireo-training/magento2-example-dealers*/Test/Integration</directory>
-        </testsuite>
-        <testsuite name="YireoAll">
-            <directory suffix="Test.php">../../../app/code/Yireo/*/Test/Integration</directory>
-            <directory suffix="Test.php">../../../vendor/yireo/magento2-*/Test/Integration</directory>
-            <directory suffix="Test.php">../../../vendor/yireo-training/*/Test/Integration</directory>
-            <exclude>../../../vendor/yireo-training/magento2-di-recipes/Test/Integration/*</exclude>
-        </testsuite>
-        <testsuite name="YireoAllVendor">
-            <directory suffix="Test.php">../../../vendor/yireo/magento2-*/Test/Integration</directory>
-            <directory suffix="Test.php">../../../vendor/yireo-training/*/Test/Integration</directory>
-            <exclude>../../../vendor/yireo-training/magento2-di-recipes/Test/Integration/*</exclude>
-        </testsuite>
-        <testsuite name="YireoAllApp">
-            <directory suffix="Test.php">../../../app/code/Yireo/*/Test/Integration</directory>
-        </testsuite>
-        <testsuite name="ExtDN">
-            <directory suffix="Test.php">../../../vendor/fooman/*/tests/integration/testsuite/Fooman/*</directory>
-            <!--
-            <directory suffix="Test.php">../../../vendor/yireo/*/Test/Integration</directory>
-            <directory suffix="Test.php">../../../app/code/Yireo/*/Test/Integration</directory>
-            -->
-        </testsuite>
-        <testsuite name="WpContent">
-            <directory suffix="Test.php">../../../app/code/WpContent/*/Test/Integration</directory>
-            <directory suffix="Test.php">../../../vendor/yireo/magento2-wp-content*/Test/Integration</directory>
-        </testsuite>
-        <testsuite name="PrintDSGNR">
-            <directory suffix="Test.php">../../../app/code/PrintDSGNR/*/Test/Integration</directory>
-            <directory suffix="Test.php">../../../vendor/printdsgnr/*/Test/Integration</directory>
+        <testsuite name="App Files">
+            <directory suffix="Test.php">../../../app/code/*/*</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist addUncoveredFilesFromWhiteList="true">
-            <directory suffix=".php">../../../vendor/yireo-training</directory>
+            <directory suffix=".php">../../../app/code</directory>
             <exclude>
                 <directory>../../../app/code/*/*/Test</directory>
-                <directory>../../../lib/internal/*/*/Test</directory>
-                <directory>../../../lib/internal/*/*/*/Test</directory>
-                <directory>../../../setup/src/*/*/Test</directory>
-                <directory>../../../vendor/yireo/magento2-di-recipes/Test</directory>
             </exclude>
         </whitelist>
     </filter>
