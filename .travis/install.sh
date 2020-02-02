@@ -23,8 +23,7 @@ if [ -n "$MAGENTO_USERNAME" ]; then
     composer config --global http-basic.repo.magento.com "$MAGENTO_USERNAME" "$MAGENTO_PASSWORD"
 fi
 
-git clone --depth 1 https://github.com/magento/magento2 /tmp/magento2
-git checkout ${MAGENTO_VERSION}
+git clone --single-branch --branch ${MAGENTO_VERSION} https://github.com/magento/magento2 /tmp/magento2
 test -f /tmp/magento2/composer.json || exit 1
 
 source .module.ini
