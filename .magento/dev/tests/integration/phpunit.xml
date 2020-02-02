@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.2/phpunit.xsd"
+         colors="true"
+         beStrictAboutTestsThatDoNotTestAnything="false"
+         bootstrap="./framework/bootstrap.php"
+         stderr="true"
+>
+    <testsuites>
+        <testsuite name="YireoEmailTester2">
+            <directory suffix="Test.php">../../../vendor/yireo/magento2-emailtester2/Test/Integration</directory>
+        </testsuite>
+        <testsuite name="YireoCheckoutTester2">
+            <directory suffix="Test.php">../../../vendor/yireo/magento2-checkouttester2/Test/Integration</directory>
+        </testsuite>
+        <testsuite name="YireoSalesBlock2">
+            <directory suffix="Test.php">../../../vendor/yireo/magento2-salesblock2/Test/Integration</directory>
+        </testsuite>
+        <testsuite name="YireoGoogleTagManager2">
+            <directory suffix="Test.php">../../../vendor/yireo/magento2-googletagmanager2/Test/Integration</directory>
+        </testsuite>
+        <testsuite name="YireoWebp2">
+            <directory suffix="Test.php">../../../vendor/yireo/magento2-webp2/Test/Integration</directory>
+        </testsuite>
+        <testsuite name="YireoCommonViewModels">
+            <directory suffix="Test.php">../../../vendor/yireo/magento2-common-view-models/Test/Integration</directory>
+        </testsuite>
+        <testsuite name="YireoExampleDealers">
+            <directory suffix="Test.php">../../../vendor/yireo-training/magento2-example-dealers*/Test/Integration</directory>
+        </testsuite>
+        <testsuite name="YireoAll">
+            <directory suffix="Test.php">../../../app/code/Yireo/*/Test/Integration</directory>
+            <directory suffix="Test.php">../../../vendor/yireo/magento2-*/Test/Integration</directory>
+            <directory suffix="Test.php">../../../vendor/yireo-training/*/Test/Integration</directory>
+            <exclude>../../../vendor/yireo-training/magento2-di-recipes/Test/Integration/*</exclude>
+        </testsuite>
+        <testsuite name="YireoAllVendor">
+            <directory suffix="Test.php">../../../vendor/yireo/magento2-*/Test/Integration</directory>
+            <directory suffix="Test.php">../../../vendor/yireo-training/*/Test/Integration</directory>
+            <exclude>../../../vendor/yireo-training/magento2-di-recipes/Test/Integration/*</exclude>
+        </testsuite>
+        <testsuite name="YireoAllApp">
+            <directory suffix="Test.php">../../../app/code/Yireo/*/Test/Integration</directory>
+        </testsuite>
+        <testsuite name="ExtDN">
+            <directory suffix="Test.php">../../../vendor/fooman/*/tests/integration/testsuite/Fooman/*</directory>
+            <!--
+            <directory suffix="Test.php">../../../vendor/yireo/*/Test/Integration</directory>
+            <directory suffix="Test.php">../../../app/code/Yireo/*/Test/Integration</directory>
+            -->
+        </testsuite>
+        <testsuite name="WpContent">
+            <directory suffix="Test.php">../../../app/code/WpContent/*/Test/Integration</directory>
+            <directory suffix="Test.php">../../../vendor/yireo/magento2-wp-content*/Test/Integration</directory>
+        </testsuite>
+        <testsuite name="PrintDSGNR">
+            <directory suffix="Test.php">../../../app/code/PrintDSGNR/*/Test/Integration</directory>
+            <directory suffix="Test.php">../../../vendor/printdsgnr/*/Test/Integration</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist addUncoveredFilesFromWhiteList="true">
+            <directory suffix=".php">../../../vendor/yireo-training</directory>
+            <exclude>
+                <directory>../../../app/code/*/*/Test</directory>
+                <directory>../../../lib/internal/*/*/Test</directory>
+                <directory>../../../lib/internal/*/*/*/Test</directory>
+                <directory>../../../setup/src/*/*/Test</directory>
+                <directory>../../../vendor/yireo/magento2-di-recipes/Test</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+    <php>
+        <includePath>.</includePath>
+        <includePath>testsuite</includePath>
+        <ini name="date.timezone" value="America/Los_Angeles"/>
+        <ini name="xdebug.max_nesting_level" value="200"/>
+        <const name="TESTS_INSTALL_CONFIG_FILE" value="etc/install-config-mysql.php"/>
+        <const name="TESTS_GLOBAL_CONFIG_FILE" value="etc/config-global.php"/>
+        <const name="TESTS_GLOBAL_CONFIG_DIR" value="../../../app/etc"/>
+        <const name="TESTS_CLEANUP" value="enabled"/>
+        <const name="TESTS_MEM_USAGE_LIMIT" value="4096M"/>
+        <const name="TESTS_MEM_LEAK_LIMIT" value=""/>
+        <const name="TESTS_EXTRA_VERBOSE_LOG" value="1"/>
+        <const name="TESTS_MAGENTO_MODE" value="developer"/>
+        <const name="TESTS_ERROR_LOG_LISTENER_LEVEL" value="-1"/>
+    </php>
+    <listeners>
+        <listener class="Magento\TestFramework\Event\PhpUnit"/>
+        <listener class="Magento\TestFramework\ErrorLog\Listener"/>
+    </listeners>
+</phpunit>
