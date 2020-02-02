@@ -4,6 +4,8 @@
 #
 
 set -e
+cp -R .magento/* /tmp/magento2/
+
 pushd /tmp/magento2
 
 if [ $TEST_SUITE == 'unit' ]; then
@@ -22,7 +24,6 @@ if [ $TEST_SUITE == 'static' ]; then
 fi
 
 if [ $TEST_SUITE == 'integration' ]; then
-    cp -R ${TRAVIS_BUILD_DIR}/.magento/dev/* /tmp/magento2/dev/
     source ${TRAVIS_BUILD_DIR}/.travis/scripts/prepare-integration-tests.sh
 fi
 

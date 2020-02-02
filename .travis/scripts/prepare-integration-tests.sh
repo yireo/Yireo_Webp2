@@ -33,12 +33,7 @@ php bin/magento setup:install \
 
 echo "Enabling developer mode"
 php bin/magento deploy:mode:set developer
-php bin/magento config:set cms/wysiwyg/enabled disabled
-php bin/magento config:set admin/security/admin_account_sharing 1
-php bin/magento config:set admin/security/use_form_key 0
     
-ls vendor/
-ls vendor/bin
 vendor/bin/phpunit -c dev/tests/integration/phpunit.xml;
     
 popd
