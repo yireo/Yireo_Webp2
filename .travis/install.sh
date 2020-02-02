@@ -35,3 +35,4 @@ composer install --dev --prefer-dist --optimize-autoloader
 test -f bin/magento || exit 1
 popd
 
+cp -R .magento/* /tmp/magento2/

@@ -34,6 +34,6 @@ php bin/magento setup:install \
 echo "Enabling developer mode"
 php bin/magento deploy:mode:set developer
     
-vendor/bin/phpunit -c dev/tests/integration/phpunit.xml;
+vendor/bin/phpunit -c dev/tests/integration/phpunit.xml
     
 popd

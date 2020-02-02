@@ -4,8 +4,6 @@
 #
 
 set -e
-cp -R .magento/* /tmp/magento2/
-
 pushd /tmp/magento2
 
 if [ $TEST_SUITE == 'unit' ]; then
