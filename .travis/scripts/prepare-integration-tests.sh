@@ -25,6 +25,7 @@ php bin/magento setup:install \
     --db-host=127.0.0.1 \
     --db-name=magento2 \
     --db-user=root \
+    --db-password=root \
     --cleanup-database \
     --admin-use-security-key=0 \
     --admin-password="${MAGENTO_ADMIN_PASSWORD}"
