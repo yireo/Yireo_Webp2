@@ -24,7 +24,7 @@ fi
 if [ $TEST_SUITE == 'integration' ]; then
     cp -R ${TRAVIS_BUILD_DIR}/.magento/dev/* /tmp/magento2/dev/
     source ${TRAVIS_BUILD_DIR}/.travis/scripts/prepare-integration-tests.sh
-    vendor/bin/phpunit -c .magento/dev/tests/integration/phpunit.xml;
+    vendor/bin/phpunit -c dev/tests/integration/phpunit.xml;
 fi
 
 popd
