@@ -28,7 +28,8 @@ env:
   matrix:
     #- TEST_SUITE=unit
     - TEST_SUITE=integration MAGENTO_VERSION=2.3
-    #- TEST_SUITE=phpstan
+    #- TEST_SUITE=functional MAGENTO_VERSION=2.3
+    #- TEST_SUITE=installation MAGENTO_VERSION=2.3
     #- TEST_SUITE=static
 matrix:
   fast_finish: true
