@@ -94,7 +94,7 @@ class BrowserSupport implements ArgumentInterface
      */
     public function acceptsWebpHeader(): bool
     {
-        if (strpos($this->request->getHeader('ACCEPT'), 'image/webp')) {
+        if (strpos((string)$this->request->getHeader('ACCEPT'), 'image/webp')) {
             return true;
         }
 
