@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 echo 'Creating magento2 database'
-mysql -uroot -e 'CREATE DATABASE magento2;'
+mysql -u root --password=root -e 'CREATE DATABASE magento2;'
 
 phpenv config-rm xdebug.ini
 
