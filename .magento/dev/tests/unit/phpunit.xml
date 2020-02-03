@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.2/phpunit.xsd"
+         colors="true"
+         beStrictAboutTestsThatDoNotTestAnything="false"
+         bootstrap="../../../vendor/autoload.php"
+         stderr="true"
+>
+    <testsuites>
+        <testsuite name="App">
+            <directory suffix="Test.php">../../../app/code/*/*/Test/Unit</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist addUncoveredFilesFromWhiteList="true">
+            <directory suffix=".php">../../../app/code</directory>
+            <exclude>
+                <directory>../../../app/code/*/*/Test</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+    <php>
+        <includePath>.</includePath>
+        <includePath>testsuite</includePath>
+        <ini name="date.timezone" value="America/Los_Angeles"/>
+        <ini name="xdebug.max_nesting_level" value="200"/>
+    </php>
+</phpunit>
