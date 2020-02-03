@@ -9,22 +9,22 @@ php bin/magento setup:install \
     --language="en_US" \
     --timezone="UTC" \
     --currency="USD" \
-    --base-url="${MAGENTO_PROTOCOL}://${MAGENTO_HOST_NAME}/" \
-    --base-url-secure="${MAGENTO_PROTOCOL}://${MAGENTO_HOST_NAME}/" \
+    --base-url="http://magento2.test/" \
+    --base-url-secure="http://magento2.test/" \
     --use-secure=1 \
     --use-secure-admin=1 \
     --admin-firstname="John" \
     --admin-lastname="Doe" \
-    --backend-frontname="${MAGENTO_BACKEND}" \
+    --backend-frontname="admin" \
     --admin-email="admin@example.com" \
-    --admin-user="${MAGENTO_ADMIN_USERNAME}" \
+    --admin-user="admin" \
     --use-rewrites=1 \
     --db-host=127.0.0.1 \
     --db-name=magento2 \
     --db-user=root \
     --cleanup-database \
     --admin-use-security-key=0 \
-    --admin-password="${MAGENTO_ADMIN_PASSWORD}"
+    --admin-password="1234admin"
 
 echo "Enabling developer mode"
 php bin/magento deploy:mode:set developer

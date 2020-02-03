@@ -19,12 +19,6 @@ php:
   - 7.3
   #- 7.4
 env:
-  global:
-    - MAGENTO_HOST_NAME="magento2.test"
-    - MAGENTO_PROTOCOL="https"
-    - MAGENTO_BACKEND="backend"
-    - MAGENTO_ADMIN_USERNAME="admin"
-    - MAGENTO_ADMIN_PASSWORD="123123q"
   matrix:
     #- TEST_SUITE=unit
     - TEST_SUITE=integration MAGENTO_VERSION=2.3
