@@ -10,7 +10,6 @@ phpenv config-rm xdebug.ini
 
 echo "Running integration tests"
 cd dev/tests/integration/
-cat phpunit.xml
 ../../../vendor/bin/phpunit -c phpunit.xml
     
 popd
