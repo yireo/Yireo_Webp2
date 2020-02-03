@@ -36,6 +36,7 @@ php bin/magento deploy:mode:set developer
     
 echo "Running integration tests"
 cd dev/tests/integration/
+cat phpunit.xml
 ../../../vendor/bin/phpunit
     
 popd
