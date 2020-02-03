@@ -14,11 +14,11 @@ fi
 
 if [ $TEST_SUITE == 'phpstan' ]; then
     composer require --dev phpstan/phpstan fooman/phpstan-magento2-magic-methods;
-    vendor/bin/phpstan analyse -l 2 app/code/Yireo/* -a dev/tests/api-functional/framework/autoload.php;
+    vendor/bin/phpstan analyse -l 2 app/code/* -a dev/tests/api-functional/framework/autoload.php;
 fi
 
 if [ $TEST_SUITE == 'static' ]; then
-    vendor/bin/phpcs --standard=dev/tests/static/framework/Magento/ app/code/Yireo*;
+    vendor/bin/phpcs --standard=dev/tests/static/framework/Magento/ app/code/*;
 fi
 
 if [ $TEST_SUITE == 'integration' ]; then
