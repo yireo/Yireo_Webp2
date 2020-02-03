@@ -26,7 +26,7 @@ fi
 git clone --single-branch --branch ${MAGENTO_VERSION} https://github.com/magento/magento2 /tmp/magento2
 test -f /tmp/magento2/composer.json || exit 1
 
-rm -rf /tmp/magento2/app/code/*
+#rm -rf /tmp/magento2/app/code/*
 
 source .module.ini
 mkdir -p /tmp/magento2/app/code/${EXTENSION_VENDOR}/${EXTENSION_NAME}
