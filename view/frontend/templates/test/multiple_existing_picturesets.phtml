@@ -6,6 +6,8 @@ $images = $imageProvider->getImages();
 ?>
 <?php foreach ($images as $image) : ?>
     <div>
-        <img src="<?= $block->escapeUrl($block->getViewFileUrl('Yireo_Webp2/' . $image)) ?>" width="100" height="100"/>
+        <picture>
+            <img src="<?= $block->escapeUrl($block->getViewFileUrl('Yireo_Webp2/' . $image)) ?>" width="100" height="100"/>
+        </picture>
     </div>
 <?php endforeach; ?>
