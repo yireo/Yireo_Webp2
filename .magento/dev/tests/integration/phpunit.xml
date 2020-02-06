@@ -8,14 +8,14 @@
 >
     <testsuites>
         <testsuite name="App">
-            <directory suffix="Test.php">../../../app/code/*/*/Test/Integration</directory>
+            <directory suffix="Test.php">../../../vendor/yireo/*/Test/Integration</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist addUncoveredFilesFromWhiteList="true">
-            <directory suffix=".php">../../../app/code</directory>
+            <directory suffix=".php">../../../vendor/yireo</directory>
             <exclude>
-                <directory>../../../app/code/*/*/Test</directory>
+                <directory>../../../vendor/yireo/*/Test</directory>
             </exclude>
         </whitelist>
     </filter>
