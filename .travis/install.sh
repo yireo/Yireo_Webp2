@@ -33,7 +33,7 @@ source .module.ini
 test -z "${COMPOSER_NAME}" && exit 1
 
 mkdir -p /tmp/magento2/source/${EXTENSION_VENDOR}_${EXTENSION_NAME}
-cp -R ${MODULE_FOLDER}/* /tmp/magento2/source/${EXTENSION_VENDOR}_${EXTENSION_NAME}/
+cp -R * /tmp/magento2/source/${EXTENSION_VENDOR}_${EXTENSION_NAME}/
 
 pushd /tmp/magento2
 composer install --dev --prefer-dist --optimize-autoloader
