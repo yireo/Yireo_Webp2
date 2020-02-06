@@ -30,12 +30,18 @@ echo "Reset root password to root"
 echo "USE mysql;\nUPDATE user SET password=PASSWORD('root') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
 
 source .module.ini
-mkdir -p /tmp/magento2/app/code/${EXTENSION_VENDOR}/${EXTENSION_NAME}
-cp -R * /tmp/magento2/app/code/${EXTENSION_VENDOR}/${EXTENSION_NAME}/
+test -z "${COMPOSER_NAME}" && exit 1
+MODULE_FOLDER=`pwd`
+
+#mkdir -p /tmp/magento2/app/code/${EXTENSION_VENDOR}/${EXTENSION_NAME}
+#cp -R ${MODULE_FOLDER}/* /tmp/magento2/app/code/${EXTENSION_VENDOR}/${EXTENSION_NAME}/
 
 pushd /tmp/magento2
 composer install --dev --prefer-dist --optimize-autoloader
 test -f bin/magento || exit 1
+
+composer config repositories.${COMPOSER_NAME} path ${MODULE_FOLDER}
+composer require ${COMPOSER_NAME}:@dev
 popd
 
 cp -R .magento/* /tmp/magento2/
