@@ -3,7 +3,4 @@
     <type name="Magento\Framework\View\LayoutInterface">
         <plugin name="yireo_webp2_replace_tags" type="Yireo\Webp2\Plugin\ReplaceTags"/>
     </type>
-    <type name="Magento\Catalog\Block\Product\View\Gallery">
-        <plugin name="yireo_webp2_replace_gallery" type="Yireo\Webp2\Plugin\ReplaceGalleryImages"/>
-    </type>
 </config>

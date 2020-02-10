@@ -85,14 +85,14 @@ class ReplaceTags
             return $output;
         }
 
-        $regex = '/<([^<]+)\ src=\"([^\"]+)\.(png|jpg|jpeg)([^>]+)>(\s*)<\/([a-z]+)/msi';
+        $regex = '/<([^<]+)\ src=\"([^\"]+)\.(png|jpg|jpeg)([^>]+)>(\s*)<(\/?)([a-z]+)/msi';
         if (preg_match_all($regex, $output, $matches) === false) {
             return $output;
         }
 
         foreach ($matches[0] as $index => $match) {
 
-            $nextTag = $matches[6][$index];
+            $nextTag = $matches[7][$index];
             if ($nextTag === 'picture') {
                 continue;
             }
