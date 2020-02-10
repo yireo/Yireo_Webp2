@@ -24,6 +24,3 @@ offering this to them, is wasting additional bandwidth.
 It could be that your transactional email templates are including XML layout handles that suddenly introduce this extensions functionality, while actually adding WebP to emails is a bad idea (because most email clients will not support anything of the like). 
 
 If you encounter such an email, find out which XML layout handle is the cause of this (`{handle layout="foobar"}`). Next, create a new XML layout file with that name (`foobar.xml`) and call the `webp_skip` handle from it (`<update handle="webp_skip" />`). So this instructs the WebP extension to skip loading itself.
-
-# Unable to install under PHP 7.0
-Our module requires PHP 7.1 or higher. As of such, Magento 2.0 is also no longer supported.
