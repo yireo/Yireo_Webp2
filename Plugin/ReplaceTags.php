@@ -109,8 +109,6 @@ class ReplaceTags
                 if ($this->config->isDebugging()) {
                     throw $e;
                 }
-                die($e->getMessage());
-
 
                 $result = false;
                 $this->debugger->debug($e->getMessage(), [$imageUrl, $webpUrl]);
