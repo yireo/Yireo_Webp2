@@ -85,24 +85,23 @@ class ReplaceTags
             return $output;
         }
 
-        $regex = '/<([^<]+)\ src=\"([^\"]+)\.(png|jpg|jpeg)([^>]+)>/mi';
-        if (preg_match_all($regex, $output, $matches, PREG_OFFSET_CAPTURE) === false) {
+        $regex = '/<([^<]+)\ src=\"([^\"]+)\.(png|jpg|jpeg)([^>]+)>(\s*)<\/([a-z]+)/msi';
+        if (preg_match_all($regex, $output, $matches) === false) {
             return $output;
         }
 
-        $accumulatedChange = 0;
-
         foreach ($matches[0] as $index => $match) {
-            $offset = $match[1] + $accumulatedChange;
-            $htmlTag = $matches[0][$index][0];
-            $imageUrl = $matches[2][$index][0] . '.' . $matches[3][$index][0];
+
+            $nextTag = $matches[6][$index];
+            if ($nextTag === 'picture') {
+                continue;
+            }
+
+            $fullSearchMatch = $matches[0][$index];
+            $htmlTag = preg_replace('/>(.*)/msi', '>', $fullSearchMatch);
+            $imageUrl = $matches[2][$index] . '.' . $matches[3][$index];
 
             $webpUrl = $this->file->toWebp($imageUrl);
-
-            $altText = $this->getAttributeText($htmlTag, 'alt');
-            $width = $this->getAttributeText($htmlTag, 'width');
-            $height = $this->getAttributeText($htmlTag, 'height');
-            $class = $this->getAttributeText($htmlTag, 'class');
 
             try {
                 $result = $this->convertor->convert($imageUrl, $webpUrl);
@@ -110,6 +109,8 @@ class ReplaceTags
                 if ($this->config->isDebugging()) {
                     throw $e;
                 }
+                die($e->getMessage());
+
 
                 $result = false;
                 $this->debugger->debug($e->getMessage(), [$imageUrl, $webpUrl]);
@@ -122,15 +123,15 @@ class ReplaceTags
             $newHtmlTag = $this->getPictureBlock($layout)
                 ->setOriginalImage($imageUrl)
                 ->setWebpImage($webpUrl)
-                ->setAltText($altText)
+                ->setAltText($this->getAttributeText($htmlTag, 'alt'))
                 ->setOriginalTag($htmlTag)
-                ->setClass($class)
-                ->setWidth($width)
-                ->setHeight($height)
+                ->setClass($this->getAttributeText($htmlTag, 'class'))
+                ->setWidth($this->getAttributeText($htmlTag, 'width'))
+                ->setHeight($this->getAttributeText($htmlTag, 'height'))
                 ->toHtml();
 
-            $output = substr_replace($output, $newHtmlTag, $offset, strlen($htmlTag));
-            $accumulatedChange = $accumulatedChange + (strlen($newHtmlTag) - strlen($htmlTag));
+            $replacement = $newHtmlTag . '<' . $nextTag;
+            $output = str_replace($fullSearchMatch, $replacement, $output);
         }
 
         return $output;
