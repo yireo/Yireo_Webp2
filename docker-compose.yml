@@ -1,0 +1,25 @@
+version: "2"
+services:
+  php:
+    build: .
+    #image: php:7.3-cli
+    tmpfs:
+      - /tmp:mode=1777
+    links:
+      - mysql
+    environment:
+      - MAGENTO_VERSION=2.3
+      - TEST_SUITE=integration
+    command: .ci-scripts/run.sh
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "magento2"
+      MYSQL_SQL_TO_RUN: 'GRANT ALL ON *.* TO "root"@"%";'
+    tmpfs:
+      - /tmp:mode=1777
+      - /var/lib/mysql:mode=1777
+    ports:
+      - 3306

@@ -1,9 +1,9 @@
 addons:
   apt:
     packages:
-      - mysql-server-5.6
-      - mysql-client-core-5.6
-      - mysql-client-5.6
+      - mysql-server-5.7
+      - mysql-client-core-5.7
+      - mysql-client-5.7
       - postfix
 services:
   - mysql
@@ -26,10 +26,10 @@ cache:
   directories:
     - $HOME/.composer/cache
 install:
-  - bash -x .travis/install.sh
+  - bash -x .ci-scripts/pre-travis.sh
 script:
-  - bash -x .travis/script.sh
+  - bash -x .ci-scripts/run.sh
 after_success:
   - if [ $TEST_SUITE == 'unit' ]; then travis_retry coveralls; fi
 after_script:
-    - bash -x .travis/after_script.sh
+    - bash -x .ci-scripts/after_script.sh
