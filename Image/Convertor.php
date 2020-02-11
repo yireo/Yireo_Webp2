@@ -55,7 +55,8 @@ class Convertor
             return false;
         }
 
-        return WebPConvert::convert($sourceImageFilename, $destinationImageFilename, $this->getOptions());
+        WebPConvert::convert($sourceImageFilename, $destinationImageFilename, $this->getOptions());
+        return true;
     }
 
     /**
