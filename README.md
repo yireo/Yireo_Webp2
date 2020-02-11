@@ -9,12 +9,4 @@ This module adds WebP support to Magento 2. Currently, it ships with the followi
 - [TODO](TODO.md)
 
 ## Requesting support
-Feel free to open an **Issue** here on GitHub. However, do make sure to be thorough and mention the following:
-
-- Your browser;
-- Your Magento version;
-- Your PHP version including an indication of it supporting WebP;
-- The location of the `cwebp` binary on your system;
-- Preferably an URL to a live demo;
-- An indication on which Magento caches are enabled or disabled;
-
+Feel free to open an **Issue** here on GitHub. However, do make sure to be thorough. See [SUPPORT.md](SUPPORT.md) for further details.
