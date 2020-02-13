@@ -2,7 +2,6 @@ version: "2"
 services:
   php:
     build: .
-    #image: php:7.3-cli
     tmpfs:
       - /tmp:mode=1777
     links:

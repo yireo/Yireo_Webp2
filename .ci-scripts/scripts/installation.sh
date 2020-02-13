@@ -4,8 +4,6 @@ pushd /tmp/magento2
 echo 'Creating magento2 database'
 mysql -u root --password=root -e 'CREATE DATABASE `magento2`;'
 
-phpenv config-rm xdebug.ini
-
 echo "Installing Magento"
 php bin/magento setup:install \
     --language="en_US" \

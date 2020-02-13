@@ -2,8 +2,6 @@
 #
 # Travis installation script run before running main script
 #
-set -e
-trap '>&2 echo Error: Command \`$BASH_COMMAND\` on line $LINENO failed with exit code $?' ERR
 
 if [ -z "$MAGENTO_VERSION" ]; then
     echo "No MAGENTO_VERSION variable defined. Exiting"
@@ -13,6 +11,10 @@ fi
 if [ -z "$TEST_SUITE" ]; then
     echo "No TEST_SUITE variable defined. Exiting"
     exit 1
+fi
+
+if [ -z "$TRAVIS_BUILD_DIR" ]; then
+    TRAVIS_BUILD_DIR=/source
 fi
 
 if [[ ${TEST_SUITE} == "functional" ]]; then
@@ -28,7 +30,7 @@ git clone --single-branch --branch ${MAGENTO_VERSION} https://github.com/magento
 test -f /tmp/magento2/composer.json || exit 1
 
 echo "Reset root password to root"
-echo "USE mysql;\nUPDATE user SET password=PASSWORD('root') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
+echo "USE mysql;\nUPDATE user SET authentication_string=PASSWORD('root') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
 
 source .module.ini
 test -z "${COMPOSER_NAME}" && exit 1
@@ -37,7 +39,7 @@ mkdir -p /tmp/magento2/source/${EXTENSION_VENDOR}_${EXTENSION_NAME}
 cp -R * /tmp/magento2/source/${EXTENSION_VENDOR}_${EXTENSION_NAME}/
 
 pushd /tmp/magento2
-composer install --dev --prefer-dist --optimize-autoloader
+composer install --prefer-dist --optimize-autoloader
 test -f bin/magento || exit 1
 
 composer config repositories.${COMPOSER_NAME} path source/${EXTENSION_VENDOR}_${EXTENSION_NAME}/
