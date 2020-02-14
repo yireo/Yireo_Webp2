@@ -25,20 +25,20 @@ if [ -n "$MAGENTO_USERNAME" ]; then
     composer config --global http-basic.repo.magento.com "$MAGENTO_USERNAME" "$MAGENTO_PASSWORD"
 fi
 
-git clone --single-branch --branch ${MAGENTO_VERSION} https://github.com/magento/magento2 /tmp/magento2
+git clone --single-branch --branch ${MAGENTO_VERSION} https://github.com/magento/magento2 /data/magento2
 
-test -f /tmp/magento2/composer.json || exit 1
+test -f /data/magento2/composer.json || exit 1
 
 echo "Reset root password to root"
-echo "USE mysql;\nUPDATE user SET authentication_string=PASSWORD('root') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
+echo "USE mysql; UPDATE user SET authentication_string=PASSWORD('root') WHERE user='root'; FLUSH PRIVILEGES;" | mysql -u root
 
 source .module.ini
 test -z "${COMPOSER_NAME}" && exit 1
 
-mkdir -p /tmp/magento2/source/${EXTENSION_VENDOR}_${EXTENSION_NAME}
-cp -R * /tmp/magento2/source/${EXTENSION_VENDOR}_${EXTENSION_NAME}/
+mkdir -p /data/magento2/source/${EXTENSION_VENDOR}_${EXTENSION_NAME}
+cp -R * /data/magento2/source/${EXTENSION_VENDOR}_${EXTENSION_NAME}/
 
-pushd /tmp/magento2
+pushd /data/magento2
 composer install --prefer-dist --optimize-autoloader
 test -f bin/magento || exit 1
 
@@ -46,10 +46,10 @@ composer config repositories.${COMPOSER_NAME} path source/${EXTENSION_VENDOR}_${
 composer require ${COMPOSER_NAME}:@dev
 popd
 
-cp -R .magento/* /tmp/magento2/
+cp -R .magento/* /data/magento2/
 
 set -e
-pushd /tmp/magento2
+pushd /data/magento2
 
 if [ $TEST_SUITE == 'unit' ]; then
     echo "Prepare for running unit tests"

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-pushd /tmp/magento2
+pushd /data/magento2
 
 echo 'Creating magento2 database'
 mysql -u root --password=root -e 'CREATE DATABASE `magento2`;'

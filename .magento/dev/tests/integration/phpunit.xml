@@ -28,14 +28,16 @@
         <const name="TESTS_GLOBAL_CONFIG_FILE" value="etc/config-global.php"/>
         <const name="TESTS_GLOBAL_CONFIG_DIR" value="../../../app/etc"/>
         <const name="TESTS_CLEANUP" value="enabled"/>
-        <const name="TESTS_MEM_USAGE_LIMIT" value="4096M"/>
+        <const name="TESTS_MEM_USAGE_LIMIT" value="1024M"/>
         <const name="TESTS_MEM_LEAK_LIMIT" value=""/>
-        <const name="TESTS_EXTRA_VERBOSE_LOG" value="1"/>
+        <const name="TESTS_EXTRA_VERBOSE_LOG" value="0"/>
         <const name="TESTS_MAGENTO_MODE" value="developer"/>
         <const name="TESTS_ERROR_LOG_LISTENER_LEVEL" value="-1"/>
     </php>
+    <!--
     <listeners>
         <listener class="Magento\TestFramework\Event\PhpUnit"/>
         <listener class="Magento\TestFramework\ErrorLog\Listener"/>
     </listeners>
+    -->
 </phpunit>
