@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-pushd /data/magento2
+pushd /tmp/magento2
 
 test -f dev/tests/unit/phpunit.xml || exit 0
 
