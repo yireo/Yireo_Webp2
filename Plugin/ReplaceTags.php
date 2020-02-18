@@ -5,6 +5,7 @@ namespace Yireo\Webp2\Plugin;
 
 use Exception as ExceptionAlias;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Yireo\Webp2\Block\Picture;
 use Yireo\Webp2\Config\Config;
 use Yireo\Webp2\Image\Convertor;
@@ -37,7 +38,10 @@ class ReplaceTags
      * @var Config
      */
     private $config;
-
+    /**
+    * @var \Magento\Store\Model\StoreManagerInterface $this->_storeManager
+    */
+    private $_storeManager;
     /**
      * ReplaceTags constructor.
      *
@@ -50,12 +54,14 @@ class ReplaceTags
         Convertor $convertor,
         File $file,
         Debugger $debugger,
-        Config $config
+        Config $config,
+        StoreManagerInterface $storeManager
     ) {
         $this->convertor = $convertor;
         $this->file = $file;
         $this->debugger = $debugger;
         $this->config = $config;
+        $this->_storeManager = $storeManager;
     }
 
     /**
@@ -84,24 +90,61 @@ class ReplaceTags
         if ($this->config->enabled() === false) {
             return $output;
         }
-
-        $regex = '/<([^<]+)\ src=\"([^\"]+)\.(png|jpg|jpeg)([^>]+)>(\s*)<(\/?)([a-z]+)/msi';
-        if (preg_match_all($regex, $output, $matches) === false) {
-            return $output;
-        }
-
-        foreach ($matches[0] as $index => $match) {
-
-            $nextTag = $matches[7][$index];
-            if ($nextTag === '/picture') {
-                continue;
+        
+        
+        $regex = '/<([^<]+)\ src=\"([^\"]+)\.(png|jpg|jpeg)([^>]+)>/mi';
+        $regex_data = '/<([^<]+)\ data-src=\"([^\"]+)\.(png|jpg|jpeg)([^>]+)>/mi';
+        if (preg_match_all($regex, $output, $matches, PREG_OFFSET_CAPTURE) === false) {           
+            if (preg_match_all($regex_data, $output, $matches, PREG_OFFSET_CAPTURE) === false) {
+                return $output;
             }
+        }
+        
+       
 
-            $fullSearchMatch = $matches[0][$index];
-            $htmlTag = preg_replace('/>(.*)/msi', '>', $fullSearchMatch);
-            $imageUrl = $matches[2][$index] . '.' . $matches[3][$index];
+       
+        $output = $this->getConvertedContent($matches, $output, $layout);
+        
+         if(preg_match_all($regex_data, $output, $matches, PREG_OFFSET_CAPTURE) === false){
+             return $output;            
+        }
+         $output = $this->getConvertedContent($matches, $output, $layout);
+        return $output;
+    }
+    
+    
+    private function getConvertedContent($matches, $output, $layout){        
+        $baseurl = $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB);
+        $mediaurl = $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);        $accumulatedChange = 0;
+        foreach ($matches[0] as $index => $match) {
+            $offset = $match[1] + $accumulatedChange;
+            $htmlTag = $matches[0][$index][0];
+            $imageUrl = $matches[2][$index][0] . '.' . $matches[3][$index][0];
+
+            $pos = strpos($imageUrl, $baseurl);
+            $cdn = false;
+            if ($pos === false) {    
+                $pos1 = strpos($imageUrl, $mediaurl);
+                if ($pos1 === false) {       
+                    $result = false;
+                    continue;
+                } else {       
+                    $localimagePath = str_replace($mediaurl,'',$imageUrl);
+                    $imageUrl = str_replace('media/','',$localimagePath);
+                    $imageUrl = $baseurl.'media/'.$imageUrl;       
+                    $cdn = true;
+                } 
+    
+            } 
 
             $webpUrl = $this->file->toWebp($imageUrl);
+            $altText = $this->getAttributeText($htmlTag, 'alt');
+            $width = $this->getAttributeText($htmlTag, 'width');
+            $height = $this->getAttributeText($htmlTag, 'height');
+            $class = $this->getAttributeText($htmlTag, 'class');
+
+
+
 
             try {
                 $result = $this->convertor->convert($imageUrl, $webpUrl);
@@ -117,21 +160,30 @@ class ReplaceTags
             if (!$result && !$this->convertor->urlExists($webpUrl)) {
                 continue;
             }
-
+            //emirajbbd
+            if($cdn){
+                $imageUrl = $mediaurl.$localimagePath;
+                $webpUrl = $this->file->toWebp($imageUrl);
+                
+            }
+            
+            
+            
+            
             $newHtmlTag = $this->getPictureBlock($layout)
                 ->setOriginalImage($imageUrl)
                 ->setWebpImage($webpUrl)
-                ->setAltText($this->getAttributeText($htmlTag, 'alt'))
+                ->setAltText($altText)
                 ->setOriginalTag($htmlTag)
-                ->setClass($this->getAttributeText($htmlTag, 'class'))
-                ->setWidth($this->getAttributeText($htmlTag, 'width'))
-                ->setHeight($this->getAttributeText($htmlTag, 'height'))
+                ->setClass($class)
+                ->setWidth($width)
+                ->setHeight($height)
                 ->toHtml();
 
-            $replacement = $newHtmlTag . '<' . $nextTag;
-            $output = str_replace($fullSearchMatch, $replacement, $output);
+            $output = substr_replace($output, $newHtmlTag, $offset, strlen($htmlTag));
+            $accumulatedChange = $accumulatedChange + (strlen($newHtmlTag) - strlen($htmlTag));
         }
-
+        
         return $output;
     }
 
