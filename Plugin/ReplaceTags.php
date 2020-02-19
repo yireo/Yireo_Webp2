@@ -39,9 +39,10 @@ class ReplaceTags
      */
     private $config;
     /**
-    * @var \Magento\Store\Model\StoreManagerInterface $this->_storeManager
-    */
+     * @var \Magento\Store\Model\StoreManagerInterface $this ->_storeManager
+     */
     private $_storeManager;
+
     /**
      * ReplaceTags constructor.
      *
@@ -56,7 +57,8 @@ class ReplaceTags
         Debugger $debugger,
         Config $config,
         StoreManagerInterface $storeManager
-    ) {
+    )
+    {
         $this->convertor = $convertor;
         $this->file = $file;
         $this->debugger = $debugger;
@@ -90,32 +92,32 @@ class ReplaceTags
         if ($this->config->enabled() === false) {
             return $output;
         }
-        
-        
+
+
         $regex = '/<([^<]+)\ src=\"([^\"]+)\.(png|jpg|jpeg)([^>]+)>/mi';
         $regex_data = '/<([^<]+)\ data-src=\"([^\"]+)\.(png|jpg|jpeg)([^>]+)>/mi';
-        if (preg_match_all($regex, $output, $matches, PREG_OFFSET_CAPTURE) === false) {           
+        if (preg_match_all($regex, $output, $matches, PREG_OFFSET_CAPTURE) === false) {
             if (preg_match_all($regex_data, $output, $matches, PREG_OFFSET_CAPTURE) === false) {
                 return $output;
             }
         }
-        
-       
 
-       
+
         $output = $this->getConvertedContent($matches, $output, $layout);
-        
-         if(preg_match_all($regex_data, $output, $matches, PREG_OFFSET_CAPTURE) === false){
-             return $output;            
+
+        if (preg_match_all($regex_data, $output, $matches, PREG_OFFSET_CAPTURE) === false) {
+            return $output;
         }
-         $output = $this->getConvertedContent($matches, $output, $layout);
+        $output = $this->getConvertedContent($matches, $output, $layout);
         return $output;
     }
-    
-    
-    private function getConvertedContent($matches, $output, $layout){        
+
+
+    private function getConvertedContent($matches, $output, $layout)
+    {
         $baseurl = $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB);
-        $mediaurl = $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);        $accumulatedChange = 0;
+        $mediaurl = $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+        $accumulatedChange = 0;
         foreach ($matches[0] as $index => $match) {
             $offset = $match[1] + $accumulatedChange;
             $htmlTag = $matches[0][$index][0];
@@ -123,27 +125,25 @@ class ReplaceTags
 
             $pos = strpos($imageUrl, $baseurl);
             $cdn = false;
-            if ($pos === false) {    
+            if ($pos === false) {
                 $pos1 = strpos($imageUrl, $mediaurl);
-                if ($pos1 === false) {       
+                if ($pos1 === false) {
                     $result = false;
                     continue;
-                } else {       
-                    $localimagePath = str_replace($mediaurl,'',$imageUrl);
-                    $imageUrl = str_replace('media/','',$localimagePath);
-                    $imageUrl = $baseurl.'media/'.$imageUrl;       
+                } else {
+                    $localimagePath = str_replace($mediaurl, '', $imageUrl);
+                    $imageUrl = str_replace('media/', '', $localimagePath);
+                    $imageUrl = $baseurl . 'media/' . $imageUrl;
                     $cdn = true;
-                } 
-    
-            } 
+                }
+
+            }
 
             $webpUrl = $this->file->toWebp($imageUrl);
             $altText = $this->getAttributeText($htmlTag, 'alt');
             $width = $this->getAttributeText($htmlTag, 'width');
             $height = $this->getAttributeText($htmlTag, 'height');
             $class = $this->getAttributeText($htmlTag, 'class');
-
-
 
 
             try {
@@ -160,16 +160,14 @@ class ReplaceTags
             if (!$result && !$this->convertor->urlExists($webpUrl)) {
                 continue;
             }
-            //emirajbbd
-            if($cdn){
-                $imageUrl = $mediaurl.$localimagePath;
+
+            if ($cdn) {
+                $imageUrl = $mediaurl . $localimagePath;
                 $webpUrl = $this->file->toWebp($imageUrl);
-                
+
             }
-            
-            
-            
-            
+
+
             $newHtmlTag = $this->getPictureBlock($layout)
                 ->setOriginalImage($imageUrl)
                 ->setWebpImage($webpUrl)
@@ -183,7 +181,7 @@ class ReplaceTags
             $output = substr_replace($output, $newHtmlTag, $offset, strlen($htmlTag));
             $accumulatedChange = $accumulatedChange + (strlen($newHtmlTag) - strlen($htmlTag));
         }
-        
+
         return $output;
     }
 
