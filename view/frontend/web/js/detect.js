@@ -10,7 +10,7 @@ define([
     'jquery'
 ], function ($) {
 
-    return function(config) {
+    return function (config) {
         if ($.cookie('webp')) {
             $('body').addClass('webp');
             return true;
