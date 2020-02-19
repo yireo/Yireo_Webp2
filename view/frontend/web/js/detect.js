@@ -12,6 +12,7 @@ define([
 
     return function(config) {
         if ($.cookie('webp')) {
+            $('body').addClass('webp');
             return true;
         }
 
@@ -20,6 +21,7 @@ define([
             if (Tester.width > 0 && Tester.height > 0) {
                 console.log('Set cookie');
                 document.cookie = 'webp=1';
+                $('body').addClass('webp');
             }
         };
 
