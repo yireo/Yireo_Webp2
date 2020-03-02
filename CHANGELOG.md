@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.1] - February 19th, 2020
+### Fixed
+- Prevent overwriting existing `picture` tags
+
 ## [0.5.0] - February 11th, 2020
 ### Added
 - Upgraded rosell-dk/webp-convert library

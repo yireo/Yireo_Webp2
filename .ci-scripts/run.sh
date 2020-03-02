@@ -30,7 +30,7 @@ git clone --single-branch --branch ${MAGENTO_VERSION} https://github.com/magento
 test -f /tmp/magento2/composer.json || exit 1
 
 echo "Reset root password to root"
-echo "USE mysql;\nUPDATE user SET authentication_string=PASSWORD('root') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
+echo "USE mysql; UPDATE user SET authentication_string=PASSWORD('root') WHERE user='root'; FLUSH PRIVILEGES;" | mysql -u root
 
 source .module.ini
 test -z "${COMPOSER_NAME}" && exit 1

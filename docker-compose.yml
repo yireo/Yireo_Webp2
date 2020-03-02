@@ -2,13 +2,12 @@ version: "2"
 services:
   php:
     build: .
-    tmpfs:
-      - /tmp:mode=1777
     links:
       - mysql
     environment:
-      - MAGENTO_VERSION=2.3
-      - TEST_SUITE=integration
+      MAGENTO_VERSION: "2.3"
+      TEST_SUITE: "integration"
+      MYSQL_HOST: "mysql"
     command: .ci-scripts/run.sh
 
   mysql:
@@ -18,7 +17,6 @@ services:
       MYSQL_DATABASE: "magento2"
       MYSQL_SQL_TO_RUN: 'GRANT ALL ON *.* TO "root"@"%";'
     tmpfs:
-      - /tmp:mode=1777
       - /var/lib/mysql:mode=1777
     ports:
       - 3306
