@@ -32,6 +32,7 @@ class FileTest extends TestCase
         $readFactoryMock = $this->getMockBuilder(ReadFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
+
         $target = new File($directoryListMock, $readFactoryMock);
         return $target;
     }

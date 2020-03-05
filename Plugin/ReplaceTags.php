@@ -92,7 +92,7 @@ class ReplaceTags
 
         foreach ($matches[0] as $index => $match) {
 
-            $nextTag = $matches[7][$index];
+            $nextTag = $matches[6][$index].$matches[7][$index];
             if ($nextTag === '/picture') {
                 continue;
             }
