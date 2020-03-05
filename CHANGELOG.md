@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.2] - March 5th, 2020
+### Fixed
+- Fix next tag not being closed properly
+
 ## [0.5.1] - February 19th, 2020
 ### Fixed
 - Prevent overwriting existing `picture` tags
