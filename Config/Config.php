@@ -47,6 +47,22 @@ class Config
     }
 
     /**
+     * @return bool
+     */
+    public function allowImageCreation(): bool
+    {
+        return (bool)$this->scopeConfig->getValue('yireo_webp2/settings/convert_images');
+    }
+
+    /**
+     * @return bool
+     */
+    public function addLazyLoading(): bool
+    {
+        return (bool)$this->scopeConfig->getValue('yireo_webp2/settings/lazy_loading');
+    }
+
+    /**
      * @param LayoutInterface $block
      * @return bool
      */
