@@ -18,6 +18,16 @@
                     <label>Debug Log</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="convert_images" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Convert WebP images</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Try to convert JPGs and PNGs to WebP, if the WebP image does not exist yet</comment>
+                </field>
+                <field id="lazy_loading" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Add lazy loading attribute</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Add <code>loading="lazy"</code> attribute, which is supported by some browsers]]></comment>
+                </field>
                 <field id="gd" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>GD support</label>
                     <frontend_model>Yireo\Webp2\Block\Adminhtml\System\Config\Gd</frontend_model>
