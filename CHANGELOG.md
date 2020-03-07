@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.6.0] - March 7th, 2020
+### Added
+- Skipping WebP image creation by configuration option
 
 ## [0.5.2] - March 5th, 2020
 ### Fixed

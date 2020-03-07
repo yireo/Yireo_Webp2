@@ -58,6 +58,11 @@ class Picture extends Template
     private $class = '';
 
     /**
+     * @var bool
+     */
+    private $lazyLoading = true;
+
+    /**
      * @return string
      */
     public function getWebpImage(): string
@@ -217,6 +222,25 @@ class Picture extends Template
     public function setClass(string $class)
     {
         $this->class = $class;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getLazyLoading(): bool
+    {
+        return $this->lazyLoading;
+    }
+
+    /**
+     * @param bool $lazyLoading
+     * @return $this
+     */
+    public function setLazyLoading(bool $lazyLoading)
+    {
+        $this->lazyLoading = $lazyLoading;
 
         return $this;
     }
