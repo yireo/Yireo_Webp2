@@ -55,6 +55,10 @@ class Convertor
             return false;
         }
 
+        if ($this->config->allowImageCreation() === false) {
+            return false;
+        }
+
         WebPConvert::convert($sourceImageFilename, $destinationImageFilename, $this->getOptions());
         return true;
     }
