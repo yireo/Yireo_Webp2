@@ -25,6 +25,7 @@ class BrowseDummyImagesTest extends Common
         $this->getRequest()->setParam('case', 'multiple_images');
         $this->dispatch('webp/test/images');
         $this->assertSame('multiple_images', $this->getRequest()->getParam('case'));
+        $this->assertSame(200, $this->getResponse()->getHttpResponseCode());
 
         $body = $this->getResponse()->getBody();
         $this->assertImageTagsExist($body, $this->getImageProvider()->getImages());
@@ -37,17 +38,19 @@ class BrowseDummyImagesTest extends Common
      * @magentoAdminConfigFixture yireo_webp2/settings/enabled 1
      * @magentoAdminConfigFixture yireo_webp2/settings/debug 1
      */
-    /*public function testIfHtmlContainsSingleWebpImage()
+    public function testIfHtmlContainsSingleWebpImage()
     {
         $this->fixtureImageFiles();
 
         $this->getRequest()->setParam('case', 'multiple_images_same');
         $this->dispatch('webp/test/images');
         $this->assertSame('multiple_images_same', $this->getRequest()->getParam('case'));
+        $this->assertSame(200, $this->getResponse()->getHttpResponseCode());
+        //$this->assertSame('test', $this->getResponse()->getContent());
 
-        $body = $this->getResponse()->getBody();
+        $body = $this->getResponse()->getContent();
         $this->assertImageTagsExist($body, [$this->getImageProvider()->getImage()]);
-    }*/
+    }
 
     /**
      * @magentoAppIsolation enabled
@@ -62,8 +65,9 @@ class BrowseDummyImagesTest extends Common
         $this->getRequest()->setParam('case', 'image_with_custom_style');
         $this->dispatch('webp/test/images');
         $this->assertSame('image_with_custom_style', $this->getRequest()->getParam('case'));
+        $this->assertSame(200, $this->getResponse()->getHttpResponseCode());
 
-        $body = $this->getResponse()->getBody();
+        $body = $this->getResponse()->getContent();
         $this->assertImageTagsExist($body, [$this->getImageProvider()->getImage()]);
         $this->assertContains('style="display:insane; opacity:666;"', $body);
     }
