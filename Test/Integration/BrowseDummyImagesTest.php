@@ -20,15 +20,11 @@ class BrowseDummyImagesTest extends Common
     {
         $this->fixtureImageFiles();
 
-        $this->getResponse()->clearBody();
-        $this->getResponse()->setHeader('Accept', 'image/webp');
-
         $this->getRequest()->setParam('case', 'multiple_images');
         $this->dispatch('webp/test/images');
         $this->assertSame('multiple_images', $this->getRequest()->getParam('case'));
 
-        $body = $this->getLayout()->getOutput();
-
+        $body = $this->getResponse()->getBody();
         $this->assertImageTagsExist($body, $this->getImageProvider()->getImages());
     }
 
@@ -41,15 +37,11 @@ class BrowseDummyImagesTest extends Common
     {
         $this->fixtureImageFiles();
 
-        $this->getResponse()->clearBody();
-        $this->getResponse()->setHeader('Accept', 'image/webp');
-
         $this->getRequest()->setParam('case', 'multiple_images_same');
         $this->dispatch('webp/test/images');
         $this->assertSame('multiple_images_same', $this->getRequest()->getParam('case'));
 
-        $body = $this->getLayout()->getOutput();
-
+        $body = $this->getResponse()->getBody();
         $this->assertImageTagsExist($body, [$this->getImageProvider()->getImage()]);
     }
 
@@ -62,16 +54,11 @@ class BrowseDummyImagesTest extends Common
     {
         $this->fixtureImageFiles();
 
-        $this->getResponse()->clearBody();
-        $this->getResponse()->setHeader('Accept', 'image/webp');
-
         $this->getRequest()->setParam('case', 'image_with_custom_style');
         $this->dispatch('webp/test/images');
         $this->assertSame('image_with_custom_style', $this->getRequest()->getParam('case'));
 
         $body = $this->getResponse()->getBody();
-        //$body = $this->getLayout()->getOutput();
-
         $this->assertImageTagsExist($body, [$this->getImageProvider()->getImage()]);
         $this->assertContains('style="display:insane; opacity:666;"', $body);
     }
@@ -85,13 +72,5 @@ class BrowseDummyImagesTest extends Common
             $webPImage = preg_replace('/\.(png|jpg)$/', '.webp', $image);
             $this->assertContains($webPImage, $body);
         }
-    }
-
-    /**
-     * @return LayoutInterface
-     */
-    private function getLayout(): LayoutInterface
-    {
-        return $this->_objectManager->get(LayoutInterface::class);
     }
 }
