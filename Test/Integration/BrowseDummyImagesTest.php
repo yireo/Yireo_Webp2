@@ -12,6 +12,7 @@ use Magento\Framework\View\LayoutInterface;
 class BrowseDummyImagesTest extends Common
 {
     /**
+     * @magentoAppIsolation enabled
      * @magentoAdminConfigFixture yireo_webp2/settings/enabled 1
      * @magentoAdminConfigFixture yireo_webp2/settings/debug 1
      */
@@ -31,6 +32,7 @@ class BrowseDummyImagesTest extends Common
     }
 
     /**
+     * @magentoAppIsolation enabled
      * @magentoAdminConfigFixture yireo_webp2/settings/enabled 1
      * @magentoAdminConfigFixture yireo_webp2/settings/debug 1
      */
@@ -50,6 +52,7 @@ class BrowseDummyImagesTest extends Common
     }
 
     /**
+     * @magentoAppIsolation enabled
      * @magentoAdminConfigFixture yireo_webp2/settings/enabled 1
      * @magentoAdminConfigFixture yireo_webp2/settings/debug 1
      */
@@ -57,6 +60,7 @@ class BrowseDummyImagesTest extends Common
     {
         $this->fixtureImageFiles();
 
+        $this->getResponse()->clearHeader();
         $this->getResponse()->clearBody();
         $this->getResponse()->setHeader('Accept', 'image/webp');
         $this->dispatch('webp/test/images/case/image_with_custom_style');
