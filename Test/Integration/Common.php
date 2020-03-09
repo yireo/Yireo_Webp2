@@ -7,6 +7,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\TestCase\AbstractController;
 use RuntimeException;
+use Yireo\Webp2\Image\ConvertWrapper;
 use Yireo\Webp2\Test\ImageProvider;
 
 /**
@@ -15,6 +16,12 @@ use Yireo\Webp2\Test\ImageProvider;
  */
 class Common extends AbstractController
 {
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->_objectManager->addSharedInstance($this->_objectManager->get(ConvertWrapperStub::class), ConvertWrapper::class);
+    }
+
     protected function fixtureImageFiles()
     {
         /** @var DirectoryList $directoryList */

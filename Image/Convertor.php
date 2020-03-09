@@ -5,7 +5,6 @@ namespace Yireo\Webp2\Image;
 
 use Exception;
 use Magento\Framework\View\Asset\File\NotFoundException;
-use WebPConvert\WebPConvert;
 use Yireo\Webp2\Config\Config;
 
 /**
@@ -26,17 +25,25 @@ class Convertor
     private $file;
 
     /**
+     * @var ConvertWrapper
+     */
+    private $convertWrapper;
+
+    /**
      * Convertor constructor.
      *
      * @param Config $config
      * @param File $file
+     * @param ConvertWrapper $convertWrapper
      */
     public function __construct(
         Config $config,
-        File $file
+        File $file,
+        ConvertWrapper $convertWrapper
     ) {
         $this->config = $config;
         $this->file = $file;
+        $this->convertWrapper = $convertWrapper;
     }
 
     /**
@@ -59,7 +66,7 @@ class Convertor
             return false;
         }
 
-        WebPConvert::convert($sourceImageFilename, $destinationImageFilename, $this->getOptions());
+        $this->convertWrapper->convert($sourceImageFilename, $destinationImageFilename);
         return true;
     }
 
@@ -109,17 +116,5 @@ class Convertor
         }
 
         return false;
-    }
-
-    /**
-     * @return array
-     */
-    public function getOptions(): array
-    {
-        return [
-            'quality' => 'auto',
-            'max-quality' => $this->config->getQualityLevel(),
-            'converters' => $this->config->getConvertors(),
-        ];
     }
 }
