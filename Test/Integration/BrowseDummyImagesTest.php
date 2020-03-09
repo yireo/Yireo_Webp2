@@ -22,11 +22,11 @@ class BrowseDummyImagesTest extends Common
 
         $this->getResponse()->clearBody();
         $this->getResponse()->setHeader('Accept', 'image/webp');
-        $this->dispatch('webp/test/images/case/multiple_images');
 
-        /** @var LayoutInterface $layout */
-        $layout = $this->_objectManager->get(LayoutInterface::class);
-        $body = $layout->getOutput();
+        $this->dispatch('webp/test/images?case=multiple_images');
+        $this->assertSame('multiple_images', $this->getRequest()->getParam('case'));
+
+        $body = $this->getLayout()->getOutput();
 
         $this->assertImageTagsExist($body, $this->getImageProvider()->getImages());
     }
@@ -42,11 +42,11 @@ class BrowseDummyImagesTest extends Common
 
         $this->getResponse()->clearBody();
         $this->getResponse()->setHeader('Accept', 'image/webp');
-        $this->dispatch('webp/test/images/case/multiple_images_same');
 
-        /** @var LayoutInterface $layout */
-        $layout = $this->_objectManager->get(LayoutInterface::class);
-        $body = $layout->getOutput();
+        $this->dispatch('webp/test/images?case=multiple_images_same');
+        $this->assertSame('multiple_images_same', $this->getRequest()->getParam('case'));
+
+        $body = $this->getLayout()->getOutput();
 
         $this->assertImageTagsExist($body, [$this->getImageProvider()->getImage()]);
     }
@@ -66,7 +66,6 @@ class BrowseDummyImagesTest extends Common
 
         $this->assertSame('image_with_custom_style', $this->getRequest()->getParam('case'));
 
-        /** @var LayoutInterface $layout */
         $body = $this->getLayout()->getOutput();
 
         $this->assertImageTagsExist($body, [$this->getImageProvider()->getImage()]);
