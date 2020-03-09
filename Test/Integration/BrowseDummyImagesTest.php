@@ -60,13 +60,11 @@ class BrowseDummyImagesTest extends Common
     {
         $this->fixtureImageFiles();
 
-        foreach ($this->getLayout()->getUpdate()->getHandles() as $handle) {
-            $this->getLayout()->getUpdate()->removeHandle($handle);
-        }
-
         $this->getResponse()->clearBody();
         $this->getResponse()->setHeader('Accept', 'image/webp');
         $this->dispatch('webp/test/images/case/image_with_custom_style');
+
+        $this->assertSame('image_with_custom_style', $this->getRequest()->getParam('case'));
 
         /** @var LayoutInterface $layout */
         $body = $this->getLayout()->getOutput();
