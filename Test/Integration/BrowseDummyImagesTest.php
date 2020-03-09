@@ -69,7 +69,8 @@ class BrowseDummyImagesTest extends Common
         $this->dispatch('webp/test/images');
         $this->assertSame('image_with_custom_style', $this->getRequest()->getParam('case'));
 
-        $body = $this->getLayout()->getOutput();
+        $body = $this->getResponse()->getBody();
+        //$body = $this->getLayout()->getOutput();
 
         $this->assertImageTagsExist($body, [$this->getImageProvider()->getImage()]);
         $this->assertContains('style="display:insane; opacity:666;"', $body);
