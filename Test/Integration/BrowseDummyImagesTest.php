@@ -62,7 +62,7 @@ class BrowseDummyImagesTest extends Common
 
         $this->getResponse()->clearBody();
         $this->getResponse()->setHeader('Accept', 'image/webp');
-        $this->dispatch('webp/test/images/case/image_with_custom_style');
+        $this->dispatch('webp/test/images?case=image_with_custom_style');
 
         $this->assertSame('image_with_custom_style', $this->getRequest()->getParam('case'));
 
