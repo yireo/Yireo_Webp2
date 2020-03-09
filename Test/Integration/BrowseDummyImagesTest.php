@@ -17,6 +17,7 @@ class BrowseDummyImagesTest extends Common
      * @magentoAdminConfigFixture yireo_webp2/settings/enabled 1
      * @magentoAdminConfigFixture yireo_webp2/settings/debug 1
      */
+    /*
     public function testIfHtmlContainsWebpImages()
     {
         $this->fixtureImageFiles();
@@ -28,6 +29,7 @@ class BrowseDummyImagesTest extends Common
         $body = $this->getResponse()->getBody();
         $this->assertImageTagsExist($body, $this->getImageProvider()->getImages());
     }
+    */
 
     /**
      * @magentoAppIsolation enabled
