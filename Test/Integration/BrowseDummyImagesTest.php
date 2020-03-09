@@ -60,13 +60,16 @@ class BrowseDummyImagesTest extends Common
     {
         $this->fixtureImageFiles();
 
+        foreach ($this->getLayout()->getUpdate()->getHandles() as $handle) {
+            $this->getLayout()->getUpdate()->removeHandle($handle);
+        }
+
         $this->getResponse()->clearBody();
         $this->getResponse()->setHeader('Accept', 'image/webp');
         $this->dispatch('webp/test/images/case/image_with_custom_style');
 
         /** @var LayoutInterface $layout */
-        $layout = $this->_objectManager->get(LayoutInterface::class);
-        $body = $layout->getOutput();
+        $body = $this->getLayout()->getOutput();
 
         $this->assertImageTagsExist($body, [$this->getImageProvider()->getImage()]);
         $this->assertContains('style="display:insane; opacity:666;"', $body);
@@ -81,5 +84,13 @@ class BrowseDummyImagesTest extends Common
             $webPImage = preg_replace('/\.(png|jpg)$/', '.webp', $image);
             $this->assertContains($webPImage, $body);
         }
+    }
+
+    /**
+     * @return LayoutInterface
+     */
+    private function getLayout(): LayoutInterface
+    {
+        return $this->_objectManager->get(LayoutInterface::class);
     }
 }
