@@ -19,6 +19,7 @@ class BrowseDummyImagesTest extends Common
     {
         $this->fixtureImageFiles();
 
+        $this->getResponse()->clearBody();
         $this->getResponse()->setHeader('Accept', 'image/webp');
         $this->dispatch('webp/test/images/case/multiple_images');
 
@@ -37,6 +38,7 @@ class BrowseDummyImagesTest extends Common
     {
         $this->fixtureImageFiles();
 
+        $this->getResponse()->clearBody();
         $this->getResponse()->setHeader('Accept', 'image/webp');
         $this->dispatch('webp/test/images/case/multiple_images_same');
 
@@ -55,6 +57,7 @@ class BrowseDummyImagesTest extends Common
     {
         $this->fixtureImageFiles();
 
+        $this->getResponse()->clearBody();
         $this->getResponse()->setHeader('Accept', 'image/webp');
         $this->dispatch('webp/test/images/case/image_with_custom_style');
 
