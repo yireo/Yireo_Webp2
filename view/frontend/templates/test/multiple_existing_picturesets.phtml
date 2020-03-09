@@ -4,6 +4,9 @@
 $imageProvider = $block->getImageProvider();
 $images = $imageProvider->getImages();
 ?>
+
+<h1><?= $block->getNameInLayout() ?></h1>
+
 <?php foreach ($images as $image) : ?>
     <div>
         <picture>
@@ -11,3 +14,7 @@ $images = $imageProvider->getImages();
         </picture>
     </div>
 <?php endforeach; ?>
+
+<pre>
+    <?= implode(', ', $block->getLayout()->getUpdate()->getHandles()); ?>
+</pre>

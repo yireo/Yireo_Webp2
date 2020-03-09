@@ -4,8 +4,15 @@
 $imageProvider = $block->getImageProvider();
 $image = $imageProvider->getImage();
 ?>
+
+<h1><?= $block->getNameInLayout() ?></h1>
+
 <?php for ($i = 0; $i < 3; $i++) : ?>
     <div>
         <img src="<?= $block->escapeUrl($block->getViewFileUrl('Yireo_Webp2/' . $image)) ?>" width="100" height="100"/>
     </div>
 <?php endfor; ?>
+
+<pre>
+    <?= implode(', ', $block->getLayout()->getUpdate()->getHandles()); ?>
+</pre>
