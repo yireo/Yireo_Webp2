@@ -23,7 +23,8 @@ class BrowseDummyImagesTest extends Common
         $this->getResponse()->clearBody();
         $this->getResponse()->setHeader('Accept', 'image/webp');
 
-        $this->dispatch('webp/test/images?case=multiple_images');
+        $this->getRequest()->setParam('case', 'multiple_images');
+        $this->dispatch('webp/test/images');
         $this->assertSame('multiple_images', $this->getRequest()->getParam('case'));
 
         $body = $this->getLayout()->getOutput();
@@ -43,7 +44,8 @@ class BrowseDummyImagesTest extends Common
         $this->getResponse()->clearBody();
         $this->getResponse()->setHeader('Accept', 'image/webp');
 
-        $this->dispatch('webp/test/images?case=multiple_images_same');
+        $this->getRequest()->setParam('case', 'multiple_images_same');
+        $this->dispatch('webp/test/images');
         $this->assertSame('multiple_images_same', $this->getRequest()->getParam('case'));
 
         $body = $this->getLayout()->getOutput();
@@ -62,8 +64,9 @@ class BrowseDummyImagesTest extends Common
 
         $this->getResponse()->clearBody();
         $this->getResponse()->setHeader('Accept', 'image/webp');
-        $this->dispatch('webp/test/images?case=image_with_custom_style');
 
+        $this->getRequest()->setParam('case', 'image_with_custom_style');
+        $this->dispatch('webp/test/images');
         $this->assertSame('image_with_custom_style', $this->getRequest()->getParam('case'));
 
         $body = $this->getLayout()->getOutput();
