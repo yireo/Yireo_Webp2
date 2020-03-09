@@ -13,6 +13,7 @@ class BrowseDummyImagesTest extends Common
 {
     /**
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @magentoAdminConfigFixture yireo_webp2/settings/enabled 1
      * @magentoAdminConfigFixture yireo_webp2/settings/debug 1
      */
@@ -30,6 +31,7 @@ class BrowseDummyImagesTest extends Common
 
     /**
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @magentoAdminConfigFixture yireo_webp2/settings/enabled 1
      * @magentoAdminConfigFixture yireo_webp2/settings/debug 1
      */
@@ -47,6 +49,7 @@ class BrowseDummyImagesTest extends Common
 
     /**
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @magentoAdminConfigFixture yireo_webp2/settings/enabled 1
      * @magentoAdminConfigFixture yireo_webp2/settings/debug 1
      */
