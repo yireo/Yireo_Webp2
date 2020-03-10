@@ -5,6 +5,7 @@ namespace Yireo\Webp2\Test\Integration;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\TestCase\AbstractController;
 use RuntimeException;
 use Yireo\Webp2\Image\ConvertWrapper;
@@ -20,6 +21,8 @@ class Common extends AbstractController
     protected function setUp()
     {
         parent::setUp();
+        $this->_objectManager->removeSharedInstance(LayoutInterface::class);
+        $this->_objectManager->removeSharedInstance(\Zend\Stdlib\Message::class);
         $this->_objectManager->addSharedInstance($this->_objectManager->get(ConvertWrapperStub::class), ConvertWrapper::class);
     }
 
@@ -78,15 +81,5 @@ class Common extends AbstractController
             $webPImage = preg_replace('/\.(png|jpg)$/', '.webp', $image);
             $this->assertContains($webPImage, $body);
         }
-    }
-
-    public function getRequest()
-    {
-        return $this->_objectManager->get(\Magento\Framework\App\RequestInterface::class);
-    }
-
-    public function getResponse()
-    {
-        return $this->_objectManager->get(\Magento\Framework\App\ResponseInterface::class);
     }
 }
