@@ -14,17 +14,14 @@ class ImageWithCustomStyleTest extends Common
     /**
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
+     * @magentoCache all disabled
      * @magentoAdminConfigFixture yireo_webp2/settings/enabled 1
      * @magentoAdminConfigFixture yireo_webp2/settings/debug 1
      */
     public function testIfHtmlContainsImageWithCustomStyle()
     {
-        $this->getResponse()->clearBody();
-        $this->getResponse()->clearHeaders();
         $this->fixtureImageFiles();
 
-        $this->getRequest()->clearParams();
-        $this->getRequest()->setRequestUri('webp/test/images');
         $this->getRequest()->setParam('case', 'image_with_custom_style');
         $this->dispatch('webp/test/images');
         $this->assertSame('image_with_custom_style', $this->getRequest()->getParam('case'));

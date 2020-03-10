@@ -12,17 +12,14 @@ class MultipleImagesSameTest extends Common
     /**
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
+     * @magentoCache all disabled
      * @magentoAdminConfigFixture yireo_webp2/settings/enabled 1
      * @magentoAdminConfigFixture yireo_webp2/settings/debug 1
      */
     public function testIfHtmlContainsSingleWebpImage()
     {
-        $this->getResponse()->clearBody();
-        $this->getResponse()->clearHeaders();
         $this->fixtureImageFiles();
 
-        $this->getRequest()->clearParams();
-        $this->getRequest()->setRequestUri('webp/test/images');
         $this->getRequest()->setParam('case', 'multiple_images_same');
         $this->dispatch('webp/test/images');
         $this->assertSame('multiple_images_same', $this->getRequest()->getParam('case'));
