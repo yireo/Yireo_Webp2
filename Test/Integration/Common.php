@@ -21,8 +21,6 @@ class Common extends AbstractController
     protected function setUp()
     {
         parent::setUp();
-        $this->_objectManager->removeSharedInstance(LayoutInterface::class);
-        $this->_objectManager->removeSharedInstance(\Zend\Stdlib\Message::class);
         $this->_objectManager->addSharedInstance($this->_objectManager->get(ConvertWrapperStub::class), ConvertWrapper::class);
     }
 
