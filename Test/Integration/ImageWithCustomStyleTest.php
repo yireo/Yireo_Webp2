@@ -19,6 +19,7 @@ class ImageWithCustomStyleTest extends Common
      */
     public function testIfHtmlContainsImageWithCustomStyle()
     {
+        $this->getResponse()->clearBody();
         $this->fixtureImageFiles();
 
         $this->getRequest()->setParam('case', 'image_with_custom_style');

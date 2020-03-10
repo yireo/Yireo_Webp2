@@ -17,6 +17,7 @@ class MultipleImagesSameTest extends Common
      */
     public function testIfHtmlContainsSingleWebpImage()
     {
+        $this->getResponse()->clearBody();
         $this->fixtureImageFiles();
 
         $this->getRequest()->setParam('case', 'multiple_images_same');
