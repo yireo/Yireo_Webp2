@@ -18,6 +18,7 @@ class MultipleImagesTest extends Common
     public function testIfHtmlContainsWebpImages()
     {
         $this->getResponse()->clearBody();
+        $this->getResponse()->clearHeaders();
         $this->fixtureImageFiles();
 
         $this->getRequest()->setParam('case', 'multiple_images');
