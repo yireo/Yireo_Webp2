@@ -21,6 +21,8 @@ class MultipleImagesSameTest extends Common
         $this->getResponse()->clearHeaders();
         $this->fixtureImageFiles();
 
+        $this->getRequest()->clearParams();
+        $this->getRequest()->setRequestUri('webp/test/images');
         $this->getRequest()->setParam('case', 'multiple_images_same');
         $this->dispatch('webp/test/images');
         $this->assertSame('multiple_images_same', $this->getRequest()->getParam('case'));

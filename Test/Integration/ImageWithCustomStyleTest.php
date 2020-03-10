@@ -23,6 +23,8 @@ class ImageWithCustomStyleTest extends Common
         $this->getResponse()->clearHeaders();
         $this->fixtureImageFiles();
 
+        $this->getRequest()->clearParams();
+        $this->getRequest()->setRequestUri('webp/test/images');
         $this->getRequest()->setParam('case', 'image_with_custom_style');
         $this->dispatch('webp/test/images');
         $this->assertSame('image_with_custom_style', $this->getRequest()->getParam('case'));
