@@ -4,7 +4,7 @@
         <referenceContainer name="main">
             <block name="webp-multiple-existing-imagesets" template="Yireo_Webp2::test/multiple_existing_picturesets.phtml" before="-">
                 <arguments>
-                    <argument name="image_provider" xsi:type="object">Yireo\Webp2\Test\ImageProvider</argument>
+                    <argument name="image_provider" xsi:type="object">Yireo\Webp2\Test\Utils\ImageProvider</argument>
                 </arguments>
             </block>
         </referenceContainer>

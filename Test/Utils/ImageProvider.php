@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\Webp2\Test;
+namespace Yireo\Webp2\Test\Utils;
 
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
  * Class ImageProvider
- * @package Yireo\Webp2\Test
+ * @package Yireo\Webp2\Test\Utils
  */
 class ImageProvider implements ArgumentInterface
 {

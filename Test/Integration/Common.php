@@ -8,7 +8,8 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\TestCase\AbstractController;
 use RuntimeException;
 use Yireo\Webp2\Image\ConvertWrapper;
-use Yireo\Webp2\Test\ImageProvider;
+use Yireo\Webp2\Test\Utils\ImageProvider;
+use Yireo\Webp2\Test\Utils\ConvertWrapperStub;
 
 /**
  * Class Common
@@ -66,5 +67,16 @@ class Common extends AbstractController
     protected function getImageProvider(): ImageProvider
     {
         return $this->_objectManager->get(ImageProvider::class);
+    }
+
+    /**
+     * @param string $body
+     */
+    protected function assertImageTagsExist(string $body, $images)
+    {
+        foreach ($images as $image) {
+            $webPImage = preg_replace('/\.(png|jpg)$/', '.webp', $image);
+            $this->assertContains($webPImage, $body);
+        }
     }
 }
