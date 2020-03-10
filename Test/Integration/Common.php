@@ -21,7 +21,8 @@ class Common extends AbstractController
     protected function setUp()
     {
         parent::setUp();
-        $this->_objectManager->addSharedInstance($this->_objectManager->get(ConvertWrapperStub::class), ConvertWrapper::class);
+        $convertWrapperStub = $this->_objectManager->get(ConvertWrapperStub::class);
+        $this->_objectManager->addSharedInstance($convertWrapperStub, ConvertWrapper::class);
     }
 
     protected function fixtureImageFiles()

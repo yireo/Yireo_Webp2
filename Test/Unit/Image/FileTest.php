@@ -1,4 +1,7 @@
 <?php
+declare(strict_types=1);
+
+namespace Yireo\Webp2\Test\Unit\Image;
 
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Filesystem\DirectoryList;

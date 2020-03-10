@@ -5,7 +5,7 @@ $imageProvider = $block->getImageProvider();
 $image = $imageProvider->getImage();
 ?>
 
-<h1><?= $block->getNameInLayout() ?></h1>
+<h1><?= /* @noEscape */$block->getNameInLayout() ?></h1>
 
 <?php for ($i = 0; $i < 3; $i++) : ?>
     <div>
@@ -14,5 +14,5 @@ $image = $imageProvider->getImage();
 <?php endfor; ?>
 
 <pre>
-    <?= implode(', ', $block->getLayout()->getUpdate()->getHandles()); ?>
+    <?= implode(', ', /* @noEscape */$block->getLayout()->getUpdate()->getHandles()); ?>
 </pre>
