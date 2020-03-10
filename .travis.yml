@@ -6,6 +6,7 @@ addons:
       - postfix
 services:
   - mysql
+  - redis-server
 language: php
 php:
   #- 7.1
