@@ -10,9 +10,6 @@ namespace Yireo\Webp2\Test\Integration;
 class MultipleImagesTest extends Common
 {
     /**
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
-     * @magentoCache all disabled
      * @magentoAdminConfigFixture yireo_webp2/settings/enabled 1
      * @magentoAdminConfigFixture yireo_webp2/settings/debug 1
      */

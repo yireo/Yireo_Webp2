@@ -12,9 +12,6 @@ use Magento\Framework\View\LayoutInterface;
 class ImageWithCustomStyleTest extends Common
 {
     /**
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
-     * @magentoCache all disabled
      * @magentoAdminConfigFixture yireo_webp2/settings/enabled 1
      * @magentoAdminConfigFixture yireo_webp2/settings/debug 1
      */
@@ -30,7 +27,7 @@ class ImageWithCustomStyleTest extends Common
         $body = $this->getResponse()->getContent();
         $this->assertImageTagsExist($body, [$this->getImageProvider()->getImage()]);
 
-        if (!defined('TRAVIS')) {
+        if (!getenv('TRAVIS')) {
             $this->assertContains('style="display:insane; opacity:666;"', $body);
         }
     }
