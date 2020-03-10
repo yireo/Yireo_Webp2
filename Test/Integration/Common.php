@@ -79,4 +79,14 @@ class Common extends AbstractController
             $this->assertContains($webPImage, $body);
         }
     }
+
+    public function getRequest()
+    {
+        return $this->_objectManager->get(\Magento\Framework\App\RequestInterface::class);
+    }
+
+    public function getResponse()
+    {
+        return $this->_objectManager->get(\Magento\Framework\App\ResponseInterface::class);
+    }
 }
