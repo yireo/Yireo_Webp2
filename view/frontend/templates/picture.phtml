@@ -9,12 +9,15 @@ $lazyLoading = ($block->getLazyLoading()) ? ' loading="lazy" ' : '';
 
 $originalTag = trim($block->getOriginalTag());
 $originalTag = preg_replace('/(\/?)>$/', $lazyLoading.'\1>', $originalTag);
+
+$originalImage = $block->getOriginalImage();
+$originalImageType = $block->getOriginalImageType();
 ?>
 <?php if ($block->getDebug()) : ?>
         <!-- <?= /* @noEscape */ $block->getOriginalTag() ?> -->
 <?php endif; ?>
 <picture<?= /* @noEscape */ $altText ?><?= /* @noEscape */ $class ?>>
     <source type="image/webp" srcset="<?= /* @noEscape */ $block->getWebpImage() ?>">
-    <source type="<?= /* @noEscape */ $block->getOriginalImageType() ?>" srcset="<?= /* @noEscape */ $block->getOriginalImage() ?>">
+    <source type="<?= /* @noEscape */ $originalImageType ?>" srcset="<?= /* @noEscape */ $originalImage ?>">
     <?= /* @noEscape */ $originalTag ?>
 </picture>

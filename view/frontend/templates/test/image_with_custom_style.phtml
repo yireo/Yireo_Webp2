@@ -3,12 +3,13 @@
 /** @var $imageProvider \Yireo\Webp2\Test\Utils\ImageProvider */
 $imageProvider = $block->getImageProvider();
 $image = $imageProvider->getImage();
+$imageUrl = $block->escapeUrl($block->getViewFileUrl('Yireo_Webp2/' . $image));
 ?>
 
-<h1><?= $block->getNameInLayout() ?></h1>
+<h1><?= /* @noEscape */ $block->getNameInLayout() ?></h1>
 
-<img class="alt-img" src="<?= $block->escapeUrl($block->getViewFileUrl('Yireo_Webp2/' . $image)) ?>" alt="test sample" style="display:insane; opacity:666;">
+<img class="alt-img" src="<?= /* @noEscape */ $imageUrl ?>" alt="test sample" style="display:insane; opacity:666;">
 
 <pre>
-    <?= implode(', ', $block->getLayout()->getUpdate()->getHandles()); ?>
+    <?= implode(', ', /* @noEscape */ $block->getLayout()->getUpdate()->getHandles()); ?>
 </pre>
