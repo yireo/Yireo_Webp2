@@ -24,3 +24,7 @@ offering this to them, is wasting additional bandwidth.
 It could be that your transactional email templates are including XML layout handles that suddenly introduce this extensions functionality, while actually adding WebP to emails is a bad idea (because most email clients will not support anything of the like). 
 
 If you encounter such an email, find out which XML layout handle is the cause of this (`{handle layout="foobar"}`). Next, create a new XML layout file with that name (`foobar.xml`) and call the `webp_skip` handle from it (`<update handle="webp_skip" />`). So this instructs the WebP extension to skip loading itself.
+
+# error while loading shared libraries: libjpeg.so.8: cannot open shared object file: No such file or directory
+Ask your system administrator to install this library. Or ask the system administrator to install WebP support in PHP by upgrading PHP itself to the right version and to include the right PHP modules (like imagemagick). Or skip converting WebP images by disabling the setting in our extension and then convert all WebP images by hand.
+
