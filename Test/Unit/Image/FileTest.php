@@ -16,7 +16,7 @@ class FileTest extends TestCase
     /**
      * @test Test the resolve() function
      */
-    public function testResolve()
+    public function testResolve(): void
     {
         $target = $this->getTarget();
         $resolvedFile = $target->resolve('http://anotherhost.com/some/fake/url.png');
@@ -36,7 +36,7 @@ class FileTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $target = new File($directoryListMock, $readFactoryMock);
+        $target = new File($directoryListMock, $readFactoryMock); // phpstan:ignore
         return $target;
     }
 }

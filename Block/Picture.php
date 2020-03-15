@@ -193,7 +193,7 @@ class Picture extends Template
     /**
      * @return bool
      */
-    public function isDebug()
+    public function isDebug(): bool
     {
         return $this->debug;
     }
@@ -201,7 +201,7 @@ class Picture extends Template
     /**
      * @param bool $debug
      */
-    public function setDebug(bool $debug)
+    public function setDebug(bool $debug): void
     {
         $this->debug = $debug;
     }

@@ -12,6 +12,9 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\MailException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Framework\View\Result\Page;
@@ -92,8 +95,11 @@ class Mail extends Action
 
     /**
      * @return ResultInterface
+     * @throws LocalizedException
+     * @throws MailException
+     * @throws NoSuchEntityException
      */
-    public function execute()
+    public function execute(): ResultInterface
     {
         $token = (string)$this->request->getParam('token');
         $cryptKey = (string)$this->config->get('crypt/key');
@@ -139,11 +145,11 @@ class Mail extends Action
         $transport->sendMessage();
         $data['msg'] = 'Email sent';
 
-        $this->sendResult($data);
+        return $this->sendResult($data);
     }
 
     /**
-     * @param array $data
+     * @param mixed[] $data
      * @return ResultInterface
      */
     private function sendResult(array $data): ResultInterface

@@ -47,10 +47,14 @@ class File
     public function resolve(string $url): string
     {
         $parsedUrl = parse_url($url);
+        if (!$parsedUrl) {
+            return '';
+        }
+
         $path = $parsedUrl['path'];
-        $path = preg_replace('/^\/pub\//', '/', $path);
-        $path = preg_replace('/\/static\/version([0-9]+\/)/', '/static/', $path);
-        $path = $this->getAbsolutePathFromImagePath($path);
+        $path = preg_replace('/^\/pub\//', '/', (string)$path);
+        $path = preg_replace('/\/static\/version([0-9]+\/)/', '/static/', (string)$path);
+        $path = $this->getAbsolutePathFromImagePath((string)$path);
 
         return $path;
     }
@@ -62,7 +66,7 @@ class File
      */
     public function toWebp(string $sourceFilename): string
     {
-        return preg_replace('/\.(jpg|jpeg|png)/i', '.webp', $sourceFilename);
+        return (string) preg_replace('/\.(jpg|jpeg|png)/i', '.webp', $sourceFilename);
     }
 
     /**
@@ -92,7 +96,7 @@ class File
             return 0;
         }
 
-        return filemtime($filePath);
+        return (int) filemtime($filePath);
     }
 
     /**

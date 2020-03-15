@@ -13,7 +13,7 @@ class MultipleImagesTest extends Common
      * @magentoAdminConfigFixture yireo_webp2/settings/enabled 1
      * @magentoAdminConfigFixture yireo_webp2/settings/debug 1
      */
-    public function testIfHtmlContainsWebpImages()
+    public function testIfHtmlContainsWebpImages(): void
     {
         $this->fixtureImageFiles();
 

@@ -12,7 +12,7 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 class ImageProvider implements ArgumentInterface
 {
     /**
-     * @return array
+     * @return string[]
      */
     public function getImages(): array
     {

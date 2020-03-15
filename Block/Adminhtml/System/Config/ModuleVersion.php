@@ -31,7 +31,7 @@ class ModuleVersion extends Field
      * @param ComponentRegistrar $componentRegistrar
      * @param ModuleListInterface $moduleList
      * @param Context $context
-     * @param array $data
+     * @param mixed[] $data
      */
     public function __construct(
         ComponentRegistrar $componentRegistrar,
@@ -71,7 +71,7 @@ class ModuleVersion extends Field
     /**
      * Check if GD supports WebP
      *
-     * @return bool
+     * @return string
      */
     public function getModuleVersion(): string
     {
@@ -79,16 +79,16 @@ class ModuleVersion extends Field
 
         $composerJsonFile = $modulePath . '/composer.json';
         if (file_exists($composerJsonFile)) {
-            $jsonContents = file_get_contents($composerJsonFile);
+            $jsonContents = (string) file_get_contents($composerJsonFile);
             $data = json_decode($jsonContents, true);
             if (isset($data['version'])) {
-                return (string) $data['version'];
+                return (string)$data['version'];
             }
         }
 
         $module = $this->moduleList->getOne('Yireo_Webp2');
         if (isset($module['setup_version'])) {
-            return (string) $module['setup_version'];
+            return (string)$module['setup_version'];
         }
 
         return '';

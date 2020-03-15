@@ -33,13 +33,13 @@ class ConvertWrapper
      * @param string $destinationImageFilename
      * @throws ConversionFailedException
      */
-    public function convert(string $sourceImageFilename, string $destinationImageFilename)
+    public function convert(string $sourceImageFilename, string $destinationImageFilename): void
     {
         WebPConvert::convert($sourceImageFilename, $destinationImageFilename, $this->getOptions());
     }
 
     /**
-     * @return string[]
+     * @return mixed[]
      */
     public function getOptions(): array
     {

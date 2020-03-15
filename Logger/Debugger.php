@@ -39,7 +39,7 @@ class Debugger
 
     /**
      * @param string $msg
-     * @param array $data
+     * @param mixed $data
      *
      * @return bool
      */
@@ -50,7 +50,7 @@ class Debugger
         }
 
         if (!empty($data)) {
-            $msg .= ': '.var_export($data, true);
+            $msg .= ': ' . var_export($data, true);
         }
 
         $this->logger->notice($msg);

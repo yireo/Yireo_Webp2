@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Yireo\Webp2\Browser;
 
-use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Request\Http as Request;
 use Magento\Framework\HTTP\Header;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
@@ -28,7 +28,7 @@ class BrowserSupport implements ArgumentInterface
     private $cookieManager;
 
     /**
-     * @var RequestInterface
+     * @var Request
      */
     private $request;
 
@@ -47,14 +47,14 @@ class BrowserSupport implements ArgumentInterface
      *
      * @param Header $headerService
      * @param CookieManagerInterface $cookieManager
-     * @param RequestInterface $request
+     * @param Request $request
      * @param Config $config
      * @param LayoutInterface $layout
      */
     public function __construct(
         Header $headerService,
         CookieManagerInterface $cookieManager,
-        RequestInterface $request,
+        Request $request,
         Config $config,
         LayoutInterface $layout
     ) {

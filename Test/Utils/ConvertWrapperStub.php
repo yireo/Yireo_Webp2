@@ -15,7 +15,7 @@ class ConvertWrapperStub extends ConvertWrapper
      * @param string $sourceImageFilename
      * @param string $destinationImageFilename
      */
-    public function convert(string $sourceImageFilename, string $destinationImageFilename)
+    public function convert(string $sourceImageFilename, string $destinationImageFilename): void
     {
         copy($sourceImageFilename, $destinationImageFilename);
     }

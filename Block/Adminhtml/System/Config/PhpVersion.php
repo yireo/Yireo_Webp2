@@ -40,7 +40,7 @@ class PhpVersion extends Field
     /**
      * Check if GD supports WebP
      *
-     * @return bool
+     * @return string
      */
     public function getPhpVersion(): string
     {
