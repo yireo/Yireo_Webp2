@@ -15,7 +15,7 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="debug" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                    <label>Debug Log</label>
+                    <label>Debugging</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="convert_images" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
