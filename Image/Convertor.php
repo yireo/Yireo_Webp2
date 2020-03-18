@@ -79,7 +79,7 @@ class Convertor
     private function needsConversion(string $sourceImageFilename, string $destinationImageFilename): bool
     {
         if (!file_exists($sourceImageFilename)) {
-            throw new NotFoundException($sourceImageFilename . ' is not found');
+            return false;
         }
 
         if (!file_exists($destinationImageFilename)) {
