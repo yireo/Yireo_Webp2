@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.2] - March 18th, 2020
+### Fixed
+- Skip captcha images (PR from @jasperzeinstra)
+
 ## [0.6.1] - March 18th, 2020
 ### Fixed
 - Do not throw error in debugging with non-existing images
