@@ -101,6 +101,11 @@ class ReplaceTags
             $htmlTag = preg_replace('/>(.*)/msi', '>', $fullSearchMatch);
             $imageUrl = $matches[2][$index] . '.' . $matches[3][$index];
 
+            // Skip captcha images, otherwise refresh captcha won't work
+            if (strpos($imageUrl, '/media/captcha/') !== false) {
+                continue;
+            }
+
             $webpUrl = $this->file->toWebp($imageUrl);
 
             try {
