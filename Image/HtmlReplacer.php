@@ -74,11 +74,11 @@ class HtmlReplacer
             $fullSearchMatch = $matches[0][$index];
             $imageUrl = $matches[2][$index] . '.' . $matches[3][$index];
 
-            if ($nextTag === '/picture') {
+            if (!$this->isAllowedByNextTag($nextTag)) {
                 continue;
             }
 
-            if (strpos($imageUrl, '/media/captcha/') !== false) {
+            if (!$this->isAllowedByImageUrl($imageUrl)) {
                 continue;
             }
 
@@ -94,6 +94,32 @@ class HtmlReplacer
         }
 
         return $html;
+    }
+
+    /**
+     * @param string $nextTag
+     * @return bool
+     */
+    private function isAllowedByNextTag(string $nextTag): bool
+    {
+        if ($nextTag === '/picture') {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param string $imageUrl
+     * @return bool
+     */
+    private function isAllowedByImageUrl(string $imageUrl): bool
+    {
+        if (strpos($imageUrl, '/media/captcha/') !== false) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
