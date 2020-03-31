@@ -28,3 +28,5 @@ If you encounter such an email, find out which XML layout handle is the cause of
 # error while loading shared libraries: libjpeg.so.8: cannot open shared object file: No such file or directory
 Ask your system administrator to install this library. Or ask the system administrator to install WebP support in PHP by upgrading PHP itself to the right version and to include the right PHP modules (like imagemagick). Or skip converting WebP images by disabling the setting in our extension and then convert all WebP images by hand.
 
+# Can I use this with Amasty Shopby?
+Yes, you can. Make sure to install the addition https://github.com/yireo/Yireo_Webp2ForAmastyShopby as well.
