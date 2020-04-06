@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.1] - April 6th, 2020
+### Added
+- Quick fix to allow for WebP images in catalog swatches
+
 ## [0.7.0] - March 31st, 2020
 ### Added
 - Code refactoring to allow for Amasty Shopby compatibility
