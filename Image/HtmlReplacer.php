@@ -37,23 +37,31 @@ class HtmlReplacer
     private $config;
 
     /**
+     * @var UrlReplacer
+     */
+    private $urlReplacer;
+
+    /**
      * ReplaceTags constructor.
      *
      * @param Convertor $convertor
      * @param File $file
      * @param Debugger $debugger
      * @param Config $config
+     * @param UrlReplacer $urlReplacer
      */
     public function __construct(
         Convertor $convertor,
         File $file,
         Debugger $debugger,
-        Config $config
+        Config $config,
+        UrlReplacer $urlReplacer
     ) {
         $this->convertor = $convertor;
         $this->file = $file;
         $this->debugger = $debugger;
         $this->config = $config;
+        $this->urlReplacer = $urlReplacer;
     }
 
     /**
@@ -82,7 +90,7 @@ class HtmlReplacer
                 continue;
             }
 
-            $webpUrl = $this->getWebpUrlFromImageUrl($imageUrl);
+            $webpUrl = $this->urlReplacer->getWebpUrlFromImageUrl($imageUrl);
             if (!$webpUrl) {
                 continue;
             }
@@ -120,33 +128,6 @@ class HtmlReplacer
         }
 
         return true;
-    }
-
-    /**
-     * @param string $imageUrl
-     * @return string
-     * @throws ExceptionAlias
-     */
-    private function getWebpUrlFromImageUrl(string $imageUrl): string
-    {
-        $webpUrl = $this->file->toWebp($imageUrl);
-
-        try {
-            $result = $this->convertor->convert($imageUrl, $webpUrl);
-        } catch (ExceptionAlias $e) {
-            if ($this->config->isDebugging()) {
-                throw $e;
-            }
-
-            $result = false;
-            $this->debugger->debug($e->getMessage(), [$imageUrl, $webpUrl]);
-        }
-
-        if (!$result && !$this->convertor->urlExists($webpUrl)) {
-            return '';
-        }
-
-        return $webpUrl;
     }
 
     /**
