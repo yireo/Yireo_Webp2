@@ -3,4 +3,8 @@
     <type name="Magento\Framework\View\LayoutInterface">
         <plugin name="yireo_webp2_replace_tags" type="Yireo\Webp2\Plugin\ReplaceTagsPlugin"/>
     </type>
+
+    <type name="Magento\Swatches\Helper\Data">
+        <plugin name="yireo_webp2_correct_images_in_ajax_response" type="Yireo\Webp2\Plugin\CorrectImagesInAjaxResponse"/>
+    </type>
 </config>
