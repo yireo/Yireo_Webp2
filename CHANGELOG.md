@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.2] - June 13th, 2020
+### Fixed
+- Remove alt attribute from picture element (@gjportegies)
+
 ## [0.7.1] - April 6th, 2020
 ### Added
 - Quick fix to allow for WebP images in catalog swatches
