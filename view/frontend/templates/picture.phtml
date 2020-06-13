@@ -3,7 +3,6 @@
 
 $width = ($block->getWidth()) ? ' width="' . $block->getWidth() . '"' : '';
 $height = ($block->getHeight()) ? ' height="' . $block->getHeight() . '"' : '';
-$altText = ($block->getAltText()) ? ' alt="' . $block->getAltText() . '"' : '';
 $class = ($block->getClass()) ? ' class="' . $block->getClass() . '"' : '';
 $lazyLoading = ($block->getLazyLoading()) ? ' loading="lazy" ' : '';
 
@@ -16,7 +15,7 @@ $originalImageType = $block->getOriginalImageType();
 <?php if ($block->getDebug()) : ?>
         <!-- <?= /* @noEscape */ $block->getOriginalTag() ?> -->
 <?php endif; ?>
-<picture<?= /* @noEscape */ $altText ?><?= /* @noEscape */ $class ?>>
+<picture<?= /* @noEscape */ $class ?>>
     <source type="image/webp" srcset="<?= /* @noEscape */ $block->getWebpImage() ?>">
     <source type="<?= /* @noEscape */ $originalImageType ?>" srcset="<?= /* @noEscape */ $originalImage ?>">
     <?= /* @noEscape */ $originalTag ?>
