@@ -12,9 +12,6 @@ jobs:
         env:
             MAGENTO_MARKETPLACE_USERNAME: ${{ secrets.MAGENTO_MARKETPLACE_USERNAME }}
             MAGENTO_MARKETPLACE_PASSWORD: ${{ secrets.MAGENTO_MARKETPLACE_PASSWORD }}
-        with:
-            module_name: Yireo_Webp2
-            composer_name: yireo/magento2-webp2
-            ce_version: 2.3.5
-
-
+            MODULE_NAME: ${{ secrets.MODULE_NAME }}
+            COMPOSER_NAME: ${{ secrets.COMPOSER_NAME }}
+            CE_VERSION: 2.3.5
