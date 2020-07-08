@@ -9,11 +9,6 @@ use Yireo\Webp2\Block\Picture;
 use Yireo\Webp2\Config\Config;
 use Yireo\Webp2\Logger\Debugger;
 
-/**
- * Class HtmlReplacer
- *
- * @package Yireo\Webp2\Image
- */
 class HtmlReplacer
 {
     /**

@@ -9,7 +9,6 @@ use Yireo\Webp2\Config\Config;
 
 /**
  * Class ConvertWrapper to wrap third party wrapper for purpose of preference overrides and testing
- * @package Yireo\Webp2\Image
  */
 class ConvertWrapper
 {

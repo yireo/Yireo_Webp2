@@ -5,11 +5,6 @@ namespace Yireo\Webp2\Block;
 
 use Magento\Framework\View\Element\Template;
 
-/**
- * Class Picture
- *
- * @package Yireo\Webp2\Block
- */
 class Picture extends Template
 {
     /**

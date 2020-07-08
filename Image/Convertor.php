@@ -4,14 +4,11 @@ declare(strict_types=1);
 namespace Yireo\Webp2\Image;
 
 use Exception;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\View\Asset\File\NotFoundException;
+use Magento\Framework\Filesystem\File\ReadFactory as FileReadFactory;
 use Yireo\Webp2\Config\Config;
 
-/**
- * Class Convertor
- *
- * @package Yireo\Webp2\Image
- */
 class Convertor
 {
     /**
@@ -28,6 +25,10 @@ class Convertor
      * @var ConvertWrapper
      */
     private $convertWrapper;
+    /**
+     * @var FileReadFactory
+     */
+    private $fileReadFactory;
 
     /**
      * Convertor constructor.
@@ -35,15 +36,18 @@ class Convertor
      * @param Config $config
      * @param File $file
      * @param ConvertWrapper $convertWrapper
+     * @param FileReadFactory $fileReadFactory
      */
     public function __construct(
         Config $config,
         File $file,
-        ConvertWrapper $convertWrapper
+        ConvertWrapper $convertWrapper,
+        FileReadFactory $fileReadFactory
     ) {
         $this->config = $config;
         $this->file = $file;
         $this->convertWrapper = $convertWrapper;
+        $this->fileReadFactory = $fileReadFactory;
     }
 
     /**
@@ -78,11 +82,11 @@ class Convertor
      */
     private function needsConversion(string $sourceImageFilename, string $destinationImageFilename): bool
     {
-        if (!file_exists($sourceImageFilename)) {
+        if (!$this->fileExists($sourceImageFilename)) {
             return false;
         }
 
-        if (!file_exists($destinationImageFilename)) {
+        if (!$this->fileExists($destinationImageFilename)) {
             return true;
         }
 
@@ -111,10 +115,24 @@ class Convertor
     public function urlExists(string $url): bool
     {
         $filePath = $this->file->resolve($url);
-        if (file_exists($filePath)) {
+        if ($this->fileExists($filePath)) {
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * @param $filePath
+     * @return bool
+     */
+    private function fileExists($filePath): bool
+    {
+        try {
+            $this->fileReadFactory->create($filePath, 'file');
+            return true;
+        } catch (FileSystemException $fileSystemException) {
+            return false;
+        }
     }
 }

@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.3] - July 8th, 2020
+### Fixed
+- Numerous PHPCS issues
+
+### Added
+- URL parsing via laminas/laminas-uri package
+
 ## [0.7.2] - June 13th, 2020
 ### Fixed
 - Remove alt attribute from picture element (@gjportegies)

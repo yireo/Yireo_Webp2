@@ -1,17 +1,16 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Yireo\Webp2\Image;
 
 use Exception;
-use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Laminas\Uri\Uri;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Directory\ReadFactory as DirectoryReadFactory;
+use Magento\Framework\Filesystem\Driver\File as FileDriver;
 
-/**
- * Class File
- *
- * @package Yireo\Webp2\Image
- */
 class File
 {
     /**
@@ -20,38 +19,45 @@ class File
     private $directoryList;
 
     /**
-     * @var ReadFactory
+     * @var DirectoryReadFactory
      */
-    private $readFactory;
+    private $directoryReadFactory;
+
+    /**
+     * @var FileDriver
+     */
+    private $fileDriver;
 
     /**
      * File constructor.
      *
      * @param DirectoryList $directoryList
-     * @param ReadFactory $readFactory
+     * @param DirectoryReadFactory $directoryReadFactory
+     * @param FileDriver $fileDriver
      */
     public function __construct(
         DirectoryList $directoryList,
-        ReadFactory $readFactory
+        DirectoryReadFactory $directoryReadFactory,
+        FileDriver $fileDriver
     ) {
         $this->directoryList = $directoryList;
-        $this->readFactory = $readFactory;
+        $this->directoryReadFactory = $directoryReadFactory;
+        $this->fileDriver = $fileDriver;
     }
 
     /**
      * @param string $url
      *
      * @return string
-     * @throws Exception
      */
     public function resolve(string $url): string
     {
-        $parsedUrl = parse_url($url);
+        $parsedUrl = new Uri($url);
         if (!$parsedUrl) {
             return '';
         }
 
-        $path = $parsedUrl['path'];
+        $path = $parsedUrl->getPath();
         $path = preg_replace('/^\/pub\//', '/', (string)$path);
         $path = preg_replace('/\/static\/version([0-9]+\/)/', '/static/', (string)$path);
         $path = $this->getAbsolutePathFromImagePath((string)$path);
@@ -66,7 +72,7 @@ class File
      */
     public function toWebp(string $sourceFilename): string
     {
-        return (string) preg_replace('/\.(jpg|jpeg|png)/i', '.webp', $sourceFilename);
+        return (string)preg_replace('/\.(jpg|jpeg|png)/i', '.webp', $sourceFilename);
     }
 
     /**
@@ -74,7 +80,7 @@ class File
      *
      * @return string
      */
-    public function getAbsolutePathFromImagePath(string $imagePath) : string
+    public function getAbsolutePathFromImagePath(string $imagePath): string
     {
         return $this->directoryList->getRoot() . '/pub' . $imagePath;
     }
@@ -86,17 +92,12 @@ class File
      */
     public function getModificationTime(string $filePath): int
     {
-        $read = $this->readFactory->create($filePath);
-        // @todo: This call always leads to false for some reason?
-        //if (!$read->isExist($filePath)) {
-        //    return 0;
-        //}
-
-        if (!file_exists($filePath)) {
+        try {
+            $stat = $this->fileDriver->stat($filePath);
+            return (isset($stat['mtime'])) ? (int)$stat['mtime'] : $stat['ctime'];
+        } catch (FileSystemException $e) {
             return 0;
         }
-
-        return (int) filemtime($filePath);
     }
 
     /**

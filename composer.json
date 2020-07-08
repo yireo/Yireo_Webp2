@@ -24,6 +24,7 @@
     "magento/module-config": "^101.0.0|^101.1.0",
     "magento/module-page-cache": "^100.0",
     "rosell-dk/webp-convert": "^2.0",
+    "laminas/laminas-uri": "^2.7",
     "psr/log": "^1.0",
     "php": ">=7.1.0",
     "ext-json": "*",

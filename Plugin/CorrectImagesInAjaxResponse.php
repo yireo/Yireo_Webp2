@@ -8,11 +8,6 @@ use Yireo\Webp2\Browser\BrowserSupport;
 use Yireo\Webp2\Config\Config;
 use Yireo\Webp2\Image\UrlReplacer;
 
-/**
- * Class CorrectImagesInAjaxResponse
- *
- * @package Yireo\Webp2\Plugin
- */
 class CorrectImagesInAjaxResponse
 {
     /**

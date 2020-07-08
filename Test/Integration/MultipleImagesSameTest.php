@@ -3,10 +3,6 @@ declare(strict_types=1);
 
 namespace Yireo\Webp2\Test\Integration;
 
-/**
- * Class MultipleImagesSameTest
- * @package Yireo\Webp2\Test\Integration
- */
 class MultipleImagesSameTest extends Common
 {
     /**

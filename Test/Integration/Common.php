@@ -12,10 +12,6 @@ use Yireo\Webp2\Image\ConvertWrapper;
 use Yireo\Webp2\Test\Utils\ImageProvider;
 use Yireo\Webp2\Test\Utils\ConvertWrapperStub;
 
-/**
- * Class Common
- * @package Yireo\Webp2\Test\Integration
- */
 class Common extends AbstractController
 {
     protected function setUp()

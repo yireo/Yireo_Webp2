@@ -8,11 +8,6 @@ use Magento\Framework\View\LayoutInterface;
 use Yireo\Webp2\Config\Config;
 use Yireo\Webp2\Image\HtmlReplacer;
 
-/**
- * Class ReplaceTagsPlugin
- *
- * @package Yireo\Webp2\Plugin
- */
 class ReplaceTagsPlugin
 {
     /**
@@ -55,7 +50,6 @@ class ReplaceTagsPlugin
 
         return $this->htmlReplacer->replaceImagesInHtml($layout, $output);
     }
-
 
     /**
      * @param LayoutInterface $layout
