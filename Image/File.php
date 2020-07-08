@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yireo\Webp2\Image;
 
-use Exception;
 use Laminas\Uri\Uri;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DirectoryList;
