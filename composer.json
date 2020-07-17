@@ -32,7 +32,9 @@
   },
   "require-dev": {
     "phpunit/phpunit": "*",
-    "composer/composer": "*@dev"
+    "composer/composer": "*@dev",
+    "phpstan/phpstan": "^0.12.32",
+    "bitexpert/phpstan-magento": "^0.3.0"
   },
   "autoload": {
     "psr-4": {
