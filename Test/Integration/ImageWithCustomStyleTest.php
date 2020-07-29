@@ -20,10 +20,10 @@ class ImageWithCustomStyleTest extends Common
 
         $body = $this->getResponse()->getContent();
         $this->assertImageTagsExist($body, [$this->getImageProvider()->getImage()]);
-        $this->assertContains('type="image/webp"', $body);
+        $this->assertTrue((bool)strpos($body, 'type="image/webp"'));
 
         if (!getenv('TRAVIS')) {
-            $this->assertContains('style="display:insane; opacity:666;"', $body);
+            $this->assertTrue((bool)strpos($body, 'style="display:insane; opacity:666;"'));
         }
     }
 }

@@ -19,7 +19,7 @@ class MultipleImagesSameTest extends Common
         $this->assertSame(200, $this->getResponse()->getHttpResponseCode());
 
         $body = $this->getResponse()->getContent();
-        $this->assertContains('type="image/webp"', $body);
+        $this->assertTrue((bool)strpos($body, 'type="image/webp"'));
 
         if (!getenv('TRAVIS')) {
             $this->assertImageTagsExist($body, [$this->getImageProvider()->getImage()]);

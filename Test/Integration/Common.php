@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Yireo\Webp2\Test\Integration;
@@ -14,7 +15,7 @@ use Yireo\Webp2\Test\Utils\ConvertWrapperStub;
 
 class Common extends AbstractController
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $convertWrapperStub = $this->_objectManager->get(ConvertWrapperStub::class);
@@ -74,7 +75,7 @@ class Common extends AbstractController
     {
         foreach ($images as $image) {
             $webPImage = preg_replace('/\.(png|jpg)$/', '.webp', $image);
-            $this->assertContains($webPImage, $body);
+            $this->assertTrue((bool)strpos($body, $webPImage));
         }
     }
 }
