@@ -6,7 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.7.3] - July 8th, 2020
+## [0.7.3] - 29 July 2020
+### Added
+- Magento 2.4 support 
+
 ### Fixed
 - Numerous PHPCS issues
 
