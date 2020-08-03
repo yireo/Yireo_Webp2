@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yireo\Webp2\Image;
 
-use Laminas\Uri\Uri;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\ReadFactory as DirectoryReadFactory;
@@ -51,12 +50,12 @@ class File
      */
     public function resolve(string $url): string
     {
-        $parsedUrl = new Uri($url);
+        $parsedUrl = parse_url($url);
         if (!$parsedUrl) {
             return '';
         }
 
-        $path = $parsedUrl->getPath();
+        $path = $parsedUrl['path'];
         $path = preg_replace('/^\/pub\//', '/', (string)$path);
         $path = preg_replace('/\/static\/version([0-9]+\/)/', '/static/', (string)$path);
         $path = $this->getAbsolutePathFromImagePath((string)$path);
