@@ -20,9 +20,9 @@ jobs:
       COMPOSER_NAME: ${{ secrets.COMPOSER_NAME }}
     steps:
       - uses: actions/checkout@v2
-      #- uses: docker://yireo/github-actions-magento-integration-tests:7.3
-      #  env:
-      #    MAGENTO_VERSION: '2.3.4'
+      - uses: docker://yireo/github-actions-magento-integration-tests:7.3
+        env:
+          MAGENTO_VERSION: '2.3.4'
       - uses: docker://yireo/github-actions-magento-integration-tests:7.3
         env:
           MAGENTO_VERSION: '2.3.5-p2'
