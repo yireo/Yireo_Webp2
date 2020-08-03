@@ -50,6 +50,7 @@ class File
      */
     public function resolve(string $url): string
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $parsedUrl = parse_url($url);
         if (!$parsedUrl) {
             return '';
