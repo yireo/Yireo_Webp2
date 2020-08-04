@@ -7,11 +7,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\PageCache\Model\DepersonalizeChecker;
 
-/**
- * Class Config
- *
- * @package Yireo\Webp2\Config
- */
 class Config
 {
     /**

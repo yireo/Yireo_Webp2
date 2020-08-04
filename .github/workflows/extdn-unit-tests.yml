@@ -1,0 +1,23 @@
+name: ExtDN Unit Tests
+on: [push]
+
+jobs:
+  unit-tests:
+    name: Magento 2 Unit Tests
+    runs-on: ubuntu-latest
+    env:
+      MAGENTO_MARKETPLACE_USERNAME: ${{ secrets.MAGENTO_MARKETPLACE_USERNAME }}
+      MAGENTO_MARKETPLACE_PASSWORD: ${{ secrets.MAGENTO_MARKETPLACE_PASSWORD }}
+      MODULE_NAME: ${{ secrets.MODULE_NAME }}
+      COMPOSER_NAME: ${{ secrets.COMPOSER_NAME }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker://yireo/github-actions-magento-unit-tests:7.3
+        env:
+          MAGENTO_VERSION: '2.3.4'
+      - uses: docker://yireo/github-actions-magento-unit-tests:7.3
+        env:
+          MAGENTO_VERSION: '2.3.5-p2'
+      - uses: docker://yireo/github-actions-magento-unit-tests:7.4
+        env:
+          MAGENTO_VERSION: '2.4.0'

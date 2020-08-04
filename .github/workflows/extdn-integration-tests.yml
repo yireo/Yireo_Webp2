@@ -1,0 +1,28 @@
+name: ExtDN Integration Tests
+on: [push]
+
+jobs:
+  integration-tests:
+    name: Magento 2 Integration Tests
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: --tmpfs /tmp:rw --tmpfs /var/lib/mysql:rw --health-cmd="mysqladmin ping"
+    env:
+      MAGENTO_MARKETPLACE_USERNAME: ${{ secrets.MAGENTO_MARKETPLACE_USERNAME }}
+      MAGENTO_MARKETPLACE_PASSWORD: ${{ secrets.MAGENTO_MARKETPLACE_PASSWORD }}
+      MODULE_NAME: ${{ secrets.MODULE_NAME }}
+      COMPOSER_NAME: ${{ secrets.COMPOSER_NAME }}
+    steps:
+      - uses: actions/checkout@v2
+      #- uses: docker://yireo/github-actions-magento-integration-tests:7.3
+      #  env:
+      #    MAGENTO_VERSION: '2.3.4'
+      - uses: docker://yireo/github-actions-magento-integration-tests:7.3
+        env:
+          MAGENTO_VERSION: '2.3.5-p2'

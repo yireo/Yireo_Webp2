@@ -1,0 +1,10 @@
+name: ExtDN Static Tests
+on: [push]
+
+jobs:
+  static:
+    name: Static Code Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: extdn/github-actions-m2/magento-coding-standard@master

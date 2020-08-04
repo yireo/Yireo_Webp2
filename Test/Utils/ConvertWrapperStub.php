@@ -7,7 +7,6 @@ use Yireo\Webp2\Image\ConvertWrapper;
 
 /**
  * Class ConvertWrapper to wrap third party wrapper for purpose of preference overrides and testing
- * @package Yireo\Webp2\Test\Utils
  */
 class ConvertWrapperStub extends ConvertWrapper
 {

@@ -3,6 +3,9 @@ Make sure to test things with the obvious caches disabled (Full Page Cache, Bloc
 
 You can expect the HTML to be changed, so inspecting the HTML source gives a good impression. You can also use the Error Console to inspect network traffic: If some `webp` images are flying be in a default Magento environment, this usually proofs that the extension is working to some extent.
 
+# Class 'WebPConvert\WebPConvert' not found
+We only support the installation of our Magento 2 extensions, if they are installed via `composer`. Please note that - as we see it - `composer` is the only way for managing Magento depedencies. If you want to install the extension manually in `app/code`, please study the contents of `cmoposer.json` to install all dependencies of this module manually as well.
+
 # After installation, I'm still seeing only PNG and JPEG images
 This could mean that the conversion failed. New WebP images are stored in the same path as the original path (somewhere in `pub/`) which means that all folders need to be writable by the webserver. Specifically, if your deployment is based on artifacts, this could be an issue.
 

@@ -20,11 +20,6 @@ use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Framework\View\Result\Page;
 use Magento\Store\Model\StoreManagerInterface;
 
-/**
- * Class Mail
- *
- * @package Yireo\Webp2\Controller\Test
- */
 class Mail extends Action
 {
     /**

@@ -7,11 +7,6 @@ use Exception as ExceptionAlias;
 use Yireo\Webp2\Config\Config;
 use Yireo\Webp2\Logger\Debugger;
 
-/**
- * Class UrlReplacer
- *
- * @package Yireo\Webp2\Image
- */
 class UrlReplacer
 {
     /**

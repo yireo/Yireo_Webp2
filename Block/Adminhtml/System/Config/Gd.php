@@ -6,11 +6,6 @@ namespace Yireo\Webp2\Block\Adminhtml\System\Config;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
-/**
- * Class Gd
- *
- * @package Yireo\Webp2\Block\Adminhtml\System\Config
- */
 class Gd extends Field
 {
     /**

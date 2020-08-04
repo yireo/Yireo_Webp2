@@ -3,10 +3,6 @@ declare(strict_types=1);
 
 namespace Yireo\Webp2\Test\Integration;
 
-/**
- * Class MultipleImagesTest
- * @package Yireo\Webp2\Test\Integration
- */
 class MultipleImagesTest extends Common
 {
     /**
@@ -23,7 +19,7 @@ class MultipleImagesTest extends Common
         $this->assertSame(200, $this->getResponse()->getHttpResponseCode());
 
         $body = $this->getResponse()->getBody();
-        $this->assertContains('type="image/webp"', $body);
+        $this->assertTrue((bool)strpos($body, 'type="image/webp"'));
 
         if (!getenv('TRAVIS')) {
             $this->assertImageTagsExist($body, $this->getImageProvider()->getImages());

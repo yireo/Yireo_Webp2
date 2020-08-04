@@ -6,11 +6,6 @@ namespace Yireo\Webp2\Logger;
 use Psr\Log\LoggerInterface;
 use Yireo\Webp2\Config\Config;
 
-/**
- * Class Debugger
- *
- * @package Yireo\Webp2\Logger
- */
 class Debugger
 {
     /**

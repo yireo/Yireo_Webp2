@@ -10,11 +10,6 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Framework\View\LayoutInterface;
 use Yireo\Webp2\Config\Config;
 
-/**
- * Class BrowserSupport
- *
- * @package Yireo\Webp2\Browser
- */
 class BrowserSupport implements ArgumentInterface
 {
     /**

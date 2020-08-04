@@ -8,10 +8,6 @@ use Magento\Framework\Module\ModuleList;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class ModuleTest
- * @package Yireo\Webp2\Test\Functional
- */
 class ModuleTest extends TestCase
 {
     /**

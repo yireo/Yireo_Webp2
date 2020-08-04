@@ -1,4 +1,18 @@
 # Requesting support
+
+## First check to see if our extension is doing its job
+Before requesting support, please make sure that you properly check whether this extension is working or not. Do not look at your browser and definitely do not use third party SEO tools to make any conclusions. Instead, think like a webdeveloper and inspect the source. Our extension modifies the HTML so that regular `<img>` tags are replaced with something similar to the following:
+```html
+<picture>
+  <source type="image/webp" srcset="example.webp">
+  <source type="image/png" srcset="example.png">
+  <img src="example.png" />
+</picture>
+```
+
+If similar HTML is there, but your browser is not showing the WebP image, then realize that this is not due to our extension, but due to your browser. Unfortunately, we are not browser manufacturors and we can't change this. Refer to https://caniuse.com/#search=webp instead.
+
+## Opening an issue for this extension
 Feel free to open an **Issue** in the GitHub project of this extension. However, do make sure to be thorough and answer the following:
 
 - What browser did you test this with?

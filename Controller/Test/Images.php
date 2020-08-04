@@ -8,11 +8,6 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 
-/**
- * Class Images
- *
- * @package Yireo\Webp2\Controller\Test
- */
 class Images extends Action
 {
     /**

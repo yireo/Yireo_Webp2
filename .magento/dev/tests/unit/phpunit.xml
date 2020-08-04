@@ -12,7 +12,7 @@
         </testsuite>
     </testsuites>
     <filter>
-        <whitelist addUncoveredFilesFromWhiteList="true">
+        <whitelist>
             <directory suffix=".php">../../../app/code</directory>
             <exclude>
                 <directory>../../../app/code/*/*/Test</directory>
