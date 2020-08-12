@@ -7,7 +7,8 @@
  */
 
 define([
-    'jquery'
+    'jquery',
+    'jquery/jquery.cookie'
 ], function ($) {
 
     return function(config) {
