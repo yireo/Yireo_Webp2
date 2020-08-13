@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.5] - 13 August 2020
+### Fixed
+- Add jQuery Cookie to prevent load order issues (@basvanpoppel)
+
 ## [0.7.4] - 29 July 2020
 ### Fixed
 - Image is correctly updated including the source (@johannessmit)
