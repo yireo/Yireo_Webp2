@@ -1,7 +1,7 @@
 {
   "name": "yireo/magento2-webp2",
   "license": "OSL-3.0",
-  "version": "0.7.4",
+  "version": "0.7.6",
   "type": "magento2-module",
   "homepage": "https://www.yireo.com/software/magento-extensions/webp2",
   "description": "Magento 2 module to add WebP support to the Magento frontend",
@@ -32,7 +32,9 @@
   },
   "require-dev": {
     "phpunit/phpunit": "*",
-    "composer/composer": "*@dev"
+    "composer/composer": "*@dev",
+    "phpstan/phpstan": "^0.12.32",
+    "bitexpert/phpstan-magento": "^0.3.0"
   },
   "autoload": {
     "psr-4": {
