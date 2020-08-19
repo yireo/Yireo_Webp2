@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.4] - 3 August 2020
+### Removed
+- Undo of `parse_url` Laminas replacement because this breaks pre-Laminas Magento releases
+
 ## [0.7.3] - 29 July 2020
 ### Added
 - Magento 2.4 support 
