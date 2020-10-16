@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: docker://yireo/github-actions-magento-integration-tests:7.3
         env:
-          MAGENTO_VERSION: '2.3.4'
-      - uses: docker://yireo/github-actions-magento-integration-tests:7.3
-        env:
           MAGENTO_VERSION: '2.3.5-p2'
+      - uses: docker://yireo/github-actions-magento-integration-tests:7.4
+        env:
+          MAGENTO_VERSION: '2.4.1'
