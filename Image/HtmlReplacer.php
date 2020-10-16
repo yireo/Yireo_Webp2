@@ -67,13 +67,13 @@ class HtmlReplacer
      */
     public function replaceImagesInHtml(LayoutInterface $layout, string $html): string
     {
-        $regex = '/<([^<]+)\ src=\"([^\"]+)\.(png|jpg|jpeg)([^>]+)>(\s*)<(\/?)([a-z]+)/msi';
+        $regex = '/<([^<]+)\ src=\"([^\"]+)\.(png|jpg|jpeg)([^>]+)>(\s*)(<(\/[a-z]+))?/msi';
         if (preg_match_all($regex, $html, $matches) === false) {
             return $html;
         }
 
         foreach ($matches[0] as $index => $match) {
-            $nextTag = $matches[6][$index] . $matches[7][$index];
+            $nextTag = $matches[7][$index];
             $fullSearchMatch = $matches[0][$index];
             $imageUrl = $matches[2][$index] . '.' . $matches[3][$index];
 
@@ -92,7 +92,7 @@ class HtmlReplacer
 
             $htmlTag = preg_replace('/>(.*)/msi', '>', $fullSearchMatch);
             $newHtmlTag = $this->getNewHtmlTag($layout, $imageUrl, $webpUrl, $htmlTag);
-            $replacement = $newHtmlTag . '<' . $nextTag;
+            $replacement = $nextTag ? $newHtmlTag . '<' . $nextTag : $newHtmlTag;
             $html = str_replace($fullSearchMatch, $replacement, $html);
         }
 
