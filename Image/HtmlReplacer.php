@@ -67,15 +67,15 @@ class HtmlReplacer
      */
     public function replaceImagesInHtml(LayoutInterface $layout, string $html): string
     {
-        $regex = '/<([^<]+)\ src=\"([^\"]+)\.(png|jpg|jpeg)([^>]+)>(\s*)(<(\/[a-z]+))?/msi';
+        $regex = '/<([^<]+)\ (data\-src|src)=\"([^\"]+)\.(png|jpg|jpeg)([^>]+)>(\s*)(<(\/[a-z]+))?/msi';
         if (preg_match_all($regex, $html, $matches) === false) {
             return $html;
         }
 
         foreach ($matches[0] as $index => $match) {
-            $nextTag = $matches[7][$index];
+            $nextTag = $matches[8][$index];
             $fullSearchMatch = $matches[0][$index];
-            $imageUrl = $matches[2][$index] . '.' . $matches[3][$index];
+            $imageUrl = $matches[3][$index] . '.' . $matches[4][$index];
 
             if (!$this->isAllowedByNextTag($nextTag)) {
                 continue;
@@ -91,7 +91,7 @@ class HtmlReplacer
             }
 
             $htmlTag = preg_replace('/>(.*)/msi', '>', $fullSearchMatch);
-            $newHtmlTag = $this->getNewHtmlTag($layout, $imageUrl, $webpUrl, $htmlTag);
+            $newHtmlTag = $this->getNewHtmlTag($layout, $imageUrl, $webpUrl, $htmlTag, $matches[2][$index] === 'data-src');
             $replacement = $nextTag ? $newHtmlTag . '<' . $nextTag : $newHtmlTag;
             $html = str_replace($fullSearchMatch, $replacement, $html);
         }
@@ -132,7 +132,7 @@ class HtmlReplacer
      * @param $htmlTag
      * @return string
      */
-    private function getNewHtmlTag(LayoutInterface $layout, string $imageUrl, string $webpUrl, $htmlTag): string
+    private function getNewHtmlTag(LayoutInterface $layout, string $imageUrl, string $webpUrl, $htmlTag, bool $isDataSrc = false): string
     {
         return (string)$this->getPictureBlock($layout)
             ->setOriginalImage($imageUrl)
@@ -142,6 +142,7 @@ class HtmlReplacer
             ->setClass($this->getAttributeText($htmlTag, 'class'))
             ->setWidth($this->getAttributeText($htmlTag, 'width'))
             ->setHeight($this->getAttributeText($htmlTag, 'height'))
+            ->setIsDataSrc($isDataSrc)
             ->toHtml();
     }
 
