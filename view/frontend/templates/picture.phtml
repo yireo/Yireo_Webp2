@@ -19,6 +19,6 @@ $originalImageType = $block->getOriginalImageType();
 <?php endif; ?>
 <picture<?= /* @noEscape */ $class ?>>
     <source type="image/webp" <?php if($block->getIsDataSrc()): ?>data-srcset="<?= /* @noEscape */ $block->getWebpImage() ?>"<?php else: ?>srcset="<?= /* @noEscape */ $block->getWebpImage() ?>"<?php endif; ?>>
-    <source type="<?= /* @noEscape */ $originalImageType ?>" <?php if($block->getIsDataSrc()): ?>data-srcset="<?= /* @noEscape */ $block->getWebpImage() ?>"<?php else: ?>srcset="<?= /* @noEscape */ $originalImage ?>"<?php endif; ?>>
+    <source type="<?= /* @noEscape */ $originalImageType ?>" <?php if($block->getIsDataSrc()): ?>data-srcset="<?= /* @noEscape */ $originalImage; ?>"<?php else: ?>srcset="<?= /* @noEscape */ $originalImage ?>"<?php endif; ?>>
     <?= /* @noEscape */ $originalTag ?>
 </picture>
