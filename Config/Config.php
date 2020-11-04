@@ -75,7 +75,16 @@ class Config
      */
     public function getQualityLevel(): int
     {
-        return (int)$this->scopeConfig->getValue('yireo_webp2/settings/quality_level');
+        $qualityLevel = (int)$this->scopeConfig->getValue('yireo_webp2/settings/quality_level');
+        if ($qualityLevel > 100) {
+            return 100;
+        }
+
+        if ($qualityLevel < 1) {
+            return 1;
+        }
+
+        return $qualityLevel;
     }
 
     /**

@@ -28,6 +28,10 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment><![CDATA[Add <code>loading="lazy"</code> attribute, which is supported by some browsers]]></comment>
                 </field>
+                <field id="quality_level" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Quality level</label>
+                    <comment><![CDATA[Between 0 and 100]]></comment>
+                </field>
                 <field id="gd" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>GD support</label>
                     <frontend_model>Yireo\Webp2\Block\Adminhtml\System\Config\Gd</frontend_model>
