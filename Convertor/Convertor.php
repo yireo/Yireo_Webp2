@@ -67,8 +67,19 @@ class Convertor implements ConvertorInterface
      * @param string $imageUrl
      * @return SourceImage
      * @throws ConvertorException
+     * @deprecated
      */
     public function convertByUrl(string $imageUrl): SourceImage
+    {
+        return $this->getSourceImage($imageUrl);
+    }
+
+    /**
+     * @param string $imageUrl
+     * @return SourceImage
+     * @throws ConvertorException
+     */
+    public function getSourceImage(string $imageUrl): SourceImage
     {
         if (!$this->config->enabled()) {
             throw new ConvertorException('WebP conversion is not enabled');

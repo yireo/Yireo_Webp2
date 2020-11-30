@@ -1,7 +1,7 @@
 {
   "name": "yireo/magento2-webp2",
   "license": "OSL-3.0",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "type": "magento2-module",
   "homepage": "https://www.yireo.com/software/magento-extensions/webp2",
   "description": "Magento 2 module to add WebP support to the Magento frontend",
@@ -19,7 +19,7 @@
     }
   ],
   "require": {
-    "yireo/magento2-next-gen-images": "^0.0.1",
+    "yireo/magento2-next-gen-images": "^0.0.2",
     "magento/framework": "^101.0.1|^101.1|^102.0|^103.0",
     "magento/module-backend": "^100.0|^101.0|^102.0",
     "magento/module-config": "^101.0.0|^101.1.0",
