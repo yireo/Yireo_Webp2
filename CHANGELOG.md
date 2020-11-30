@@ -17,6 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add new option for quality level
 
+## [0.8.0] - 30 November 2020
+### Fixed
+- Lazy loading configuration option was not working
+
+### Added
+- Add new option for quality level
+
 ## [0.7.6] - 19 August 2020
 ### Fixed
 - Fixes wrong name in require-js config (@johannessmit)

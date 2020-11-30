@@ -46,6 +46,23 @@ class Config implements ArgumentInterface
             return 1;
         }
 
+<<<<<<< HEAD
+=======
+    /**
+     * @return int
+     */
+    public function getQualityLevel(): int
+    {
+        $qualityLevel = (int)$this->scopeConfig->getValue('yireo_webp2/settings/quality_level');
+        if ($qualityLevel > 100) {
+            return 100;
+        }
+
+        if ($qualityLevel < 1) {
+            return 1;
+        }
+
+>>>>>>> a9252ddd5ae52df891012f748afd1b2dbd94c240
         return $qualityLevel;
     }
 

@@ -1,0 +1,24 @@
+<?php
+declare(strict_types=1);
+
+/** @var $block \Yireo\Webp2\Block\Picture */
+
+$width = ($block->getWidth()) ? ' width="' . $block->getWidth() . '"' : '';
+$height = ($block->getHeight()) ? ' height="' . $block->getHeight() . '"' : '';
+$class = ($block->getClass()) ? ' class="' . $block->getClass() . '"' : '';
+$lazyLoading = ($block->getLazyLoading()) ? ' loading="lazy" ' : '';
+
+$originalTag = trim($block->getOriginalTag());
+$originalTag = preg_replace('/(\/?)>$/', $lazyLoading . '\1>', $originalTag);
+
+$originalImage = $block->getOriginalImage();
+$originalImageType = $block->getOriginalImageType();
+?>
+<?php if ($block->getDebug()): ?>
+    <!-- <?= /* @noEscape */ $block->getOriginalTag() ?> -->
+<?php endif; ?>
+<picture<?= /* @noEscape */ $class ?>>
+    <source type="image/webp" <?php if($block->getIsDataSrc()): ?>data-srcset="<?= /* @noEscape */ $block->getWebpImage() ?>"<?php else: ?>srcset="<?= /* @noEscape */ $block->getWebpImage() ?>"<?php endif; ?>>
+    <source type="<?= /* @noEscape */ $originalImageType ?>" <?php if($block->getIsDataSrc()): ?>data-srcset="<?= /* @noEscape */ $originalImage; ?>"<?php else: ?>srcset="<?= /* @noEscape */ $originalImage ?>"<?php endif; ?>>
+    <?= /* @noEscape */ $originalTag ?>
+</picture>
