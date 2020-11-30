@@ -4,10 +4,9 @@ declare(strict_types=1);
 namespace Yireo\Webp2\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\View\LayoutInterface;
-use Magento\PageCache\Model\DepersonalizeChecker;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
 
-class Config
+class Config implements ArgumentInterface
 {
     /**
      * @var ScopeConfigInterface
@@ -15,22 +14,14 @@ class Config
     private $scopeConfig;
 
     /**
-     * @var DepersonalizeChecker
-     */
-    private $depersonalizeChecker;
-
-    /**
      * Config constructor.
      *
      * @param ScopeConfigInterface $scopeConfig
-     * @param DepersonalizeChecker $depersonalizeChecker
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        DepersonalizeChecker $depersonalizeChecker
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->depersonalizeChecker = $depersonalizeChecker;
     }
 
     /**
@@ -42,40 +33,20 @@ class Config
     }
 
     /**
-     * @return bool
-     */
-    public function allowImageCreation(): bool
-    {
-        return (bool)$this->scopeConfig->getValue('yireo_webp2/settings/convert_images');
-    }
-
-    /**
-     * @return bool
-     */
-    public function addLazyLoading(): bool
-    {
-        return (bool)$this->scopeConfig->getValue('yireo_webp2/settings/lazy_loading');
-    }
-
-    /**
-     * @param LayoutInterface $block
-     * @return bool
-     */
-    public function hasFullPageCacheEnabled(LayoutInterface $block): bool
-    {
-        if ($this->depersonalizeChecker->checkIfDepersonalize($block)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * @return int
      */
     public function getQualityLevel(): int
     {
-        return (int)$this->scopeConfig->getValue('yireo_webp2/settings/quality_level');
+        $qualityLevel = (int)$this->scopeConfig->getValue('yireo_webp2/settings/quality_level');
+        if ($qualityLevel > 100) {
+            return 100;
+        }
+
+        if ($qualityLevel < 1) {
+            return 1;
+        }
+
+        return $qualityLevel;
     }
 
     /**
@@ -84,13 +55,5 @@ class Config
     public function getConvertors(): array
     {
         return ['cwebp', 'gd', 'imagick', 'wpc', 'ewww'];
-    }
-
-    /**
-     * @return bool
-     */
-    public function isDebugging(): bool
-    {
-        return (bool)$this->scopeConfig->getValue('yireo_webp2/settings/debug');
     }
 }

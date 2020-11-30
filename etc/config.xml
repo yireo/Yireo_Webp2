@@ -13,9 +13,6 @@
         <yireo_webp2>
             <settings>
                 <enabled>1</enabled>
-                <debug>0</debug>
-                <lazy_loading>1</lazy_loading>
-                <convert_images>1</convert_images>
                 <quality_level>80</quality_level>
             </settings>
         </yireo_webp2>

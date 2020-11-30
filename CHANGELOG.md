@@ -5,6 +5,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Removed
+- Remove JavaScript check and Browser class
+- Moved code from this module to generic NextGenImages module
+- Remove Travis CI script
+
+## [0.8.0] - 30 November 2020
+### Fixed
+- Lazy loading configuration option was not working
+
+### Added
+- Add new option for quality level
 
 ## [0.7.6] - 19 August 2020
 ### Fixed

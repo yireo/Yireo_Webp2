@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Yireo\NextGenImages\Convertor\ConvertorListing">
+        <arguments>
+            <argument name="convertors" xsi:type="array">
+                <item name="webp2" xsi:type="object">Yireo\Webp2\Convertor\Convertor</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Yireo\Webp2\VirtualType\Block\Adminhtml\System\Config\ModuleVersion" type="Yireo\NextGenImages\Block\Adminhtml\System\Config\ModuleVersion">
+        <arguments>
+            <argument name="moduleName" xsi:type="string">Yireo_Webp2</argument>
+        </arguments>
+    </virtualType>
+</config>

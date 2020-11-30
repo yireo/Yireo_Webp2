@@ -1,5 +1,4 @@
 # About this module
-- Browser-support for WebP is detected in various ways: A simple check for Chrome, an ACCEPT header sent by the browser and a JavaScript check generating a `webp` cookie for all browsers that remain.
 - When `<img>` tags are found on the page, the corresponding JPG or PNG is converted into WebP and a corresponding `<picture` tag is used to replace the original `<img>` tag.
 - The Fotorama gallery of the Magento core product pages is replaced with WebP images without issues as well. However, the Fotorama effect loads new JPG images again, replacing the original `<picture>` tag. This shows that the Fotorama library is not scalable and may be a bad decision to use. We recommend you replace it with the [Notorama](https://github.com/robaimes/module-notorama) module instead.
 
