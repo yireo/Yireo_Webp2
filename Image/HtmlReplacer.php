@@ -142,6 +142,7 @@ class HtmlReplacer
             ->setClass($this->getAttributeText($htmlTag, 'class'))
             ->setWidth($this->getAttributeText($htmlTag, 'width'))
             ->setHeight($this->getAttributeText($htmlTag, 'height'))
+            ->setLazyLoading($this->config->addLazyLoading())
             ->setIsDataSrc($isDataSrc)
             ->toHtml();
     }
