@@ -33,7 +33,6 @@ class ConvertorTest extends TestCase
         $this->assertEquals('/test/foobar.webp', $convertor->getSourceImage('/test/foobar.jpg'));
     }
 
-
     /**
      * Test for Yireo\Webp2\Convertor\Convertor::convert
      */
@@ -48,7 +47,6 @@ class ConvertorTest extends TestCase
         $convertor = new Convertor($config, $sourceImageFactory, $file, $convertWrapper, $fileReadFactory);
         $this->assertFalse($convertor->convert('/images/test.jpg', '/images/test.webp'));
     }
-
 
     /**
      * Test for Yireo\Webp2\Convertor\Convertor::urlExists
