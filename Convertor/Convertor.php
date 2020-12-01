@@ -67,7 +67,7 @@ class Convertor implements ConvertorInterface
      * @param string $imageUrl
      * @return SourceImage
      * @throws ConvertorException
-     * @deprecated
+     * @deprecated Use getSourceImage() instead
      */
     public function convertByUrl(string $imageUrl): SourceImage
     {
