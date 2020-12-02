@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.2] - 2 December 2020
+### Fixed
+- Fix composer deps with magento2-next-gen-images
+
 ## [0.9.2] - 30 November 2020
 ### Fixed
 - Stick to new ConvertorInterface interface of NextGenImages
