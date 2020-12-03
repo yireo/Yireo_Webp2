@@ -22,6 +22,11 @@ jobs:
           'xpack.security.enabled': false
           ES_JAVA_OPTS: "-Xms64m -Xmx512m"
         options: --health-cmd="curl localhost:9200/_cluster/health?wait_for_status=yellow&timeout=60s" --health-interval=10s --health-timeout=5s --health-retries=3
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+        options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
     env:
       MAGENTO_MARKETPLACE_USERNAME: ${{ secrets.MAGENTO_MARKETPLACE_USERNAME }}
       MAGENTO_MARKETPLACE_PASSWORD: ${{ secrets.MAGENTO_MARKETPLACE_PASSWORD }}
@@ -32,6 +37,12 @@ jobs:
       - uses: docker://yireo/github-actions-magento-integration-tests:7.3
         env:
           MAGENTO_VERSION: '2.3.5-p2'
+        with:
+          magento_pre_install_script: .github/workflows/extdn-integration-tests-pre-install.sh
+          magento_post_install_script: .github/workflows/extdn-integration-tests-post-install.sh
       - uses: docker://yireo/github-actions-magento-integration-tests:7.4
         env:
           MAGENTO_VERSION: '2.4.1'
+        with:
+          magento_pre_install_script: .github/workflows/extdn-integration-tests-pre-install.sh
+          magento_post_install_script: .github/workflows/extdn-integration-tests-post-install.sh
