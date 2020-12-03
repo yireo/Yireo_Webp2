@@ -6,7 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.9.2] - 2 December 2020
+## [0.9.4] - 3 December 2020
+### Fixed
+- Fix missing class UrlReplacer
+
+## [0.9.3] - 2 December 2020
 ### Fixed
 - Fix composer deps with magento2-next-gen-images
 
