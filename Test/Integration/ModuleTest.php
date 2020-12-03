@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\Webp2\Test\Functional;
+namespace Yireo\Webp2\Test\Integration;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Module\ModuleList;

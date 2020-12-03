@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\Webp2\Test\Convertor;
+namespace Yireo\Webp2\Test\Unit\Convertor;
 
 use Magento\Framework\Filesystem\File\Read;
 use Magento\Framework\Filesystem\File\ReadFactory;
