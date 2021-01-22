@@ -11,6 +11,8 @@ define([
              *
              * Overwritten to make sure the image in the category grid is updated
              * when clicking a swatch image.
+             * When no .webp file is available the source tag will be removed
+             * to prevent old image being shown on the frontend.
              *
              * @param {Array} images
              * @param {jQuery} context
@@ -23,13 +25,23 @@ define([
                     const justAnImage = images[0];
 
                     if (justAnImage && justAnImage.img) {
-                        justAnImage.img.indexOf('.webp') !== -1
-                            ? context
-                                .find('[type="image/webp"]')
-                                .attr('srcset', justAnImage.img)
-                            : context
+                        const webpSourceTag = context.find('[type="image/webp"]');
+
+                        if (justAnImage.img.indexOf('.webp') !== -1) {
+                            (webpSourceTag !== undefined)
+                                ? webpSourceTag.attr('srcset', justAnImage.img)
+                                : context
+                                    .find('.product-image-photo')
+                                    .prepend('<source type="image/webp" srcset="' + justAnImage.img + '">');
+                        } else {
+                            if (webpSourceTag !== undefined) {
+                                webpSourceTag.remove();
+                            }
+
+                            context
                                 .find('[type="image/jpg"], [type="image/png"]')
                                 .attr('srcset', justAnImage.img);
+                        }
 
                     }
                 }
