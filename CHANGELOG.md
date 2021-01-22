@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.6] - 22 January 2021
+### Fixed
+- When no .webp file is available, the source tag will be removed to prevent old image being shown on the frontend (@ar-vie)
+
+
 ## [0.9.5] - 3 December 2020
 ### Fixed
 - Remove class UrlReplacer again after refactoring NextGenImages
