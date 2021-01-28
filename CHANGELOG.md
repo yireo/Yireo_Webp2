@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.0] - 28 January 2021
+### Added
+- Improved support on product detail page (configurable swatches + fotorama)
+
 ## [0.9.6] - 22 January 2021
 ### Fixed
 - When no .webp file is available, the source tag will be removed to prevent old image being shown on the frontend (@ar-vie)
