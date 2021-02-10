@@ -66,10 +66,13 @@ class AddWebpToGalleryImagesJson
     /**
      * @param string $url
      * @return string
-     * @throws ConvertorException
      */
     private function getWebpUrl(string $url): string
     {
-        return $this->convertor->getSourceImage($url)->getUrl();
+        try {
+            return $this->convertor->getSourceImage($url)->getUrl();
+        } catch(ConvertorException $ex) {
+            return $url;
+        }
     }
 }
