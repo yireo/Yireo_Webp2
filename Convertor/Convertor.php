@@ -135,7 +135,7 @@ class Convertor implements ConvertorInterface
             return false;
         }
 
-        if (!$this->fileExists($destinationImageFilename)) {
+        if (!$this->fileExists($destinationImageFilename) && $this->isWritable($destinationImageFilename)) {
             return true;
         }
 
@@ -172,5 +172,18 @@ class Convertor implements ConvertorInterface
         } catch (FileSystemException $fileSystemException) {
             return false;
         }
+    }
+
+    /**
+     * @param $filePath
+     * @return bool
+     */
+    private function isWritable($filePath): bool
+    {
+        if ($this->fileExists($filePath)) {
+            return is_writable($filePath);
+        }
+
+        return is_writable(dirname($filePath));
     }
 }
