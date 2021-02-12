@@ -36,7 +36,6 @@ class AddWebpToConfigurableJsonConfig
      * @param Configurable $subject
      * @param string $jsonConfig
      * @return string
-     * @throws ConvertorException
      */
     public function afterGetJsonConfig(Configurable $subject, string $jsonConfig): string
     {
@@ -53,7 +52,6 @@ class AddWebpToConfigurableJsonConfig
     /**
      * @param array $images
      * @return array
-     * @throws ConvertorException
      */
     private function appendImages(array $images): array
     {
@@ -74,10 +72,13 @@ class AddWebpToConfigurableJsonConfig
     /**
      * @param string $url
      * @return string
-     * @throws ConvertorException
      */
     private function getWebpUrl(string $url): string
     {
-        return $this->convertor->getSourceImage($url)->getUrl();
+        try {
+            return $this->convertor->getSourceImage($url)->getUrl();
+        } catch (ConvertorException $e) {
+            return $url;
+        }
     }
 }
