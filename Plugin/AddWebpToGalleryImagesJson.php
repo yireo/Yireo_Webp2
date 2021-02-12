@@ -36,20 +36,17 @@ class AddWebpToGalleryImagesJson
      * @param Gallery $subject
      * @param string $galleryImagesJson
      * @return string
-     * @throws ConvertorException
      */
     public function afterGetGalleryImagesJson(Gallery $subject, string $galleryImagesJson): string
     {
         $jsonData = $this->serializer->unserialize($galleryImagesJson);
         $jsonData = $this->appendImages($jsonData);
-        $jsonConfig = $this->serializer->serialize($jsonData);
-        return $jsonConfig;
+        return $this->serializer->serialize($jsonData);
     }
 
     /**
      * @param array $images
      * @return array
-     * @throws ConvertorException
      */
     private function appendImages(array $images): array
     {
@@ -66,10 +63,13 @@ class AddWebpToGalleryImagesJson
     /**
      * @param string $url
      * @return string
-     * @throws ConvertorException
      */
     private function getWebpUrl(string $url): string
     {
-        return $this->convertor->getSourceImage($url)->getUrl();
+        try {
+            return $this->convertor->getSourceImage($url)->getUrl();
+        } catch (ConvertorException $e) {
+            return $url;
+        }
     }
 }
