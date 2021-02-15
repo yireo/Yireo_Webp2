@@ -11,6 +11,7 @@ use Yireo\NextGenImages\Exception\ConvertorException;
 use Yireo\NextGenImages\Image\File;
 use Yireo\NextGenImages\Image\SourceImage;
 use Yireo\NextGenImages\Image\SourceImageFactory;
+use Yireo\NextGenImages\Logger\Debugger;
 use Yireo\Webp2\Config\Config;
 use Yireo\Webp2\Image\ConvertWrapper;
 
@@ -40,6 +41,10 @@ class Convertor implements ConvertorInterface
      * @var FileReadFactory
      */
     private $fileReadFactory;
+    /**
+     * @var Debugger
+     */
+    private $debugger;
 
     /**
      * Convertor constructor.
@@ -48,19 +53,22 @@ class Convertor implements ConvertorInterface
      * @param File $imageFile
      * @param ConvertWrapper $convertWrapper
      * @param FileReadFactory $fileReadFactory
+     * @param Debugger $debugger
      */
     public function __construct(
         Config $config,
         SourceImageFactory $sourceImageFactory,
         File $imageFile,
         ConvertWrapper $convertWrapper,
-        FileReadFactory $fileReadFactory
+        FileReadFactory $fileReadFactory,
+        Debugger $debugger
     ) {
         $this->config = $config;
         $this->sourceImageFactory = $sourceImageFactory;
         $this->imageFile = $imageFile;
         $this->convertWrapper = $convertWrapper;
         $this->fileReadFactory = $fileReadFactory;
+        $this->debugger = $debugger;
     }
 
     /**
@@ -170,6 +178,7 @@ class Convertor implements ConvertorInterface
             $fileRead = $this->fileReadFactory->create($filePath, 'file');
             return (bool)$fileRead->readAll();
         } catch (FileSystemException $fileSystemException) {
+            $this->debugger->debug($fileSystemException->getMessage(), ['filePath' => $filePath]);
             return false;
         }
     }

@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.4] - 15 February 2021
+### Fixed
+- Log all exceptions to NextGenImages logger
+
 ## [0.10.3] - 12 February 2021
 ### Fixed
 - Make sure configurable images don't throw exception
