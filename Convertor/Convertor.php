@@ -3,6 +3,7 @@
 namespace Yireo\Webp2\Convertor;
 
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\Driver\File as FileDriver;
 use Magento\Framework\Filesystem\File\ReadFactory as FileReadFactory;
 use Magento\Framework\View\Asset\File\NotFoundException;
 use WebPConvert\Convert\Exceptions\ConversionFailedException;
@@ -41,10 +42,16 @@ class Convertor implements ConvertorInterface
      * @var FileReadFactory
      */
     private $fileReadFactory;
+
     /**
      * @var Debugger
      */
     private $debugger;
+
+    /**
+     * @var FileDriver
+     */
+    private $fileDriver;
 
     /**
      * Convertor constructor.
@@ -54,6 +61,7 @@ class Convertor implements ConvertorInterface
      * @param ConvertWrapper $convertWrapper
      * @param FileReadFactory $fileReadFactory
      * @param Debugger $debugger
+     * @param FileDriver $fileDriver
      */
     public function __construct(
         Config $config,
@@ -61,7 +69,8 @@ class Convertor implements ConvertorInterface
         File $imageFile,
         ConvertWrapper $convertWrapper,
         FileReadFactory $fileReadFactory,
-        Debugger $debugger
+        Debugger $debugger,
+        FileDriver $fileDriver
     ) {
         $this->config = $config;
         $this->sourceImageFactory = $sourceImageFactory;
@@ -69,6 +78,7 @@ class Convertor implements ConvertorInterface
         $this->convertWrapper = $convertWrapper;
         $this->fileReadFactory = $fileReadFactory;
         $this->debugger = $debugger;
+        $this->fileDriver = $fileDriver;
     }
 
     /**
@@ -186,13 +196,14 @@ class Convertor implements ConvertorInterface
     /**
      * @param $filePath
      * @return bool
+     * @throws FileSystemException
      */
     private function isWritable($filePath): bool
     {
         if ($this->fileExists($filePath)) {
-            return is_writable($filePath);
+            return $this->fileDriver->isWritable($filePath);
         }
 
-        return is_writable(dirname($filePath));
+        return $this->fileDriver->isWritable($this->fileDriver->getParentDirectory($filePath));
     }
 }
