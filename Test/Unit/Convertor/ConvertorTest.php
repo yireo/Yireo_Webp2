@@ -2,12 +2,14 @@
 
 namespace Yireo\Webp2\Test\Unit\Convertor;
 
+use Magento\Framework\Filesystem\Driver\File as FileDriver;
 use Magento\Framework\Filesystem\File\Read;
 use Magento\Framework\Filesystem\File\ReadFactory;
 use PHPUnit\Framework\TestCase;
 use Yireo\NextGenImages\Exception\ConvertorException;
 use Yireo\NextGenImages\Image\File;
 use Yireo\NextGenImages\Image\SourceImageFactory;
+use Yireo\NextGenImages\Logger\Debugger;
 use Yireo\Webp2\Config\Config;
 use Yireo\Webp2\Convertor\Convertor;
 use Yireo\Webp2\Image\ConvertWrapper;
@@ -21,13 +23,7 @@ class ConvertorTest extends TestCase
     {
         $config = $this->createMock(Config::class);
         $config->method('enabled')->willReturn(true);
-
-        $sourceImageFactory = $this->createMock(SourceImageFactory::class);
-        $file = $this->createMock(File::class);
-        $convertWrapper = $this->createMock(ConvertWrapper::class);
-        $fileReadFactory = $this->getFileReadFactory();
-
-        $convertor = new Convertor($config, $sourceImageFactory, $file, $convertWrapper, $fileReadFactory);
+        $convertor = $this->getConvertor($config);
 
         $this->expectException(ConvertorException::class);
         $this->assertEquals('/test/foobar.webp', $convertor->getSourceImage('/test/foobar.jpg'));
@@ -38,13 +34,7 @@ class ConvertorTest extends TestCase
      */
     public function testConvert()
     {
-        $config = $this->createMock(Config::class);
-        $sourceImageFactory = $this->createMock(SourceImageFactory::class);
-        $file = $this->createMock(File::class);
-        $convertWrapper = $this->createMock(ConvertWrapper::class);
-        $fileReadFactory = $this->getFileReadFactory();
-
-        $convertor = new Convertor($config, $sourceImageFactory, $file, $convertWrapper, $fileReadFactory);
+        $convertor = $this->getConvertor();
         $this->assertFalse($convertor->convert('/images/test.jpg', '/images/test.webp'));
     }
 
@@ -53,14 +43,36 @@ class ConvertorTest extends TestCase
      */
     public function testUrlExists()
     {
-        $config = $this->createMock(Config::class);
+        $convertor = $this->getConvertor();
+        $this->assertFalse($convertor->urlExists('http://localhost/test.webp'));
+    }
+
+    /**
+     * @param Config|null $config
+     * @return Convertor
+     */
+    private function getConvertor(?Config $config = null): Convertor
+    {
+        if (!$config) {
+            $config = $this->createMock(Config::class);
+        }
+
         $sourceImageFactory = $this->createMock(SourceImageFactory::class);
         $file = $this->createMock(File::class);
         $convertWrapper = $this->createMock(ConvertWrapper::class);
         $fileReadFactory = $this->getFileReadFactory();
+        $debugger = $this->createMock(Debugger::class);
+        $fileDriver = $this->createMock(FileDriver::class);
 
-        $convertor = new Convertor($config, $sourceImageFactory, $file, $convertWrapper, $fileReadFactory);
-        $this->assertFalse($convertor->urlExists('http://localhost/test.webp'));
+        return new Convertor(
+            $config,
+            $sourceImageFactory,
+            $file,
+            $convertWrapper,
+            $fileReadFactory,
+            $debugger,
+            $fileDriver
+        );
     }
 
     /**
