@@ -5,6 +5,7 @@ namespace Yireo\Webp2\Plugin;
 use Magento\ConfigurableProduct\Block\Product\View\Type\Configurable;
 use Magento\Framework\Serialize\SerializerInterface;
 use Yireo\NextGenImages\Exception\ConvertorException;
+use Yireo\NextGenImages\Logger\Debugger;
 use Yireo\Webp2\Convertor\Convertor;
 
 class AddWebpToConfigurableJsonConfig
@@ -18,25 +19,31 @@ class AddWebpToConfigurableJsonConfig
      * @var Convertor
      */
     private $convertor;
+    /**
+     * @var Debugger
+     */
+    private $debugger;
 
     /**
      * AddImagesToConfigurableJsonConfig constructor.
      * @param SerializerInterface $serializer
      * @param Convertor $convertor
+     * @param Debugger $debugger
      */
     public function __construct(
         SerializerInterface $serializer,
-        Convertor $convertor
+        Convertor $convertor,
+        Debugger $debugger
     ) {
         $this->serializer = $serializer;
         $this->convertor = $convertor;
+        $this->debugger = $debugger;
     }
 
     /**
      * @param Configurable $subject
      * @param string $jsonConfig
      * @return string
-     * @throws ConvertorException
      */
     public function afterGetJsonConfig(Configurable $subject, string $jsonConfig): string
     {
@@ -53,7 +60,6 @@ class AddWebpToConfigurableJsonConfig
     /**
      * @param array $images
      * @return array
-     * @throws ConvertorException
      */
     private function appendImages(array $images): array
     {
@@ -74,10 +80,14 @@ class AddWebpToConfigurableJsonConfig
     /**
      * @param string $url
      * @return string
-     * @throws ConvertorException
      */
     private function getWebpUrl(string $url): string
     {
-        return $this->convertor->getSourceImage($url)->getUrl();
+        try {
+            return $this->convertor->getSourceImage($url)->getUrl();
+        } catch (ConvertorException $e) {
+            $this->debugger->debug($e->getMessage(), ['url' => $url]);
+            return $url;
+        }
     }
 }

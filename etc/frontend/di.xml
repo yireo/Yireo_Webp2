@@ -8,4 +8,8 @@
     <type name="Magento\Catalog\Block\Product\View\Gallery">
         <plugin name="Yireo_Webp2::addWebpToGalleryImagesJson" type="Yireo\Webp2\Plugin\AddWebpToGalleryImagesJson"/>
     </type>
+
+    <type name="Magento\Swatches\Helper\Data">
+        <plugin name="Yireo_Webp2::addWebpToSwatchesAjaxData" type="Yireo\Webp2\Plugin\AddWebpToSwatchesAjaxData"/>
+    </type>
 </config>

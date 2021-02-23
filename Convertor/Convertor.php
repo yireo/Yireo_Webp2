@@ -3,6 +3,7 @@
 namespace Yireo\Webp2\Convertor;
 
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\Driver\File as FileDriver;
 use Magento\Framework\Filesystem\File\ReadFactory as FileReadFactory;
 use Magento\Framework\View\Asset\File\NotFoundException;
 use WebPConvert\Convert\Exceptions\ConversionFailedException;
@@ -11,6 +12,7 @@ use Yireo\NextGenImages\Exception\ConvertorException;
 use Yireo\NextGenImages\Image\File;
 use Yireo\NextGenImages\Image\SourceImage;
 use Yireo\NextGenImages\Image\SourceImageFactory;
+use Yireo\NextGenImages\Logger\Debugger;
 use Yireo\Webp2\Config\Config;
 use Yireo\Webp2\Image\ConvertWrapper;
 
@@ -42,25 +44,41 @@ class Convertor implements ConvertorInterface
     private $fileReadFactory;
 
     /**
+     * @var Debugger
+     */
+    private $debugger;
+
+    /**
+     * @var FileDriver
+     */
+    private $fileDriver;
+
+    /**
      * Convertor constructor.
      * @param Config $config
      * @param SourceImageFactory $sourceImageFactory
      * @param File $imageFile
      * @param ConvertWrapper $convertWrapper
      * @param FileReadFactory $fileReadFactory
+     * @param Debugger $debugger
+     * @param FileDriver $fileDriver
      */
     public function __construct(
         Config $config,
         SourceImageFactory $sourceImageFactory,
         File $imageFile,
         ConvertWrapper $convertWrapper,
-        FileReadFactory $fileReadFactory
+        FileReadFactory $fileReadFactory,
+        Debugger $debugger,
+        FileDriver $fileDriver
     ) {
         $this->config = $config;
         $this->sourceImageFactory = $sourceImageFactory;
         $this->imageFile = $imageFile;
         $this->convertWrapper = $convertWrapper;
         $this->fileReadFactory = $fileReadFactory;
+        $this->debugger = $debugger;
+        $this->fileDriver = $fileDriver;
     }
 
     /**
@@ -135,7 +153,7 @@ class Convertor implements ConvertorInterface
             return false;
         }
 
-        if (!$this->fileExists($destinationImageFilename)) {
+        if (!$this->fileExists($destinationImageFilename) && $this->isWritable($destinationImageFilename)) {
             return true;
         }
 
@@ -170,7 +188,22 @@ class Convertor implements ConvertorInterface
             $fileRead = $this->fileReadFactory->create($filePath, 'file');
             return (bool)$fileRead->readAll();
         } catch (FileSystemException $fileSystemException) {
+            $this->debugger->debug($fileSystemException->getMessage(), ['filePath' => $filePath]);
             return false;
         }
+    }
+
+    /**
+     * @param $filePath
+     * @return bool
+     * @throws FileSystemException
+     */
+    private function isWritable($filePath): bool
+    {
+        if ($this->fileExists($filePath)) {
+            return $this->fileDriver->isWritable($filePath);
+        }
+
+        return $this->fileDriver->isWritable($this->fileDriver->getParentDirectory($filePath));
     }
 }

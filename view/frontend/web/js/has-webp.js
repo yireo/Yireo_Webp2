@@ -1,18 +1,12 @@
 define([], function () {
     'use strict';
 
-    const createWebPImage = function () {
-        return new Promise((resolve, reject) => {
-            var webP = new Image();
-            webP.onload = () => {
-                webP.height === 2 ? resolve() : reject()
-            }
-            webP.onerror = reject
-            webP.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
-        });
-    }
-
     return async function hasWebP() {
-        return await createWebPImage();
+        var elem = document.createElement('canvas');
+
+        if (!!(elem.getContext && elem.getContext('2d'))) {
+            return elem.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+        }
+        return false;
     }
 });

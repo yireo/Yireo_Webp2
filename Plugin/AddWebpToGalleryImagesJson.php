@@ -5,6 +5,7 @@ namespace Yireo\Webp2\Plugin;
 use Magento\Catalog\Block\Product\View\Gallery;
 use Magento\Framework\Serialize\SerializerInterface;
 use Yireo\NextGenImages\Exception\ConvertorException;
+use Yireo\NextGenImages\Logger\Debugger;
 use Yireo\Webp2\Convertor\Convertor;
 
 class AddWebpToGalleryImagesJson
@@ -18,38 +19,42 @@ class AddWebpToGalleryImagesJson
      * @var Convertor
      */
     private $convertor;
+    /**
+     * @var Debugger
+     */
+    private $debugger;
 
     /**
      * AddImagesToConfigurableJsonConfig constructor.
      * @param SerializerInterface $serializer
      * @param Convertor $convertor
+     * @param Debugger $debugger
      */
     public function __construct(
         SerializerInterface $serializer,
-        Convertor $convertor
+        Convertor $convertor,
+        Debugger $debugger
     ) {
         $this->serializer = $serializer;
         $this->convertor = $convertor;
+        $this->debugger = $debugger;
     }
 
     /**
      * @param Gallery $subject
      * @param string $galleryImagesJson
      * @return string
-     * @throws ConvertorException
      */
     public function afterGetGalleryImagesJson(Gallery $subject, string $galleryImagesJson): string
     {
         $jsonData = $this->serializer->unserialize($galleryImagesJson);
         $jsonData = $this->appendImages($jsonData);
-        $jsonConfig = $this->serializer->serialize($jsonData);
-        return $jsonConfig;
+        return $this->serializer->serialize($jsonData);
     }
 
     /**
      * @param array $images
      * @return array
-     * @throws ConvertorException
      */
     private function appendImages(array $images): array
     {
@@ -66,10 +71,14 @@ class AddWebpToGalleryImagesJson
     /**
      * @param string $url
      * @return string
-     * @throws ConvertorException
      */
     private function getWebpUrl(string $url): string
     {
-        return $this->convertor->getSourceImage($url)->getUrl();
+        try {
+            return $this->convertor->getSourceImage($url)->getUrl();
+        } catch (ConvertorException $e) {
+            $this->debugger->debug($e->getMessage(), ['url' => $url]);
+            return $url;
+        }
     }
 }
