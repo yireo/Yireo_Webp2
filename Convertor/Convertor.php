@@ -2,10 +2,8 @@
 
 namespace Yireo\Webp2\Convertor;
 
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Driver\File as FileDriver;
 use Magento\Framework\Filesystem\File\ReadFactory as FileReadFactory;
-use Magento\Framework\View\Asset\File\NotFoundException;
 use WebPConvert\Convert\Exceptions\ConversionFailedException;
 use Yireo\NextGenImages\Convertor\ConvertorInterface;
 use Yireo\NextGenImages\Exception\ConvertorException;
@@ -85,7 +83,6 @@ class Convertor implements ConvertorInterface
      * @param string $imageUrl
      * @return SourceImage
      * @throws ConvertorException
-     * @throws FileSystemException
      * @deprecated Use getSourceImage() instead
      */
     public function convertByUrl(string $imageUrl): SourceImage
@@ -97,7 +94,6 @@ class Convertor implements ConvertorInterface
      * @param string $imageUrl
      * @return SourceImage
      * @throws ConvertorException
-     * @throws FileSystemException
      */
     public function getSourceImage(string $imageUrl): SourceImage
     {
@@ -120,7 +116,6 @@ class Convertor implements ConvertorInterface
      * @param string|null $destinationImageUri
      * @return bool
      * @throws ConvertorException
-     * @throws FileSystemException
      */
     public function convert(string $sourceImageUri, ?string $destinationImageUri = null): bool
     {
@@ -132,7 +127,7 @@ class Convertor implements ConvertorInterface
         $destinationImageFilename = $this->imageFile->resolve($destinationImageUri);
 
         if (!$this->imageFile->needsConversion($sourceImageFilename, $destinationImageFilename)) {
-            throw new ConvertorException('No conversion needed');
+            return true;
         }
 
         if (!$this->config->enabled()) {
