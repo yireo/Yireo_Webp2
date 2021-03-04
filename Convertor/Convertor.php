@@ -108,7 +108,7 @@ class Convertor implements ConvertorInterface
         $webpUrl = $this->imageFile->convertSuffix($imageUrl, '.webp');
         $result = $this->convert($imageUrl, $webpUrl);
 
-        if (!$result && !$this->imageFile->urlExists($webpUrl)) {
+        if (!$result && !$this->imageFile->uriExists($webpUrl)) {
             throw new ConvertorException('WebP URL "' . $webpUrl . '" does not exist after conversion');
         }
 
@@ -131,8 +131,8 @@ class Convertor implements ConvertorInterface
         $sourceImageFilename = $this->imageFile->resolve($sourceImageUri);
         $destinationImageFilename = $this->imageFile->resolve($destinationImageUri);
 
-        if (!$this->needsConversion($sourceImageFilename, $destinationImageFilename)) {
-            return false;
+        if (!$this->imageFile->needsConversion($sourceImageFilename, $destinationImageFilename)) {
+            throw new ConvertorException('No conversion needed');
         }
 
         if (!$this->config->enabled()) {
@@ -146,29 +146,5 @@ class Convertor implements ConvertorInterface
         }
 
         return true;
-    }
-
-    /**
-     * @param string $sourceImageFilename
-     * @param string $destinationImageFilename
-     * @return bool
-     * @throws NotFoundException
-     * @throws FileSystemException
-     */
-    private function needsConversion(string $sourceImageFilename, string $destinationImageFilename): bool
-    {
-        if (!$this->imageFile->fileExists($sourceImageFilename)) {
-            return false;
-        }
-
-        if (!$this->imageFile->fileExists($destinationImageFilename) && $this->imageFile->isWritable($destinationImageFilename)) {
-            return true;
-        }
-
-        if ($this->imageFile->isNewerThan($destinationImageFilename, $sourceImageFilename)) {
-            return false;
-        }
-
-        return false;
     }
 }
