@@ -106,8 +106,8 @@ class Convertor implements ConvertorInterface
         $webpUrl = $this->imageFile->convertSuffix($imageUrl, '.webp');
         $result = $this->convert($imageUrl, $webpUrl);
 
-        if (!$result && !$this->urlExists($webpUrl)) {
-            throw new ConvertorException('WebP URL "' . $webpUrl . '" does not exist');
+        if (!$result && !$this->imageFile->urlExists($webpUrl)) {
+            throw new ConvertorException('WebP URL "' . $webpUrl . '" does not exist after conversion');
         }
 
         return $this->sourceImageFactory->create(['url' => $webpUrl, 'mimeType' => 'image/webp']);
@@ -163,24 +163,6 @@ class Convertor implements ConvertorInterface
 
         if ($this->imageFile->isNewerThan($destinationImageFilename, $sourceImageFilename)) {
             return false;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param string $url
-     * @return bool
-     */
-    public function urlExists(string $url): bool
-    {
-        if ($this->imageFile->fileExists($url)) {
-            return true;
-        }
-
-        $filePath = $this->imageFile->resolve($url);
-        if ($this->imageFile->fileExists($filePath)) {
-            return true;
         }
 
         return false;
