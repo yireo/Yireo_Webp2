@@ -114,15 +114,19 @@ class Convertor implements ConvertorInterface
     }
 
     /**
-     * @param string $sourceImageUrl
-     * @param string $destinationImageUrl
+     * @param string $sourceImageUri
+     * @param string $destinationImageUri
      * @return bool
      * @throws ConvertorException
      */
-    public function convert(string $sourceImageUrl, string $destinationImageUrl): bool
+    public function convert(string $sourceImageUri, ?string $destinationImageUri = null): bool
     {
-        $sourceImageFilename = $this->imageFile->resolve($sourceImageUrl);
-        $destinationImageFilename = $this->imageFile->resolve($destinationImageUrl);
+        if (!$destinationImageUri) {
+            $destinationImageUri = preg_replace('/\.(jpg|jpeg|png|gif)$/', '.webp', $sourceImageUri);
+        }
+
+        $sourceImageFilename = $this->imageFile->resolve($sourceImageUri);
+        $destinationImageFilename = $this->imageFile->resolve($destinationImageUri);
 
         if (!$this->needsConversion($sourceImageFilename, $destinationImageFilename)) {
             return false;
