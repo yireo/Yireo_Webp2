@@ -149,11 +149,11 @@ class Convertor implements ConvertorInterface
      */
     private function needsConversion(string $sourceImageFilename, string $destinationImageFilename): bool
     {
-        if (!$this->fileExists($sourceImageFilename)) {
+        if (!$this->imageFile->fileExists($sourceImageFilename)) {
             return false;
         }
 
-        if (!$this->fileExists($destinationImageFilename) && $this->isWritable($destinationImageFilename)) {
+        if (!$this->imageFile->fileExists($destinationImageFilename) && $this->imageFile->isWritable($destinationImageFilename)) {
             return true;
         }
 
@@ -170,40 +170,15 @@ class Convertor implements ConvertorInterface
      */
     public function urlExists(string $url): bool
     {
+        if ($this->imageFile->fileExists($url)) {
+            return true;
+        }
+
         $filePath = $this->imageFile->resolve($url);
-        if ($this->fileExists($filePath)) {
+        if ($this->imageFile->fileExists($filePath)) {
             return true;
         }
 
         return false;
-    }
-
-    /**
-     * @param $filePath
-     * @return bool
-     */
-    private function fileExists($filePath): bool
-    {
-        try {
-            $fileRead = $this->fileReadFactory->create($filePath, 'file');
-            return (bool)$fileRead->readAll();
-        } catch (FileSystemException $fileSystemException) {
-            $this->debugger->debug($fileSystemException->getMessage(), ['filePath' => $filePath]);
-            return false;
-        }
-    }
-
-    /**
-     * @param $filePath
-     * @return bool
-     * @throws FileSystemException
-     */
-    private function isWritable($filePath): bool
-    {
-        if ($this->fileExists($filePath)) {
-            return $this->fileDriver->isWritable($filePath);
-        }
-
-        return $this->fileDriver->isWritable($this->fileDriver->getParentDirectory($filePath));
     }
 }
