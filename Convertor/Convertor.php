@@ -85,6 +85,7 @@ class Convertor implements ConvertorInterface
      * @param string $imageUrl
      * @return SourceImage
      * @throws ConvertorException
+     * @throws FileSystemException
      * @deprecated Use getSourceImage() instead
      */
     public function convertByUrl(string $imageUrl): SourceImage
@@ -96,6 +97,7 @@ class Convertor implements ConvertorInterface
      * @param string $imageUrl
      * @return SourceImage
      * @throws ConvertorException
+     * @throws FileSystemException
      */
     public function getSourceImage(string $imageUrl): SourceImage
     {
@@ -115,9 +117,10 @@ class Convertor implements ConvertorInterface
 
     /**
      * @param string $sourceImageUri
-     * @param string $destinationImageUri
+     * @param string|null $destinationImageUri
      * @return bool
      * @throws ConvertorException
+     * @throws FileSystemException
      */
     public function convert(string $sourceImageUri, ?string $destinationImageUri = null): bool
     {
@@ -150,6 +153,7 @@ class Convertor implements ConvertorInterface
      * @param string $destinationImageFilename
      * @return bool
      * @throws NotFoundException
+     * @throws FileSystemException
      */
     private function needsConversion(string $sourceImageFilename, string $destinationImageFilename): bool
     {
