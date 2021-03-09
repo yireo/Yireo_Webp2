@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.5] - 9 March 2021
+### Fixed
+- Refactor conversion errors
+- Move helper function to NextGenImages
+- Throw exception when no conversion is needed
+- Update convertor class to comply to updated interface
+
 ## [0.10.4] - 15 February 2021
 ### Fixed
 - Log all exceptions to NextGenImages logger
