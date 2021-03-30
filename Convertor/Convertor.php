@@ -126,6 +126,10 @@ class Convertor implements ConvertorInterface
         $sourceImageFilename = $this->imageFile->resolve($sourceImageUri);
         $destinationImageFilename = $this->imageFile->resolve($destinationImageUri);
 
+        if(!$this->imageFile->fileExists($sourceImageFilename)) {
+            throw new ConvertorException('Source cached image does not exists ' . $sourceImageUri);
+        }
+        
         if (!$this->imageFile->needsConversion($sourceImageFilename, $destinationImageFilename)) {
             return true;
         }
