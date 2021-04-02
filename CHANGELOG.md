@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.6] - 2 April 2021
+- Webp images not being generated if cached jpg does not exist yet #70 (@gtlt)
+
 ## [0.10.5] - 9 March 2021
 ### Fixed
 - Refactor conversion errors
