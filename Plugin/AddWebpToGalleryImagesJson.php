@@ -59,9 +59,12 @@ class AddWebpToGalleryImagesJson
     private function appendImages(array $images): array
     {
         foreach ($images as $id => $imageData) {
-            $imageData['thumb_webp'] = $this->getWebpUrl($imageData['thumb']);
-            $imageData['img_webp'] = $this->getWebpUrl($imageData['img']);
-            $imageData['full_webp'] = $this->getWebpUrl($imageData['full']);
+            foreach (['thumb', 'img', 'full'] as $imageType) {
+                if (empty($imageData[$imageType])) {
+                    continue;
+                }
+                $imageData["{$imageType}_webp"] = $this->getWebpUrl($imageData[$imageType]);
+            }
             $images[$id] = $imageData;
         }
 
