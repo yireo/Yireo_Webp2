@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.9] - 24 June 2021
+- Fix PHP Notice when gallery is missing
+
 ## [0.10.8] - 24 June 2021
 - Allow configuring convertors (#77)
 
