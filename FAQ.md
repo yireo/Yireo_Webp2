@@ -3,6 +3,20 @@ Make sure to test things with the obvious caches disabled (Full Page Cache, Bloc
 
 You can expect the HTML to be changed, so inspecting the HTML source gives a good impression. You can also use the Error Console to inspect network traffic: If some `webp` images are flying be in a default Magento environment, this usually proofs that the extension is working to some extent.
 
+# My CPU usage goes up. Is that normal?
+Yes, it is normal. This extension does two things: It shows a WebP on the frontend of your shop. And it
+generates that WebP when it is missing. Obviously, generating an image takes up system resources. And if
+you have a large catalog, it is going to do more time. How much time? Do make sure to calculate this
+yourself: Take an image, resize it using the `cwebp` binary and measure the time - multiply it by how many
+images there are. This should give a fair estimation on how much time is needed.
+
+Note that this extension allows for using various mechanisms (aka *convertors*). Tune the **Convertors**
+settings if you want to try to optimize things. Sometimes, GD is faster than `cwebp`. Sometimes, GD just
+breaks things. It depends, so you need to pick upon the responsibility to try this in your specific
+environment.
+
+If you don't like the generation of images at all, you could also use other CLI tools instead.
+
 # Class 'WebPConvert\WebPConvert' not found
 We only support the installation of our Magento 2 extensions, if they are installed via `composer`. Please note that - as we see it - `composer` is the only way for managing Magento depedencies. If you want to install the extension manually in `app/code`, please study the contents of `cmoposer.json` to install all dependencies of this module manually as well.
 
