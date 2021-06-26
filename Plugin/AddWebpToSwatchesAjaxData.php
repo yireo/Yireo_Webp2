@@ -48,6 +48,10 @@ class AddWebpToSwatchesAjaxData
             $images[$type . '_webp'] = $this->getWebpUrl($images[$type]);
         }
 
+        if (!isset($images['gallery'])) {
+            return $images;
+        }
+
         foreach ($images['gallery'] as $galleryIndex => $galleryImages) {
             foreach ($types as $type) {
                 if (!isset($images[$type])) {

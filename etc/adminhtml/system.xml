@@ -22,6 +22,10 @@
                     <label>Module version</label>
                     <frontend_model>Yireo\Webp2\VirtualType\Block\Adminhtml\System\Config\ModuleVersion</frontend_model>
                 </field>
+                <field id="convertors" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Convertors</label>
+                    <comment><![CDATA[Allowed values: cwebp,gd,imagick,wpc,ewww]]></comment>
+                </field>
             </group>
         </section>
     </system>

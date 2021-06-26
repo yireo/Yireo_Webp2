@@ -35,16 +35,8 @@ class ConvertorTest extends TestCase
     public function testConvert()
     {
         $convertor = $this->getConvertor();
-        $this->assertFalse($convertor->convert('/images/test.jpg', '/images/test.webp'));
-    }
-
-    /**
-     * Test for Yireo\Webp2\Convertor\Convertor::urlExists
-     */
-    public function testUrlExists()
-    {
-        $convertor = $this->getConvertor();
-        $this->assertFalse($convertor->urlExists('http://localhost/test.webp'));
+        $this->expectException(ConvertorException::class);
+        $convertor->convert('/images/test.jpg', '/images/test.webp');
     }
 
     /**
