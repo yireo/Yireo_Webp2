@@ -3,7 +3,10 @@
 namespace Yireo\Webp2\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Yireo\Webp2\Exception\InvalidConvertorException;
 
 class Config implements ArgumentInterface
@@ -14,14 +17,22 @@ class Config implements ArgumentInterface
     private $scopeConfig;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * Config constructor.
      *
      * @param ScopeConfigInterface $scopeConfig
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        StoreManagerInterface $storeManager
     ) {
         $this->scopeConfig = $scopeConfig;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -29,7 +40,7 @@ class Config implements ArgumentInterface
      */
     public function enabled(): bool
     {
-        return (bool)$this->scopeConfig->getValue('yireo_webp2/settings/enabled');
+        return (bool)$this->getValue('yireo_webp2/settings/enabled');
     }
 
     /**
@@ -37,7 +48,7 @@ class Config implements ArgumentInterface
      */
     public function getQualityLevel(): int
     {
-        $qualityLevel = (int)$this->scopeConfig->getValue('yireo_webp2/settings/quality_level');
+        $qualityLevel = (int)$this->getValue('yireo_webp2/settings/quality_level');
         if ($qualityLevel > 100) {
             return 100;
         }
@@ -56,7 +67,7 @@ class Config implements ArgumentInterface
     public function getConvertors(): array
     {
         $allConvertors = ['cwebp', 'gd', 'imagick', 'wpc', 'ewww'];
-        $storedConvertors = $this->scopeConfig->getValue('yireo_webp2/settings/convertors');
+        $storedConvertors = $this->getValue('yireo_webp2/settings/convertors');
         $storedConvertors = $this->stringToArray((string)$storedConvertors);
         if (empty($storedConvertors)) {
             return $allConvertors;
@@ -64,11 +75,26 @@ class Config implements ArgumentInterface
 
         foreach ($storedConvertors as $storedConvertor) {
             if (!in_array($storedConvertor, $allConvertors)) {
-                throw new InvalidConvertorException('Invalid convertor: "'.$storedConvertor.'"');
+                throw new InvalidConvertorException('Invalid convertor: "' . $storedConvertor . '"');
             }
         }
 
         return $storedConvertors;
+    }
+
+    /**
+     * @param string $path
+     * @return mixed
+     */
+    private function getValue(string $path)
+    {
+        try {
+            return $this->scopeConfig->getValue(
+                $path,
+                ScopeInterface::SCOPE_STORE,
+                $this->storeManager->getStore());
+        } catch (NoSuchEntityException $e) {
+        }
     }
 
     /**
