@@ -6,16 +6,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.10] - 7 July 2021
+### Fixed
+- Hide all other fields if setting "Enabled" is set to 0
+- Add current store to all methods
+
 ## [0.10.9] - 24 June 2021
+### Fixed
 - Fix PHP Notice when gallery is missing
 
 ## [0.10.8] - 24 June 2021
+### Fixed
 - Allow configuring convertors (#77)
 
 ## [0.10.7] - 6 May 2021
+### Fixed
 - Prevents error if variable $imageData[$imageType] is empty (@maksymcherevko)
 
 ## [0.10.6] - 2 April 2021
+### Fixed
 - Webp images not being generated if cached jpg does not exist yet #70 (@gtlt)
 
 ## [0.10.5] - 9 March 2021
