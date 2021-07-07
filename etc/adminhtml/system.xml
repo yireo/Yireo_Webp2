@@ -10,21 +10,30 @@
             <resource>Yireo_Webp2::config</resource>
             <group id="settings" translate="label" type="text" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Settings</label>
-                <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="quality_level" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="quality_level" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Quality level</label>
                     <comment><![CDATA[Between 0 and 100]]></comment>
+                    <depends>
+                        <field id="*/*/enabled">1</field>
+                    </depends>
                 </field>
-                <field id="module_version" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="module_version" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Module version</label>
                     <frontend_model>Yireo\Webp2\VirtualType\Block\Adminhtml\System\Config\ModuleVersion</frontend_model>
+                    <depends>
+                        <field id="*/*/enabled">1</field>
+                    </depends>
                 </field>
                 <field id="convertors" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Convertors</label>
                     <comment><![CDATA[Allowed values: cwebp,gd,imagick,wpc,ewww]]></comment>
+                    <depends>
+                        <field id="*/*/enabled">1</field>
+                    </depends>
                 </field>
             </group>
         </section>
