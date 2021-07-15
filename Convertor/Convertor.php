@@ -5,6 +5,7 @@ namespace Yireo\Webp2\Convertor;
 use Magento\Framework\Filesystem\Driver\File as FileDriver;
 use Magento\Framework\Filesystem\File\ReadFactory as FileReadFactory;
 use WebPConvert\Convert\Exceptions\ConversionFailedException;
+use WebPConvert\Exceptions\InvalidInput\InvalidImageTypeException;
 use Yireo\NextGenImages\Convertor\ConvertorInterface;
 use Yireo\NextGenImages\Exception\ConvertorException;
 use Yireo\NextGenImages\Image\File;
@@ -140,6 +141,8 @@ class Convertor implements ConvertorInterface
 
         try {
             $this->convertWrapper->convert($sourceImageFilename, $destinationImageFilename);
+        } catch (InvalidImageTypeException $e) {
+            return false;
         } catch (ConversionFailedException $e) {
             throw new ConvertorException($destinationImageFilename . ': ' . $e->getMessage());
         }

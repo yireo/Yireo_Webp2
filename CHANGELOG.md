@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.11] - 15 July 2021
+### Fixed
+- Prevent exception when GIF is renamed to JPG
+
 ## [0.10.10] - 7 July 2021
 ### Fixed
 - Hide all other fields if setting "Enabled" is set to 0
