@@ -92,8 +92,10 @@ class Config implements ArgumentInterface
             return $this->scopeConfig->getValue(
                 $path,
                 ScopeInterface::SCOPE_STORE,
-                $this->storeManager->getStore());
+                $this->storeManager->getStore()
+            );
         } catch (NoSuchEntityException $e) {
+            return null;
         }
     }
 
