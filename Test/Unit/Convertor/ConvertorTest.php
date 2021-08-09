@@ -2,6 +2,7 @@
 
 namespace Yireo\Webp2\Test\Unit\Convertor;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem\Driver\File as FileDriver;
 use Magento\Framework\Filesystem\File\Read;
 use Magento\Framework\Filesystem\File\ReadFactory;
@@ -49,6 +50,7 @@ class ConvertorTest extends TestCase
             $config = $this->createMock(Config::class);
         }
 
+        ObjectManager::getInstance()->get(SourceImageFactory::class);
         $sourceImageFactory = $this->createMock(SourceImageFactory::class);
         $file = $this->createMock(File::class);
         $convertWrapper = $this->createMock(ConvertWrapper::class);
