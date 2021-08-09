@@ -35,6 +35,14 @@
                         <field id="*/*/enabled">1</field>
                     </depends>
                 </field>
+                <field id="encoding" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Encoding</label>
+                    <source_model>Yireo\Webp2\Model\Config\Source\Encoding</source_model>
+                    <comment><![CDATA[Allowed values: lossy,lossless,auto]]></comment>
+                    <depends>
+                        <field id="*/*/enabled">1</field>
+                    </depends>
+                </field>
             </group>
         </section>
     </system>

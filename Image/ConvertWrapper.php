@@ -46,6 +46,7 @@ class ConvertWrapper
             'quality' => 'auto',
             'max-quality' => $this->config->getQualityLevel(),
             'converters' => $this->config->getConvertors(),
+            'encoding' => $this->config->getEncoding(),
         ];
     }
 }

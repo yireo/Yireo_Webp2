@@ -83,6 +83,25 @@ class Config implements ArgumentInterface
     }
 
     /**
+     * @return string
+     * @throws InvalidConvertorException
+     */
+    public function getEncoding(): string
+    {
+        $allEncoding = ['lossy', 'lossless', 'auto'];
+        $storedEncoding = (string)$this->getValue('yireo_webp2/settings/encoding');
+        if (empty($storedEncoding)) {
+            return 'lossy';
+        }
+
+        if (!in_array($storedEncoding, $allEncoding)) {
+            throw new InvalidConvertorException('Invalid encoding: "' . $storedEncoding . '"');
+        }
+
+        return $storedEncoding;
+    }
+
+    /**
      * @param string $path
      * @return mixed
      */

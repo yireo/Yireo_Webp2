@@ -15,6 +15,8 @@ settings if you want to try to optimize things. Sometimes, GD is faster than `cw
 breaks things. It depends, so you need to pick upon the responsibility to try this in your specific
 environment.
 
+Also note that this extension allows for setting an *encoding*. The default is `auto` which creates both a lossy and a lossless WebP and then picks the smallest one. Things could be twice as fast by setting this to `lossy`.
+
 If you don't like the generation of images at all, you could also use other CLI tools instead.
 
 # Class 'WebPConvert\WebPConvert' not found
