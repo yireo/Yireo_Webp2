@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.1] - 10 August 2021
+### Fixed
+- Fix error to config.xml introduced in last version (@chrisastley)
+
 ## [0.11.0] - 9 August 2021
 ### Added
 - New option `encoding` for better performance with only `lossy` (@basvanpoppel)

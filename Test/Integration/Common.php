@@ -6,7 +6,6 @@ namespace Yireo\Webp2\Test\Integration;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\TestCase\AbstractController;
 use RuntimeException;
 use Yireo\Webp2\Image\ConvertWrapper;
@@ -70,8 +69,9 @@ class Common extends AbstractController
 
     /**
      * @param string $body
+     * @param array $images
      */
-    protected function assertImageTagsExist(string $body, $images)
+    protected function assertImageTagsExist(string $body, array $images)
     {
         foreach ($images as $image) {
             $webPImage = preg_replace('/\.(png|jpg)$/', '.webp', $image);
