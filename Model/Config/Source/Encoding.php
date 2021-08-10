@@ -15,3 +15,4 @@ class Encoding implements OptionSourceInterface
         ];
     }
 }
+
