@@ -50,7 +50,6 @@ class ConvertorTest extends TestCase
             $config = $this->createMock(Config::class);
         }
 
-        ObjectManager::getInstance()->get(SourceImageFactory::class);
         $sourceImageFactory = $this->createMock(SourceImageFactory::class);
         $file = $this->createMock(File::class);
         $convertWrapper = $this->createMock(ConvertWrapper::class);
