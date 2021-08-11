@@ -1,7 +1,7 @@
 define([], function () {
     'use strict';
 
-    return async function hasWebP() {
+    return function hasWebP() {
         var elem = document.createElement('canvas');
 
         if (!!(elem.getContext && elem.getContext('2d'))) {
