@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.2] - 11 August 2021
+### Fixed
+- Remove async from function (IE11 Support) (@barryvdh)
+
 ## [0.11.1] - 10 August 2021
 ### Fixed
 - Fix error to config.xml introduced in last version (@chrisastley)
