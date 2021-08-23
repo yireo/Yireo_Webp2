@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\Webp2\Image;
+namespace Yireo\Webp2\Convertor;
 
 use WebPConvert\Convert\Exceptions\ConversionFailed\InvalidInput\InvalidImageTypeException;
 use WebPConvert\Convert\Exceptions\ConversionFailedException;

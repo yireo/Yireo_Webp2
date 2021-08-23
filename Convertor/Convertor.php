@@ -16,7 +16,6 @@ use Yireo\NextGenImages\Image\SourceImageFactory;
 use Yireo\NextGenImages\Logger\Debugger;
 use Yireo\Webp2\Config\Config;
 use Yireo\Webp2\Exception\InvalidConvertorException;
-use Yireo\Webp2\Image\ConvertWrapper;
 
 class Convertor implements ConvertorInterface
 {
