@@ -16,6 +16,7 @@ use Yireo\NextGenImages\Image\SourceImageFactory;
 use Yireo\NextGenImages\Logger\Debugger;
 use Yireo\Webp2\Config\Config;
 use Yireo\Webp2\Exception\InvalidConvertorException;
+use WebPConvert\Exceptions\InvalidInput\InvalidImageTypeException as InvalidInputImageTypeException;
 
 class Convertor implements ConvertorInterface
 {
@@ -147,7 +148,7 @@ class Convertor implements ConvertorInterface
 
         try {
             $this->convertWrapper->convert($sourceImageFilename, $destinationImageFilename);
-        } catch (InvalidImageTypeException $e) {
+        } catch (InvalidImageTypeException | InvalidInputImageTypeException $e) {
             return false;
         } catch (ConversionFailedException | InvalidConvertorException $e) {
             throw new ConvertorException($destinationImageFilename . ': ' . $e->getMessage());
