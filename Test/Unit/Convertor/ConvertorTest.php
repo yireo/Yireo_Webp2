@@ -2,7 +2,6 @@
 
 namespace Yireo\Webp2\Test\Unit\Convertor;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem\Driver\File as FileDriver;
 use Magento\Framework\Filesystem\File\Read;
 use Magento\Framework\Filesystem\File\ReadFactory;
@@ -13,7 +12,7 @@ use Yireo\NextGenImages\Image\SourceImageFactory;
 use Yireo\NextGenImages\Logger\Debugger;
 use Yireo\Webp2\Config\Config;
 use Yireo\Webp2\Convertor\Convertor;
-use Yireo\Webp2\Image\ConvertWrapper;
+use Yireo\Webp2\Convertor\ConvertWrapper;
 
 class ConvertorTest extends TestCase
 {
