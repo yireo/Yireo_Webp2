@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.4] - 23 August 2021
+### Fixed
+- Check for double InvalidInputImageTypeException
+
+## [0.11.3] - 23 August 2021
+### Fixed
+- Fix wrong exception being caught
+
 ## [0.11.2] - 11 August 2021
 ### Fixed
 - Remove async from function (IE11 Support) (@barryvdh)

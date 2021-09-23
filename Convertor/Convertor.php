@@ -6,8 +6,8 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem\Driver\File as FileDriver;
 use Magento\Framework\Filesystem\File\ReadFactory as FileReadFactory;
+use WebPConvert\Convert\Exceptions\ConversionFailed\InvalidInput\InvalidImageTypeException;
 use WebPConvert\Convert\Exceptions\ConversionFailedException;
-use WebPConvert\Exceptions\InvalidInput\InvalidImageTypeException;
 use Yireo\NextGenImages\Convertor\ConvertorInterface;
 use Yireo\NextGenImages\Exception\ConvertorException;
 use Yireo\NextGenImages\Image\File;
@@ -15,7 +15,8 @@ use Yireo\NextGenImages\Image\SourceImage;
 use Yireo\NextGenImages\Image\SourceImageFactory;
 use Yireo\NextGenImages\Logger\Debugger;
 use Yireo\Webp2\Config\Config;
-use Yireo\Webp2\Image\ConvertWrapper;
+use Yireo\Webp2\Exception\InvalidConvertorException;
+use WebPConvert\Exceptions\InvalidInput\InvalidImageTypeException as InvalidInputImageTypeException;
 
 class Convertor implements ConvertorInterface
 {
@@ -86,6 +87,8 @@ class Convertor implements ConvertorInterface
      * @param string $imageUrl
      * @return SourceImage
      * @throws ConvertorException
+     * @throws FileSystemException
+     * @throws NoSuchEntityException
      * @deprecated Use getSourceImage() instead
      */
     public function convertByUrl(string $imageUrl): SourceImage
@@ -97,6 +100,8 @@ class Convertor implements ConvertorInterface
      * @param string $imageUrl
      * @return SourceImage
      * @throws ConvertorException
+     * @throws FileSystemException
+     * @throws NoSuchEntityException
      */
     public function getSourceImage(string $imageUrl): SourceImage
     {
@@ -143,9 +148,9 @@ class Convertor implements ConvertorInterface
 
         try {
             $this->convertWrapper->convert($sourceImageFilename, $destinationImageFilename);
-        } catch (InvalidImageTypeException $e) {
+        } catch (InvalidImageTypeException | InvalidInputImageTypeException $e) {
             return false;
-        } catch (ConversionFailedException $e) {
+        } catch (ConversionFailedException | InvalidConvertorException $e) {
             throw new ConvertorException($destinationImageFilename . ': ' . $e->getMessage());
         }
 
