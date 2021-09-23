@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Yireo\Webp2\Test\Integration;
 
@@ -8,7 +6,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\TestCase\AbstractController;
 use RuntimeException;
-use Yireo\Webp2\Image\ConvertWrapper;
+use Yireo\Webp2\Convertor\ConvertWrapper;
 use Yireo\Webp2\Test\Utils\ImageProvider;
 use Yireo\Webp2\Test\Utils\ConvertWrapperStub;
 
