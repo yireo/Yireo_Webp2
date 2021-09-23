@@ -2,6 +2,8 @@
 
 namespace Yireo\Webp2\Convertor;
 
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem\Driver\File as FileDriver;
 use Magento\Framework\Filesystem\File\ReadFactory as FileReadFactory;
 use WebPConvert\Convert\Exceptions\ConversionFailedException;
