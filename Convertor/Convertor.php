@@ -4,16 +4,14 @@ namespace Yireo\Webp2\Convertor;
 
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Filesystem\Driver\File as FileDriver;
-use Magento\Framework\Filesystem\File\ReadFactory as FileReadFactory;
 use WebPConvert\Convert\Exceptions\ConversionFailed\InvalidInput\InvalidImageTypeException;
 use WebPConvert\Convert\Exceptions\ConversionFailedException;
 use Yireo\NextGenImages\Convertor\ConvertorInterface;
 use Yireo\NextGenImages\Exception\ConvertorException;
-use Yireo\NextGenImages\Image\File;
-use Yireo\NextGenImages\Image\SourceImage;
-use Yireo\NextGenImages\Image\SourceImageFactory;
-use Yireo\NextGenImages\Logger\Debugger;
+use Yireo\NextGenImages\Image\TargetImageFactory;
+use Yireo\NextGenImages\Util\File;
+use Yireo\NextGenImages\Image\Image;
+use Yireo\NextGenImages\Image\ImageFactory;
 use Yireo\Webp2\Config\Config;
 use Yireo\Webp2\Exception\InvalidConvertorException;
 use WebPConvert\Exceptions\InvalidInput\InvalidImageTypeException as InvalidInputImageTypeException;
@@ -26,11 +24,6 @@ class Convertor implements ConvertorInterface
     private $config;
 
     /**
-     * @var SourceImageFactory
-     */
-    private $sourceImageFactory;
-
-    /**
      * @var File
      */
     private $imageFile;
@@ -41,104 +34,65 @@ class Convertor implements ConvertorInterface
     private $convertWrapper;
 
     /**
-     * @var FileReadFactory
+     * @var TargetImageFactory
      */
-    private $fileReadFactory;
-
-    /**
-     * @var Debugger
-     */
-    private $debugger;
-
-    /**
-     * @var FileDriver
-     */
-    private $fileDriver;
+    private $targetImageFactory;
 
     /**
      * Convertor constructor.
      * @param Config $config
-     * @param SourceImageFactory $sourceImageFactory
      * @param File $imageFile
      * @param ConvertWrapper $convertWrapper
-     * @param FileReadFactory $fileReadFactory
-     * @param Debugger $debugger
-     * @param FileDriver $fileDriver
+     * @param TargetImageFactory $targetImageFactory
      */
     public function __construct(
         Config $config,
-        SourceImageFactory $sourceImageFactory,
         File $imageFile,
         ConvertWrapper $convertWrapper,
-        FileReadFactory $fileReadFactory,
-        Debugger $debugger,
-        FileDriver $fileDriver
+        TargetImageFactory $targetImageFactory
     ) {
         $this->config = $config;
-        $this->sourceImageFactory = $sourceImageFactory;
         $this->imageFile = $imageFile;
         $this->convertWrapper = $convertWrapper;
-        $this->fileReadFactory = $fileReadFactory;
-        $this->debugger = $debugger;
-        $this->fileDriver = $fileDriver;
+        $this->targetImageFactory = $targetImageFactory;
     }
 
     /**
      * @param string $imageUrl
-     * @return SourceImage
-     * @throws ConvertorException
-     * @throws FileSystemException
-     * @throws NoSuchEntityException
-     * @deprecated Use getSourceImage() instead
-     */
-    public function convertByUrl(string $imageUrl): SourceImage
-    {
-        return $this->getSourceImage($imageUrl);
-    }
-
-    /**
-     * @param string $imageUrl
-     * @return SourceImage
+     * @return Image
      * @throws ConvertorException
      * @throws FileSystemException
      * @throws NoSuchEntityException
      */
-    public function getSourceImage(string $imageUrl): SourceImage
+    public function convertImage(Image $image): Image
     {
         if (!$this->config->enabled()) {
             throw new ConvertorException('WebP conversion is not enabled');
         }
 
-        $webpUrl = $this->imageFile->convertSuffix($imageUrl, '.webp');
-        $result = $this->convert($imageUrl, $webpUrl);
+        $webpImage = $this->targetImageFactory->create($image, 'webp');
+        $result = $this->convert($image->getPath(), $webpImage->getPath());
 
-        if (!$result && !$this->imageFile->uriExists($webpUrl)) {
-            throw new ConvertorException('WebP URL "' . $webpUrl . '" does not exist after conversion');
+        if (!$result && !$this->imageFile->fileExists($webpImage->getPath())) {
+            throw new ConvertorException('WebP path "' . $webpImage->getPath() . '" does not exist after conversion');
         }
 
-        return $this->sourceImageFactory->create(['url' => $webpUrl, 'mimeType' => 'image/webp']);
+        return $webpImage;
     }
 
     /**
-     * @param string $sourceImageUri
+     * @param string $imageUri
      * @param string|null $destinationImageUri
      * @return bool
      * @throws ConvertorException
      */
-    public function convert(string $sourceImageUri, ?string $destinationImageUri = null): bool
+    private function convert(string $sourceImagePath, string $targetImagePath): bool
     {
-        if (!$destinationImageUri) {
-            $destinationImageUri = preg_replace('/\.(jpg|jpeg|png|gif)$/', '.webp', $sourceImageUri);
+        if (!$this->imageFile->fileExists($sourceImagePath)) {
+            throw new ConvertorException('Source cached image does not exists: ' . $sourceImagePath);
         }
 
-        $sourceImageFilename = $this->imageFile->resolve($sourceImageUri);
-        $destinationImageFilename = $this->imageFile->resolve($destinationImageUri);
-
-        if (!$this->imageFile->fileExists($sourceImageFilename)) {
-            throw new ConvertorException('Source cached image does not exists ' . $sourceImageUri);
-        }
-
-        if (!$this->imageFile->needsConversion($sourceImageFilename, $destinationImageFilename)) {
+        if (!$this->imageFile->needsConversion($sourceImagePath, $targetImagePath)) {
             return true;
         }
 
@@ -147,11 +101,11 @@ class Convertor implements ConvertorInterface
         }
 
         try {
-            $this->convertWrapper->convert($sourceImageFilename, $destinationImageFilename);
+            $this->convertWrapper->convert($sourceImagePath, $targetImagePath);
         } catch (InvalidImageTypeException | InvalidInputImageTypeException $e) {
             return false;
         } catch (ConversionFailedException | InvalidConvertorException $e) {
-            throw new ConvertorException($destinationImageFilename . ': ' . $e->getMessage());
+            throw new ConvertorException($targetImagePath . ': ' . $e->getMessage());
         }
 
         return true;

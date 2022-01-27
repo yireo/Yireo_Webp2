@@ -72,7 +72,7 @@ class AddWebpToSwatchesAjaxData
     private function getWebpUrl(string $url): string
     {
         try {
-            return $this->convertor->getSourceImage($url)->getUrl();
+            return $this->convertor->getImage($url)->getUrl();
         } catch (ConvertorException $e) {
             $this->debugger->debug($e->getMessage(), ['url' => $url]);
             return $url;

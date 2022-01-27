@@ -8,7 +8,7 @@ use Magento\Framework\Filesystem\File\ReadFactory;
 use PHPUnit\Framework\TestCase;
 use Yireo\NextGenImages\Exception\ConvertorException;
 use Yireo\NextGenImages\Image\File;
-use Yireo\NextGenImages\Image\SourceImageFactory;
+use Yireo\NextGenImages\Image\ImageFactory;
 use Yireo\NextGenImages\Logger\Debugger;
 use Yireo\Webp2\Config\Config;
 use Yireo\Webp2\Convertor\Convertor;
@@ -17,16 +17,16 @@ use Yireo\Webp2\Convertor\ConvertWrapper;
 class ConvertorTest extends TestCase
 {
     /**
-     * Test for Yireo\Webp2\Convertor\Convertor::getSourceImage
+     * Test for Yireo\Webp2\Convertor\Convertor::getImage
      */
-    public function testGetSourceImage()
+    public function testGetImage()
     {
         $config = $this->createMock(Config::class);
         $config->method('enabled')->willReturn(true);
         $convertor = $this->getConvertor($config);
 
         $this->expectException(ConvertorException::class);
-        $this->assertEquals('/test/foobar.webp', $convertor->getSourceImage('/test/foobar.jpg'));
+        $this->assertEquals('/test/foobar.webp', $convertor->getImage('/test/foobar.jpg'));
     }
 
     /**
@@ -49,7 +49,7 @@ class ConvertorTest extends TestCase
             $config = $this->createMock(Config::class);
         }
 
-        $sourceImageFactory = $this->createMock(SourceImageFactory::class);
+        $imageFactory = $this->createMock(ImageFactory::class);
         $file = $this->createMock(File::class);
         $convertWrapper = $this->createMock(ConvertWrapper::class);
         $fileReadFactory = $this->getFileReadFactory();
@@ -58,7 +58,7 @@ class ConvertorTest extends TestCase
 
         return new Convertor(
             $config,
-            $sourceImageFactory,
+            $imageFactory,
             $file,
             $convertWrapper,
             $fileReadFactory,
