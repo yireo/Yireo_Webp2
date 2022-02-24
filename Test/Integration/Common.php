@@ -4,6 +4,7 @@ namespace Yireo\Webp2\Test\Integration;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\TestCase\AbstractController;
 use RuntimeException;
 use Yireo\Webp2\Convertor\ConvertWrapper;
@@ -71,9 +72,16 @@ class Common extends AbstractController
      */
     protected function assertImageTagsExist(string $body, array $images)
     {
+        $layout = $this->_objectManager->get(LayoutInterface::class);
+        $blocks = $layout->getChildBlocks('main');
+        $html = '';
+        foreach ($blocks as $block) {
+            $html .= $block->toHtml();
+        }
+
         foreach ($images as $image) {
             $webPImage = preg_replace('/\.(png|jpg)$/', '.webp', $image);
-            $this->assertTrue((bool)strpos($body, $webPImage));
+            $this->assertTrue((bool)strpos($body, $webPImage), 'Asserting that body contains "' . $webPImage . '": ' . $html);
         }
     }
 }

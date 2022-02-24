@@ -2,6 +2,8 @@
 
 namespace Yireo\Webp2\Test\Integration;
 
+use Magento\Framework\View\LayoutInterface;
+
 class MultipleImagesSameTest extends Common
 {
     /**
@@ -18,6 +20,8 @@ class MultipleImagesSameTest extends Common
         $this->assertSame(200, $this->getResponse()->getHttpResponseCode());
 
         $body = $this->getResponse()->getContent();
+
+        $this->assertImageTagsExist($body, [$this->getImageProvider()->getImage()]);
         $this->assertTrue((bool)strpos($body, 'type="image/webp"'));
 
         if (!getenv('TRAVIS')) {
