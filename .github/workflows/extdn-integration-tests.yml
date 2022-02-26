@@ -32,7 +32,6 @@ jobs:
       MAGENTO_MARKETPLACE_PASSWORD: ${{ secrets.MAGENTO_MARKETPLACE_PASSWORD }}
       MODULE_NAME: ${{ secrets.MODULE_NAME }}
       COMPOSER_NAME: ${{ secrets.COMPOSER_NAME }}
-      PROJECT_NAME: magento/project-enterprise-edition
     steps:
       - uses: actions/checkout@v2
       - uses: extdn/github-actions-m2/magento-integration-tests/7.4@master
@@ -41,3 +40,4 @@ jobs:
         with:
           magento_pre_install_script: .github/workflows/extdn-integration-tests-pre-install-m24.sh
           magento_post_install_script: .github/workflows/extdn-integration-tests-post-install.sh
+          project_name: magento/project-enterprise-edition
