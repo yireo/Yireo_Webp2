@@ -41,4 +41,3 @@ jobs:
         with:
           magento_pre_install_script: .github/workflows/extdn-integration-tests-pre-install-m24.sh
           magento_post_install_script: .github/workflows/extdn-integration-tests-post-install.sh
-          project_name: magento/project-enterprise-edition
