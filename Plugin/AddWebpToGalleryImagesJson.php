@@ -5,6 +5,7 @@ namespace Yireo\Webp2\Plugin;
 use Magento\Catalog\Block\Product\View\Gallery;
 use Magento\Framework\Serialize\SerializerInterface;
 use Yireo\NextGenImages\Exception\ConvertorException;
+use Yireo\NextGenImages\Image\ImageFactory;
 use Yireo\NextGenImages\Logger\Debugger;
 use Yireo\Webp2\Convertor\Convertor;
 
@@ -19,25 +20,34 @@ class AddWebpToGalleryImagesJson
      * @var Convertor
      */
     private $convertor;
+
     /**
      * @var Debugger
      */
     private $debugger;
 
     /**
+     * @var ImageFactory
+     */
+    private $imageFactory;
+
+    /**
      * AddImagesToConfigurableJsonConfig constructor.
      * @param SerializerInterface $serializer
      * @param Convertor $convertor
      * @param Debugger $debugger
+     * @param ImageFactory $imageFactory
      */
     public function __construct(
         SerializerInterface $serializer,
         Convertor $convertor,
-        Debugger $debugger
+        Debugger $debugger,
+        ImageFactory $imageFactory
     ) {
         $this->serializer = $serializer;
         $this->convertor = $convertor;
         $this->debugger = $debugger;
+        $this->imageFactory = $imageFactory;
     }
 
     /**
@@ -78,7 +88,8 @@ class AddWebpToGalleryImagesJson
     private function getWebpUrl(string $url): string
     {
         try {
-            return $this->convertor->getImage($url)->getUrl();
+            $image = $this->imageFactory->createFromUrl($url);
+            return $this->convertor->convertImage($image)->getUrl();
         } catch (ConvertorException $e) {
             $this->debugger->debug($e->getMessage(), ['url' => $url]);
             return $url;
