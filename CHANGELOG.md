@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Added ACL for user permissions (@jeroenalewijns)
 - Always add `webp` CSS class to body via JS detection
 - Add various integration tests
 - Refactoring because of changed NextGenImages API
