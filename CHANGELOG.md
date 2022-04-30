@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add various integration tests
 - Refactoring because of changed NextGenImages API
 
+### Removed
+- Moved AJAX plugin for swatches to NextGenImages
+
 ## [0.11.4] - 23 August 2021
 ### Fixed
 - Check for double InvalidInputImageTypeException
