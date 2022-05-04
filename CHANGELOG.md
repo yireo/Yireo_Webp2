@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.0] - 4 May 2022
+### Added
+- Added ACL for user permissions (@jeroenalewijns)
+- Always add `webp` CSS class to body via JS detection
+- Add various integration tests
+- Refactoring because of changed NextGenImages API
+
+### Removed
+- Moved AJAX plugin for swatches to NextGenImages
+
 ## [0.11.4] - 23 August 2021
 ### Fixed
 - Check for double InvalidInputImageTypeException

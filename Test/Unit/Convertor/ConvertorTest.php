@@ -7,9 +7,12 @@ use Magento\Framework\Filesystem\File\Read;
 use Magento\Framework\Filesystem\File\ReadFactory;
 use PHPUnit\Framework\TestCase;
 use Yireo\NextGenImages\Exception\ConvertorException;
-use Yireo\NextGenImages\Image\File;
+use Yireo\NextGenImages\Image\TargetImageFactory;
+use Yireo\NextGenImages\Util\File;
+use Yireo\NextGenImages\Image\Image;
 use Yireo\NextGenImages\Image\ImageFactory;
 use Yireo\NextGenImages\Logger\Debugger;
+use Yireo\NextGenImages\Util\UrlConvertor;
 use Yireo\Webp2\Config\Config;
 use Yireo\Webp2\Convertor\Convertor;
 use Yireo\Webp2\Convertor\ConvertWrapper;
@@ -26,17 +29,19 @@ class ConvertorTest extends TestCase
         $convertor = $this->getConvertor($config);
 
         $this->expectException(ConvertorException::class);
-        $this->assertEquals('/test/foobar.webp', $convertor->getImage('/test/foobar.jpg'));
+        $image = new Image('/tmp/pub/test/foobar.jpg', '/test/foobar.jpg');
+        $this->assertEquals('/test/foobar.webp', $convertor->convertImage($image));
     }
 
     /**
-     * Test for Yireo\Webp2\Convertor\Convertor::convert
+     * Test for Yireo\Webp2\Convertor\Convertor::convertImage
      */
     public function testConvert()
     {
         $convertor = $this->getConvertor();
         $this->expectException(ConvertorException::class);
-        $convertor->convert('/images/test.jpg', '/images/test.webp');
+        $image = new Image('/tmp/pub/test/foobar.jpg', '/test/foobar.jpg');
+        $convertor->convertImage($image);
     }
 
     /**
@@ -49,32 +54,15 @@ class ConvertorTest extends TestCase
             $config = $this->createMock(Config::class);
         }
 
-        $imageFactory = $this->createMock(ImageFactory::class);
         $file = $this->createMock(File::class);
         $convertWrapper = $this->createMock(ConvertWrapper::class);
-        $fileReadFactory = $this->getFileReadFactory();
-        $debugger = $this->createMock(Debugger::class);
-        $fileDriver = $this->createMock(FileDriver::class);
+        $targetImageFactory = $this->createMock(TargetImageFactory::class);
 
         return new Convertor(
             $config,
-            $imageFactory,
             $file,
             $convertWrapper,
-            $fileReadFactory,
-            $debugger,
-            $fileDriver
+            $targetImageFactory
         );
-    }
-
-    /**
-     * @return ReadFactory
-     */
-    private function getFileReadFactory(): ReadFactory
-    {
-        $fileRead = $this->createMock(Read::class);
-        $fileReadFactory = $this->createMock(ReadFactory::class);
-        $fileReadFactory->method('create')->willReturn($fileRead);
-        return $fileReadFactory;
     }
 }

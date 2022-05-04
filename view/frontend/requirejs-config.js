@@ -8,5 +8,8 @@ var config = {
                 'Yireo_Webp2/js/gallery-mixin': true
             }
         }
-    }
+    },
+    deps: [
+        'Yireo_Webp2/js/add-webp-class-to-body'
+    ]
 };
