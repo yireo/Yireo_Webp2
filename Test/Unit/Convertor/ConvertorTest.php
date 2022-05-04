@@ -2,17 +2,11 @@
 
 namespace Yireo\Webp2\Test\Unit\Convertor;
 
-use Magento\Framework\Filesystem\Driver\File as FileDriver;
-use Magento\Framework\Filesystem\File\Read;
-use Magento\Framework\Filesystem\File\ReadFactory;
 use PHPUnit\Framework\TestCase;
 use Yireo\NextGenImages\Exception\ConvertorException;
 use Yireo\NextGenImages\Image\TargetImageFactory;
 use Yireo\NextGenImages\Util\File;
 use Yireo\NextGenImages\Image\Image;
-use Yireo\NextGenImages\Image\ImageFactory;
-use Yireo\NextGenImages\Logger\Debugger;
-use Yireo\NextGenImages\Util\UrlConvertor;
 use Yireo\Webp2\Config\Config;
 use Yireo\Webp2\Convertor\Convertor;
 use Yireo\Webp2\Convertor\ConvertWrapper;
