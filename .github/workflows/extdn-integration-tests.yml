@@ -30,14 +30,16 @@ jobs:
     env:
       MAGENTO_MARKETPLACE_USERNAME: ${{ secrets.MAGENTO_MARKETPLACE_USERNAME }}
       MAGENTO_MARKETPLACE_PASSWORD: ${{ secrets.MAGENTO_MARKETPLACE_PASSWORD }}
+      REPOSITORY_URL: https://repo.magento.com/
       MODULE_NAME: ${{ secrets.MODULE_NAME }}
       COMPOSER_NAME: ${{ secrets.COMPOSER_NAME }}
+      MAGENTO_POST_INSTALL_SCRIPT: .github/workflows/extdn-integration-tests-post-install.sh
     steps:
       - uses: actions/checkout@v2
       - uses: extdn/github-actions-m2/magento-integration-tests/7.4@master
         env:
-          MAGENTO_VERSION: '2.4.3-p1'
-        with:
-          magento_pre_install_script: .github/workflows/extdn-integration-tests-pre-install-m24.sh
-          magento_post_install_script: .github/workflows/extdn-integration-tests-post-install.sh
-          project_name: magento/project-enterprise-edition
+          MAGENTO_VERSION: '2.4.3-p2'
+          MAGENTO_PRE_INSTALL_SCRIPT: .github/workflows/extdn-integration-tests-pre-install-m24.sh
+      - uses: extdn/github-actions-m2/magento-integration-tests/8.1@master
+        env:
+          MAGENTO_VERSION: '2.4.4'

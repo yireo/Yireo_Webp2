@@ -8,16 +8,17 @@ jobs:
     env:
       MAGENTO_MARKETPLACE_USERNAME: ${{ secrets.MAGENTO_MARKETPLACE_USERNAME }}
       MAGENTO_MARKETPLACE_PASSWORD: ${{ secrets.MAGENTO_MARKETPLACE_PASSWORD }}
+      REPOSITORY_URL: https://repo.magento.com/
       MODULE_NAME: ${{ secrets.MODULE_NAME }}
       COMPOSER_NAME: ${{ secrets.COMPOSER_NAME }}
     steps:
       - uses: actions/checkout@v2
       - uses: docker://yireo/github-actions-magento-unit-tests:7.3
         env:
-          MAGENTO_VERSION: '2.3.4'
-      - uses: docker://yireo/github-actions-magento-unit-tests:7.3
-        env:
-          MAGENTO_VERSION: '2.3.5-p2'
+          MAGENTO_VERSION: '2.3.7-p3'
       - uses: docker://yireo/github-actions-magento-unit-tests:7.4
         env:
-          MAGENTO_VERSION: '2.4.0'
+          MAGENTO_VERSION: '2.4.3-p2'
+      - uses: docker://yireo/github-actions-magento-unit-tests:8.1
+        env:
+          MAGENTO_VERSION: '2.4.4'
