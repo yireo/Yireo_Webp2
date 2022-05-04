@@ -81,7 +81,8 @@ class Common extends AbstractController
 
         foreach ($images as $image) {
             $webPImage = preg_replace('/\.(png|jpg)$/', '.webp', $image);
-            $this->assertTrue((bool)strpos($body, $webPImage), 'Asserting that body contains "' . $webPImage . '": ' . $html);
+            $debugMsg = 'Asserting that body contains "' . $webPImage . '": ' . $html;
+            $this->assertTrue((bool)strpos($body, $webPImage), $debugMsg);
         }
     }
 }
