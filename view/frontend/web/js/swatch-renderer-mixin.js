@@ -30,8 +30,8 @@ define([
 
                 this._super($this, response, isInProductView);
 
-                var productId = this.getProduct();
-                let $pictureTag = $('.product-image-container-' + productId + ' picture');
+                var productData = this._determineProductData();
+                let $pictureTag = $('.product-image-container-' + productData.productId + ' picture');
                 $pictureTag.find('source').remove();
             },
 
