@@ -30,8 +30,8 @@ define([
 
                 this._super($this, response, isInProductView);
 
-                var swatchOptId = this._getSwatchOptIdFromElement($this);
-                let $pictureTag = $('.product-image-container-' + swatchOptId + ' picture');
+                var productId = this.getProduct();
+                let $pictureTag = $('.product-image-container-' + productId + ' picture');
                 $pictureTag.find('source').remove();
             },
 
@@ -47,16 +47,6 @@ define([
                 }
 
                 return imageData;
-            },
-
-            _getSwatchOptIdFromElement: function ($element) {
-                const swatchOptRegex = /swatch-opt-([0-9]+)/;
-                var swatchOptClass = $element.attr('class').split(' ').find(function(className) {
-                    return swatchOptRegex.test(className);
-                });
-
-                var swatchOptMatch = swatchOptClass.match(swatchOptRegex);
-                return swatchOptMatch[1];
             }
         });
 
