@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.1] - 2 June 2022
+### Fixed
+- Skip image replacement if target URL is still empty
+
 ## [0.12.0] - 4 May 2022
 ### Added
 - Added ACL for user permissions (@jeroenalewijns)
