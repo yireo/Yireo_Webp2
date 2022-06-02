@@ -19,9 +19,9 @@ define([
             }
 
             $.each(imagesData, function (key, imageData) {
-                imageData['full'] = imageData['full_webp'];
-                imageData['img'] = imageData['img_webp'];
-                imageData['thumb'] = imageData['thumb_webp'];
+                if (imageData['full_webp']) imageData['full'] = imageData['full_webp'];
+                if (imageData['img_webp'])imageData['img'] = imageData['img_webp'];
+                if (imageData['thumb_webp'])imageData['thumb'] = imageData['thumb_webp'];
             });
         }
     };
