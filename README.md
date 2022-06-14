@@ -1,7 +1,7 @@
 # Magento 2 module for WebP
 This module adds WebP support to Magento 2.
 
-<img src="https://img.shields.io/packagist/dt/yireo/magento2-webp2"/> <img src="https://img.shields.io/packagist/v/yireo/magento2-webp2"/>
+<img src="https://img.shields.io/packagist/dt/yireo/magento2-webp2"/> <img src="https://img.shields.io/packagist/v/yireo/magento2-webp2"/> <img src="https://img.shields.io/github/languages/top/yireo/Yireo_Webp2"/> <img src="https://img.shields.io/github/last-commit/yireo/Yireo_Webp2" /> <img src="https://img.shields.io/github/sponsors/yireo"/> <img src="https://img.shields.io/twitter/follow/yireo?style=social" />
 
 ## See also:
 - [Usage](USAGE.md)
