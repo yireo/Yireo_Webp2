@@ -5,7 +5,7 @@ Next, install our module using the following command:
 
     composer require yireo/magento2-webp2
 
-Next, install the new module into Magento itself:
+Next, install the new module plus its dependency `Yireo_NextGenImages` into Magento itself:
 
     ./bin/magento module:enable Yireo_Webp2 Yireo_NextGenImages
     ./bin/magento setup:upgrade
