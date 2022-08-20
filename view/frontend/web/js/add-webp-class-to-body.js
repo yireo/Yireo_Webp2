@@ -7,4 +7,4 @@ define([
     } else {
         $('body').addClass('no-webp');
     }
-})
+});
