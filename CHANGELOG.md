@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.3] - 20 August 2022
+### Fixed
+- Add missing semicolon #130
+
 ## [0.12.2] - 21 July 2022
 ### Fixed
 - Using JS native `_determineProductData` function #120 (@artbambou)
