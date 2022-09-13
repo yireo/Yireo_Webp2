@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.4] - 13 September 2022
+### Fixed
+- Implement the NextGenImages config setting `convert_images`
+
 ## [0.12.3] - 20 August 2022
 ### Fixed
 - Add missing semicolon #130
