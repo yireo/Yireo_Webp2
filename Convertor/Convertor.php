@@ -11,7 +11,6 @@ use Yireo\NextGenImages\Exception\ConvertorException;
 use Yireo\NextGenImages\Image\TargetImageFactory;
 use Yireo\NextGenImages\Util\File;
 use Yireo\NextGenImages\Image\Image;
-use Yireo\NextGenImages\Image\ImageFactory;
 use Yireo\Webp2\Config\Config;
 use Yireo\Webp2\Exception\InvalidConvertorException;
 use WebPConvert\Exceptions\InvalidInput\InvalidImageTypeException as InvalidInputImageTypeException;
@@ -97,7 +96,7 @@ class Convertor implements ConvertorInterface
             return true;
         }
 
-        if (!$this->config->enabled()) {
+        if (!$this->config->enabled() || !$this->config->allowImageCreation()) {
             throw new ConvertorException('WebP conversion is not enabled');
         }
 

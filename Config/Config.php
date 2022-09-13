@@ -7,6 +7,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Yireo\NextGenImages\Config\Config as NextGenImagesConfig;
 use Yireo\Webp2\Exception\InvalidConvertorException;
 
 class Config implements ArgumentInterface
@@ -22,17 +23,25 @@ class Config implements ArgumentInterface
     private $storeManager;
 
     /**
+     * @var NextGenImagesConfig 
+     */
+    private $nextGenImagesConfig;
+
+    /**
      * Config constructor.
      *
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
+     * @param NextGenImagesConfig $nextGenImagesConfig
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        NextGenImagesConfig $nextGenImagesConfig
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
+        $this->nextGenImagesConfig = $nextGenImagesConfig;
     }
 
     /**
@@ -41,6 +50,14 @@ class Config implements ArgumentInterface
     public function enabled(): bool
     {
         return (bool)$this->getValue('yireo_webp2/settings/enabled');
+    }
+
+    /**
+     * @return bool
+     */
+    public function allowImageCreation(): bool
+    {
+        return $this->nextGenImagesConfig->allowImageCreation();
     }
 
     /**
