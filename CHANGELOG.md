@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.5] - 19 March 2023
+### Fixed
+- Version bump because of new NextGenImages minor
+
 ## [0.12.4] - 13 September 2022
 ### Fixed
 - Implement the NextGenImages config setting `convert_images`
