@@ -23,7 +23,7 @@ class Config implements ArgumentInterface
     private $storeManager;
 
     /**
-     * @var NextGenImagesConfig 
+     * @var NextGenImagesConfig
      */
     private $nextGenImagesConfig;
 
