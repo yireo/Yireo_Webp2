@@ -5,6 +5,7 @@ namespace Yireo\Webp2\Test\Unit\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\TestCase;
+use Yireo\NextGenImages\Config\Config as NextGenImagesConfig;
 use Yireo\Webp2\Config\Config;
 
 class ConfigTest extends TestCase
@@ -13,7 +14,8 @@ class ConfigTest extends TestCase
     {
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $storeManager = $this->createMock(StoreManagerInterface::class);
-        $config = new Config($scopeConfig, $storeManager);
+        $nextGenImagesConfig = $this->createMock(NextGenImagesConfig::class);
+        $config = new Config($scopeConfig, $storeManager, $nextGenImagesConfig);
         $this->assertFalse($config->enabled());
 
         $scopeConfig->method('getValue')->willReturn(1);
@@ -24,22 +26,23 @@ class ConfigTest extends TestCase
     {
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $storeManager = $this->createMock(StoreManagerInterface::class);
-        $config = new Config($scopeConfig, $storeManager);
+        $nextGenImagesConfig = $this->createMock(NextGenImagesConfig::class);
+        $config = new Config($scopeConfig, $storeManager, $nextGenImagesConfig);
         $this->assertEquals(1, $config->getQualityLevel());
 
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);
-        $config = new Config($scopeConfig, $storeManager);
         $scopeConfig->method('getValue')->willReturn(42);
+        $config = new Config($scopeConfig, $storeManager, $nextGenImagesConfig);
         $this->assertEquals(42, $config->getQualityLevel());
 
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $scopeConfig->method('getValue')->willReturn(142);
-        $config = new Config($scopeConfig, $storeManager);
+        $config = new Config($scopeConfig, $storeManager, $nextGenImagesConfig);
         $this->assertEquals(100, $config->getQualityLevel());
 
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $scopeConfig->method('getValue')->willReturn(0);
-        $config = new Config($scopeConfig, $storeManager);
+        $config = new Config($scopeConfig, $storeManager, $nextGenImagesConfig);
         $this->assertEquals(1, $config->getQualityLevel());
     }
 
@@ -47,7 +50,8 @@ class ConfigTest extends TestCase
     {
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $storeManager = $this->createMock(StoreManagerInterface::class);
-        $config = new Config($scopeConfig, $storeManager);
+        $nextGenImagesConfig = $this->createMock(NextGenImagesConfig::class);
+        $config = new Config($scopeConfig, $storeManager, $nextGenImagesConfig);
         $this->assertNotEmpty($config->getConvertors());
     }
 }
