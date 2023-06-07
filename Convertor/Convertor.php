@@ -70,6 +70,8 @@ class Convertor implements ConvertorInterface
             throw new ConvertorException('WebP conversion is not enabled');
         }
 
+        // @todo: https://gitlab.hyva.io/hyva-themes/hyva-compat/magento2-yireo-next-gen-images/-/blob/main/src/Plugin/ConverterPlugin.php#L50
+
         $webpImage = $this->targetImageFactory->create($image, 'webp');
         $result = $this->convert($image->getPath(), $webpImage->getPath());
 

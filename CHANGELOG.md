@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.13.0] 
+### Added
+- Copied GraphQL `url_webp` from Hyva compatibility module to here
 
 ## [0.12.5] - 19 March 2023
 ### Fixed
