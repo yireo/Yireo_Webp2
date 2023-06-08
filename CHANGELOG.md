@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Copied GraphQL `url_webp` from Hyva compatibility module to here
 
+### Fixed
+- Catch exceptions in converters by changing array to string with a foreach (@ghezelbash PR #140)
+
 ## [0.12.5] - 19 March 2023
 ### Fixed
 - Version bump because of new NextGenImages minor
