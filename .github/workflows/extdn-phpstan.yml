@@ -10,3 +10,5 @@ jobs:
       - uses: extdn/github-actions-m2/magento-phpstan@master
         with:
           composer_name: ${{ secrets.COMPOSER_NAME }}
+    env:
+      MAGENTO_PRE_INSTALL_SCRIPT: .github/workflows/extdn-integration-tests-pre-install.sh
