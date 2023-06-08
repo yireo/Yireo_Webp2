@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Yireo\Webp2\Convertor;
 
+use Psr\Log\LoggerInterface;
 use WebPConvert\Convert\Exceptions\ConversionFailed\InvalidInput\InvalidImageTypeException;
 use WebPConvert\Convert\Exceptions\ConversionFailedException;
 use WebPConvert\WebPConvert;
@@ -20,13 +21,20 @@ class ConvertWrapper
     private $config;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * ConvertWrapper constructor.
      * @param Config $config
      */
     public function __construct(
-        Config $config
+        Config $config,
+        LoggerInterface $logger
     ) {
         $this->config = $config;
+        $this->logger = $logger;
     }
 
     /**
@@ -38,7 +46,17 @@ class ConvertWrapper
      */
     public function convert(string $sourceImageFilename, string $destinationImageFilename): void
     {
-        WebPConvert::convert($sourceImageFilename, $destinationImageFilename, $this->getOptions());
+        $options = $this->getOptions();
+        foreach ($this->config->getConvertors() as $convertor){
+            $options['converter'] = $convertor;
+            try {
+                WebPConvert::convert($sourceImageFilename, $destinationImageFilename, $options);
+            } catch (\Exception $e) {
+                $this->logger->debug($e->getMessage() . ' - ' . $e->description, $e->getTrace());
+                continue;
+            }
+            break;
+        }
     }
 
     /**
@@ -50,7 +68,6 @@ class ConvertWrapper
         return [
             'quality' => 'auto',
             'max-quality' => $this->config->getQualityLevel(),
-            'converters' => $this->config->getConvertors(),
             'encoding' => $this->config->getEncoding(),
         ];
     }
