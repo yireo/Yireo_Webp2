@@ -47,15 +47,15 @@ class ConvertWrapper
     public function convert(string $sourceImageFilename, string $destinationImageFilename): void
     {
         $options = $this->getOptions();
-        foreach ($this->config->getConvertors() as $convertor){
+        foreach ($this->config->getConvertors() as $convertor) {
             $options['converter'] = $convertor;
             try {
                 WebPConvert::convert($sourceImageFilename, $destinationImageFilename, $options);
+                break;
             } catch (\Exception $e) {
                 $this->logger->debug($e->getMessage() . ' - ' . $e->description, $e->getTrace());
                 continue;
             }
-            break;
         }
     }
 
