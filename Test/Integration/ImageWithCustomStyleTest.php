@@ -5,8 +5,14 @@ namespace Yireo\Webp2\Test\Integration;
 class ImageWithCustomStyleTest extends Common
 {
     /**
-     * @magentoAdminConfigFixture yireo_webp2/settings/enabled 1
-     * @magentoAdminConfigFixture yireo_webp2/settings/debug 1
+     * @magentoAppArea frontend
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoCache all disabled
+     * @@magentoConfigFixture current_store yireo_nextgenimages/settings/enabled 1
+     * @@magentoConfigFixture current_store yireo_nextgenimages/settings/convert_images 1
+     * @@magentoConfigFixture current_store yireo_webp2/settings/enabled 1
+     * @@magentoConfigFixture current_store dev/static/sign 0
      */
     public function testIfHtmlContainsImageWithCustomStyle()
     {

@@ -20,10 +20,15 @@ class Common extends AbstractController
         $this->_objectManager->addSharedInstance($convertWrapperStub, ConvertWrapper::class);
     }
 
-    protected function fixtureImageFiles()
+    /**
+     * @return string[]
+     */
+    protected function fixtureImageFiles(): array
     {
+        // @todo: It would be cleaner to use the sandbox directory for this
         /** @var DirectoryList $directoryList */
         $directoryList = $this->_objectManager->get(DirectoryList::class);
+
         $root = $directoryList->getRoot();
         $imagesInThemePath = $root . '/pub/static/frontend/Magento/luma/en_US/Yireo_Webp2/images/test';
 
@@ -56,6 +61,8 @@ class Common extends AbstractController
             $destinationImage = $imagesInThemePath . '/' . basename($image);
             copy($sourceImage, $destinationImage);
         }
+
+        return glob($root . '/pub/static/frontend/Magento/luma/en_US/Yireo_Webp2/images/test/*');
     }
 
     /**

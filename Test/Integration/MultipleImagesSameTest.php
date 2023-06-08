@@ -7,6 +7,8 @@ use Magento\Framework\View\LayoutInterface;
 class MultipleImagesSameTest extends Common
 {
     /**
+     * @magentoAdminConfigFixture yireo_nextgenimages/settings/enabled 1
+     * @magentoAdminConfigFixture yireo_nextgenimages/settings/convert_images 1
      * @magentoAdminConfigFixture yireo_webp2/settings/enabled 1
      * @magentoAdminConfigFixture yireo_webp2/settings/debug 1
      */
