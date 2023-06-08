@@ -35,7 +35,8 @@
     "phpunit/phpunit": "*",
     "composer/composer": "*@dev",
     "phpstan/phpstan": "^0.12.32",
-    "bitexpert/phpstan-magento": "^0.3.0"
+    "bitexpert/phpstan-magento": "^0.3.0",
+    "yireo/magento2-integration-test-helper": "^0.0.8"
   },
   "autoload": {
     "psr-4": {
