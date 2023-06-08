@@ -9,6 +9,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\TestFramework\Helper\Bootstrap;
 use Yireo\NextGenImages\Config\Config;
 use Yireo\NextGenImages\Exception\ConvertorException;
 use Yireo\NextGenImages\Image\ImageFactory;
@@ -36,6 +37,12 @@ class WebpUrl implements ResolverInterface
      */
     private $convertor;
 
+    /**
+     * @param UrlResolver $urlResolver
+     * @param Config $config
+     * @param ImageFactory $imageFactory
+     * @param Convertor $convertor
+     */
     public function __construct(
         UrlResolver $urlResolver,
         Config $config,
