@@ -4,3 +4,6 @@
 ?>
 
 <img src="https://example.com/some/non/existing/image.png" alt="" width="10px">
+
+<h2>Layout handles</h2>
+<pre><?= implode(', ', /* @noEscape */ $block->getLayout()->getUpdate()->getHandles()); ?></pre>

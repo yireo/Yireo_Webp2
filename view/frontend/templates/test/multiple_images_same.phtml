@@ -14,6 +14,5 @@ $image = $imageProvider->getImage();
     </div>
 <?php endfor; ?>
 
-<pre>
-    <?= implode(', ', /* @noEscape */$block->getLayout()->getUpdate()->getHandles()); ?>
-</pre>
+<h2>Layout handles</h2>
+<pre><?= implode(', ', /* @noEscape */ $block->getLayout()->getUpdate()->getHandles()); ?></pre>

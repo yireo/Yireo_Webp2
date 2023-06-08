@@ -8,16 +8,17 @@ $images = $imageProvider->getImages();
 $imageUrl = $block->escapeUrl($block->getViewFileUrl('Yireo_Webp2/' . $image));
 ?>
 
-<h1><?= /* @noEscape */ $block->getNameInLayout() ?></h1>
+<h1><?= /* @noEscape */
+    $block->getNameInLayout() ?></h1>
 
 <?php foreach ($images as $image): ?>
     <div>
         <picture>
-            <img src="<?= /* @noEscape */ $imageUrl ?>" width="100" height="100"/>
+            <img src="<?= /* @noEscape */
+            $imageUrl ?>" width="100" height="100"/>
         </picture>
     </div>
 <?php endforeach; ?>
 
-<pre>
-    <?= implode(', ', /* @noEscape */ $block->getLayout()->getUpdate()->getHandles()); ?>
-</pre>
+<h2>Layout handles</h2>
+<pre><?= implode(', ', /* @noEscape */ $block->getLayout()->getUpdate()->getHandles()); ?></pre>
