@@ -26,6 +26,7 @@ class ModuleTest extends TestCase
     {
         $objectManager = Bootstrap::getObjectManager();
         $moduleList = $objectManager->create(ModuleList::class);
+        $this->assertTrue($moduleList->has('Yireo_NextGenImages'));
         $this->assertTrue($moduleList->has('Yireo_Webp2'));
     }
 }

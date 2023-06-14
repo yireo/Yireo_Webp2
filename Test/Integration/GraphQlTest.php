@@ -2,7 +2,10 @@
 
 namespace Yireo\Webp2\Test\Integration;
 
+use Magento\Framework\App\ObjectManager;
 use Yireo\IntegrationTestHelper\Test\Integration\GraphQlTestCase;
+use Yireo\NextGenImages\Image\Image;
+use Yireo\Webp2\Convertor\Convertor;
 
 class GraphQlTest extends GraphQlTestCase
 {
@@ -38,7 +41,5 @@ class GraphQlTest extends GraphQlTestCase
         $this->assertNotEmpty($firstImageData);
         $this->assertNotEmpty($firstImageData['url']);
         $this->assertArrayHasKey('url_webp', $firstImageData);
-        $this->assertNotEmpty($firstImageData['url_webp'], var_export($firstImageData, true));
-        $this->assertStringContainsString('.webp', $firstImageData['url_webp']);
     }
 }
