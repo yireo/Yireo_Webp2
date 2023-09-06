@@ -7,10 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- Make sure convertor is called for unsupported types #149 (@kernstmediarox)
+
+## [0.13.1] - 6 September 2023
+### Fixed
 - Remove non-existing `description` in exception handling
 - Move Hyva dependency to separate package `yireo/magento2-webp2-for-hyva`
 
-## [0.13.0] 
+## [0.13.0] - 30 August 2023
 ### Added
 - Copied GraphQL `url_webp` from Hyva compatibility module to here
 
