@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Remove non-existing `description` in exception handling
+- Move Hyva dependency to separate package `yireo/magento2-webp2-for-hyva`
 
 ## [0.13.0] 
 ### Added

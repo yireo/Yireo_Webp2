@@ -1,7 +1,7 @@
 {
   "name": "yireo/magento2-webp2",
   "license": "OSL-3.0",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "type": "magento2-module",
   "homepage": "https://www.yireo.com/software/magento-extensions/webp2",
   "description": "Magento 2 module to add WebP support to the Magento frontend",
@@ -37,6 +37,9 @@
     "phpstan/phpstan": "^0.12.32",
     "bitexpert/phpstan-magento": "^0.3.0",
     "yireo/magento2-integration-test-helper": "^0.0.8"
+  },
+  "suggest": {
+    "yireo/magento2-webp2-for-hyva": "Additional fixes with Yireo Webp2 for Hyva"
   },
   "autoload": {
     "psr-4": {

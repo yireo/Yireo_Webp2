@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="hyva_graphql_render_before_slider_products_query">
-        <observer name="Yireo_Webp2::addUrlWebpToGraphqlQuery" instance="Yireo\Webp2\Observer\AddUrlWebpToGraphqlQuery"/>
-    </event>
-</config>
