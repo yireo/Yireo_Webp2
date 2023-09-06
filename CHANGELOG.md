@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Remove non-existing `description` in exception handling
+
 ## [0.13.0] 
 ### Added
 - Copied GraphQL `url_webp` from Hyva compatibility module to here
