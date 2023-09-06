@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.2] - 6 September 2023
 ### Fixed
 - Make sure convertor is called for unsupported types #149 (@kernstmediarox)
 
