@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.3] - 22 September 2023
 ### Fixed
 - Properly check for MIME-typed (fix of #149)
 - Add "webp" / "nowebp" to body class for Hyva
