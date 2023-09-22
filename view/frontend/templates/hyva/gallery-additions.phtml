@@ -1,0 +1,37 @@
+<script>
+    document.addEventListener('gallery-init', ({detail: galleryData}) => {
+        if (typeof hasWebP != 'function') {
+            console.error('[Yireo_WebP2] JavaScript function "hasWebP" does not exist');
+            return;
+        }
+
+        function replaceImage(image) {
+            if (image.full && image.full_webp) {
+                image.full = image.full_webp;
+                delete image.full_webp;
+            }
+
+            if (image.img && image.img_webp) {
+                image.img = image.img_webp;
+                delete image.img_webp;
+            }
+
+            if (image.thumb && image.thumb_webp) {
+                image.thumb = image.thumb_webp;
+                delete image.thumb_webp;
+            }
+        }
+
+        if (galleryData.images) {
+            galleryData.images.forEach(function(image) {
+                replaceImage(image);
+            });
+        }
+
+        if (galleryData.initialImages) {
+            galleryData.initialImages.forEach(function(image) {
+                replaceImage(image);
+            });
+        }
+    });
+</script>
