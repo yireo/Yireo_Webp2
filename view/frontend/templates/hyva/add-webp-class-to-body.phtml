@@ -1,0 +1,19 @@
+<?php declare(strict_types=1);
+
+?>
+<script>
+    function hasWebP() {
+        var elem = document.createElement('canvas');
+
+        if (!!(elem.getContext && elem.getContext('2d'))) {
+            return elem.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+        }
+        return false;
+    }
+
+    if (hasWebP()) {
+        document.body.classList.add("webp");
+    } else {
+        document.body.classList.add("no-webp");
+    }
+</script>
