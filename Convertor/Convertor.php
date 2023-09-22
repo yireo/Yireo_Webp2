@@ -70,9 +70,8 @@ class Convertor implements ConvertorInterface
             throw new ConvertorException('WebP conversion is not enabled');
         }
 
-        // @todo: allowed image mime types over xml
-        if(!in_array($image->getMimetype(), ['jpeg','jpg','png'])){
-            throw new ConvertorException('The follwing image type is not supported ' . $image->getMimetype());
+        if(!in_array($image->getMimetype(), ['image/jpeg','image/jpg','image/png'])){
+            throw new ConvertorException('The mimetype "'.$image->getMimetype().'" is not supported');
         }
 
         // @todo: https://gitlab.hyva.io/hyva-themes/hyva-compat/magento2-yireo-next-gen-images/-/blob/main/src/Plugin/ConverterPlugin.php#L50
