@@ -70,7 +70,7 @@ class Convertor implements ConvertorInterface
             throw new ConvertorException('WebP conversion is not enabled');
         }
 
-        if(!in_array($image->getMimetype(), ['image/jpeg','image/jpg','image/png'])){
+        if (!in_array($image->getMimetype(), ['image/jpeg', 'image/jpg', 'image/png'])) {
             throw new ConvertorException('The mimetype "'.$image->getMimetype().'" is not supported');
         }
 
@@ -80,7 +80,7 @@ class Convertor implements ConvertorInterface
         $result = $this->convert($image->getPath(), $webpImage->getPath());
 
         if (!$result && !$this->imageFile->fileExists($webpImage->getPath())) {
-            throw new ConvertorException('WebP path "' . $webpImage->getPath() . '" does not exist after conversion');
+            throw new ConvertorException('WebP path "'.$webpImage->getPath().'" does not exist after conversion');
         }
 
         return $webpImage;
@@ -95,7 +95,7 @@ class Convertor implements ConvertorInterface
     private function convert(string $sourceImagePath, string $targetImagePath): bool
     {
         if (!$this->imageFile->fileExists($sourceImagePath)) {
-            throw new ConvertorException('Source cached image does not exists: ' . $sourceImagePath);
+            throw new ConvertorException('Source cached image does not exists: '.$sourceImagePath);
         }
 
         if (!$this->imageFile->needsConversion($sourceImagePath, $targetImagePath)) {
@@ -108,10 +108,10 @@ class Convertor implements ConvertorInterface
 
         try {
             $this->convertWrapper->convert($sourceImagePath, $targetImagePath);
-        } catch (InvalidImageTypeException | InvalidInputException | InvalidInputImageTypeException $e) {
+        } catch (InvalidImageTypeException|InvalidInputException|InvalidInputImageTypeException $e) {
             return false;
-        } catch (ConversionFailedException | InvalidConvertorException $e) {
-            throw new ConvertorException($targetImagePath . ': ' . $e->getMessage());
+        } catch (ConversionFailedException|InvalidConvertorException $e) {
+            throw new ConvertorException($targetImagePath.': '.$e->getMessage());
         }
 
         return true;
