@@ -114,6 +114,37 @@ Ask your system administrator to install this library. Or ask the system adminis
 #### Can I use this with Amasty Shopby?
 Yes, you can. Make sure to install the addition https://github.com/yireo/Yireo_Webp2ForAmastyShopby as well.
 
+#### How can I convert WebP images manually from the CLI?
+Even though this extension (or actually its parent extension `Yireo_NextGenImages`) support a CLI (`bin/magento next-gen-images:convert`), using this extension for 1000s of images will definitely not be performant. If you want to convert all images at once from the CLI, it is better to look at other tools. For instance, the `cwebp` binary (part of the Google WebP project itself) could be installed. Or perhaps you could use `convert` of the Imagick project. 
+
+Next, a simple shell script could be used to build all WebP files:
+```bash
+find . -type f -name \*.jpg | while read IMAGE do; convert $IMAGE ${IMAGE/.jpg/.webp}; done
+```
+
+Or another example (of @rostilos):
+```bash
+#!/bin/bash
+start=`date +%s`
+directory="../pub/media"
+
+cd "$directory" || exit
+find . -type f \( -iname \*.jpg -o -iname \*.jpeg -o -iname \*.png \) -print0 |
+
+while IFS= read -r -d $'\0' file;
+  do
+    filename=$(basename -- "$file")
+    new_filename="${filename%.*}.webp"
+    new_filepath="$(dirname "$file")/$new_filename"
+    echo "Converting: $file -> $new_filepath"
+    cwebp -q 80 -quiet "$file" -o "$new_filepath"
+  done
+end=`date +%s`
+runtime=$((end-start))
+
+echo "Execution completed in $runtime seconds."
+```
+
 ## Requesting support
 
 ### First check to see if our extension is doing its job
