@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.2/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.1/phpunit.xsd"
          colors="true"
          beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="./framework/bootstrap.php"
@@ -34,10 +34,4 @@
         <const name="TESTS_MAGENTO_MODE" value="developer"/>
         <const name="TESTS_ERROR_LOG_LISTENER_LEVEL" value="-1"/>
     </php>
-    <!--
-    <listeners>
-        <listener class="Magento\TestFramework\Event\PhpUnit"/>
-        <listener class="Magento\TestFramework\ErrorLog\Listener"/>
-    </listeners>
-    -->
 </phpunit>
