@@ -7,7 +7,8 @@
 - When `<img>` tags are found on the page, the corresponding JPG or PNG is converted into WebP and a corresponding `<picture` tag is used to replace the original `<img>` tag.
 - The Fotorama gallery of the Magento core product pages is replaced with WebP images without issues as well. However, the Fotorama effect loads new JPG images again, replacing the original `<picture>` tag. This shows that the Fotorama library is not scalable and may be a bad decision to use. We recommend you replace it with the [Notorama](https://github.com/robaimes/module-notorama) module instead.
 
-Hyvä support is built into the latest versions of this module. Please do not use the deprecated compatibility module anymore.
+> [!WARNING]
+> Hyvä support is built into the latest versions of this module. Please do not use the deprecated compatibility module anymore.
 
 ## Instructions for using composer
 Use composer to install this extension. Not using composer is **not** supported. Next, install the new module plus its dependency `Yireo_NextGenImages` into Magento itself: 
