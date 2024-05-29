@@ -1,11 +1,5 @@
 # Magento 2 module for WebP
-<img src="https://img.shields.io/packagist/dt/yireo/magento2-webp2"/>
-<img src="https://img.shields.io/packagist/v/yireo/magento2-webp2"/>
-<img src="https://img.shields.io/github/languages/top/yireo/Yireo_Webp2"/>
-<img src="https://img.shields.io/github/last-commit/yireo/Yireo_Webp2" />
-<img src="https://img.shields.io/github/sponsors/yireo"/>
-<img src="https://img.shields.io/badge/Hyva_Themes-Supported-3df0af.svg?longCache=true" />
-<img src="https://img.shields.io/twitter/follow/yireo?style=social" />
+<img src="https://img.shields.io/packagist/dt/yireo/magento2-webp2"/> <img src="https://img.shields.io/packagist/v/yireo/magento2-webp2"/> <img src="https://img.shields.io/github/languages/top/yireo/Yireo_Webp2"/> <img src="https://img.shields.io/github/last-commit/yireo/Yireo_Webp2" /> <img src="https://img.shields.io/github/sponsors/yireo"/> <img src="https://img.shields.io/badge/Hyva_Themes-Supported-3df0af.svg?longCache=true" /> <img src="https://img.shields.io/twitter/follow/yireo?style=social" />
 
 **This module adds WebP support to Magento 2.**
 
