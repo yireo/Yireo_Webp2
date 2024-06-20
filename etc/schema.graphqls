@@ -1,3 +1,0 @@
-interface MediaGalleryInterface @doc(description: "Contains basic information about a product image or video, including WebP image URL.") @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\MediaGalleryTypeResolver") {
-    url_webp: String @doc(description: "The URL of the product image or video in WebP format.") @resolver(class: "Yireo\\Webp2\\GraphQl\\Resolver\\WebpUrl")
-}
