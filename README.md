@@ -35,24 +35,10 @@ We recommend you to work on making all options work, not just one.
 
 Please note that both tasks should be simple for developers and system administrator, but might be magical for non-technical people. If this extension is not working out of the box for you, most likely a technical person needs to take a look at your hosting environment.
 
-## GraphQL support
-This module enhances GraphQL as well:
-```graphql
-query {
-  products(search:"a", pageSize: 1){
-    items {
-      sku
-      name
-      media_gallery {
-        url
-        url_webp
-      }
-    }
-  }
-}
-```
-
 ## FAQ
+
+#### Does this module support GraphQL?
+Yes, but only via the additional [Yireo Webp2GraphQl](https://github.com/yireo/Yireo_Webp2GraphQl) module
 
 #### How do I know WebP is used?
 Make sure to test things with the obvious caches disabled (Full Page Cache, Block HTML Cache). Once this extension is working, catalog images (like on a category page) should be replaced with: Their `<img>` tag should be replaced with a `<picture>` tag that lists both the old image and the new WebP image. If the conversion from the old image to WebP goes well.

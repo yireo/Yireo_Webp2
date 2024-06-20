@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.14.0] - 20 June 2024
+### Fixed
+- Move GraphQL support in seperate [module](https://github.com/yireo/Yireo_Webp2GraphQl)
+
 ## [0.13.5] - 4 April 2024
 ### Fixed
 - Compatibility with Magento >=2.4.7-beta3
