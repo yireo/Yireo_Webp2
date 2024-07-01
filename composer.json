@@ -39,7 +39,8 @@
     "yireo/magento2-integration-test-helper": "^0.0.8"
   },
   "suggest": {
-    "yireo/magento2-webp2-for-hyva": "Additional fixes with Yireo Webp2 for Hyva"
+    "yireo/magento2-webp2-for-hyva": "Additional fixes with Yireo Webp2 for Hyva",
+    "yireo/magento2-webp2-graph-ql": "GraphQL endpoints for Yireo Webp2"
   },
   "autoload": {
     "psr-4": {
