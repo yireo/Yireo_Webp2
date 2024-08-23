@@ -1,5 +1,0 @@
-parameters:
-	bootstrapFiles:
-		- vendor/bitexpert/phpstan-magento/autoload.php
-includes:
-	- vendor/bitexpert/phpstan-magento/extension.neon
