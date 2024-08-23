@@ -3,6 +3,7 @@
     <module name="Yireo_Webp2" setup_version="0.4.0">
         <sequence>
             <module name="Yireo_NextGenImages" />
+            <module name="Yireo_CspUtilities" />
             <module name="Magento_Backend" />
             <module name="Magento_Catalog" />
             <module name="Magento_Config" />

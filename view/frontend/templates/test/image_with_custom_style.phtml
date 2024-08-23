@@ -1,15 +1,1 @@
-<?php declare(strict_types=1);
-
-/** @var $block \Magento\Framework\View\Element\Template */
-/** @var $imageProvider \Yireo\Webp2\Test\Utils\ImageProvider */
-$imageProvider = $block->getImageProvider();
-$image = $imageProvider->getImage();
-$imageUrl = $block->escapeUrl($block->getViewFileUrl('Yireo_Webp2/' . $image));
-?>
-
-<h1><?= /* @noEscape */ $block->getNameInLayout() ?></h1>
-
-<img class="alt-img" src="<?= /* @noEscape */ $imageUrl ?>" alt="test sample" style="display:insane; opacity:666;">
-
-<h2>Layout handles</h2>
-<pre><?= implode(', ', /* @noEscape */ $block->getLayout()->getUpdate()->getHandles()); ?></pre>
+<?php declare(strict_types=1); /** @var $block \Magento\Framework\View\Element\Template */ /** @var $imageProvider \Yireo\Webp2\Test\Utils\ImageProvider */ $imageProvider = $block->getImageProvider(); $image = $imageProvider->getImage(); $imageUrl = $block->escapeUrl($block->getViewFileUrl('Yireo_Webp2/' . $image)); ?> <h1><?= /* @noEscape */ $block->getNameInLayout() ?></h1><img class="alt-img" src="<?= /* @noEscape */ $imageUrl ?>" alt="test sample" style="display:insane; opacity:666;"><h2>Layout handles</h2><pre><?= implode(', ', /* @noEscape */ $block->getLayout()->getUpdate()->getHandles()); ?></pre>
