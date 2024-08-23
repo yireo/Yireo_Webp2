@@ -24,4 +24,4 @@ jobs:
           composer_name: yireo/magento2-webp2
           composer_version: 2
           phpstan_level: 2
-          magento_pre_install_script: .github/workflows/extdn-integration-tests-pre-install.sh
+          magento_pre_install_script: .github/workflows/extdn-phpstan-pre-install.sh
