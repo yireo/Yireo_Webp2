@@ -7,4 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: extdn/github-actions-m2/magento-coding-standard@master
+      - uses: extdn/github-actions-m2/magento-coding-standard/8.3@master
+        with:
+          phpcs_severity: 8
+          phpcs_report: full
+          phpcs_extensions: php
