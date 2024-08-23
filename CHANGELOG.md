@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.14.2] - 23 August 2024
+### Fixed
+- Guarantee return type is string #170
+
 ## [0.14.1] - 23 August 2024
 ### Fixed
 - Add CSP nonces to inline scripts

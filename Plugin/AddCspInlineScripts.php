@@ -18,7 +18,7 @@ class AddCspInlineScripts
     public function afterToHtml(Template $block, $html): string
     {
         if (false === strstr((string)$block->getNameInLayout(), 'yireo_webp2.')) {
-            return $html;
+            return (string)$html;
         }
 
         return $this->replaceInlineScripts->replace((string)$html);
