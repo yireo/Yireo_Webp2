@@ -33,8 +33,7 @@
     "ext-gd": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "*",
-    "composer/composer": "*@dev",
+    "phpunit/phpunit": "^9.0|^10.0|^11.0",
     "phpstan/phpstan": "^0.12.32",
     "bitexpert/phpstan-magento": "^0.3.0",
     "yireo/magento2-integration-test-helper": "^0.0.8"
