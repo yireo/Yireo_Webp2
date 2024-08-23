@@ -2,9 +2,10 @@
 composer config minimum-stability dev
 composer config prefer-stable false
 
-composer require --dev yireo/magento2-integration-test-helper --no-update
+composer require yireo/magento2-integration-test-helper --no-update
 
 composer config --no-plugins allow-plugins true
+
 composer require --dev phpstan/extension-installer --no-update
 composer require --dev bitexpert/phpstan-magento --no-update
 
