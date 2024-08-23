@@ -58,11 +58,10 @@ class Convertor implements ConvertorInterface
     }
 
     /**
-     * @param string $imageUrl
+     * @param Image $image
      * @return Image
      * @throws ConvertorException
      * @throws FileSystemException
-     * @throws NoSuchEntityException
      */
     public function convertImage(Image $image): Image
     {
@@ -87,8 +86,8 @@ class Convertor implements ConvertorInterface
     }
 
     /**
-     * @param string $imageUri
-     * @param string|null $destinationImageUri
+     * @param string $sourceImagePath
+     * @param string $targetImagePath
      * @return bool
      * @throws ConvertorException
      */
