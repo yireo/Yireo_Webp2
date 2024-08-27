@@ -1,36 +1,27 @@
-<script>
+<?php
+
+declare(strict_types=1);
+
+/**
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+
+$script = <<<JS
     document.addEventListener('gallery-init', ({detail: galleryData}) => {
-        if (typeof hasWebP != 'function') {
-            console.error('[Yireo_WebP2] JavaScript function "hasWebP" does not exist');
-            return;
-        }
-
+        const keys = ['full', 'img', 'thumb'];
         function replaceImage(image) {
-            if (image.full && image.full_webp) {
-                image.full = image.full_webp;
-                delete image.full_webp;
-            }
-
-            if (image.img && image.img_webp) {
-                image.img = image.img_webp;
-                delete image.img_webp;
-            }
-
-            if (image.thumb && image.thumb_webp) {
-                image.thumb = image.thumb_webp;
-                delete image.thumb_webp;
-            }
+            keys.forEach((key) => {
+                const webpKey = key + '_webp';
+                if (key in image && webpKey in image) {
+                    image[key] = image[webpKey];
+                    delete image[webpKey];
+                }
+            })
         }
 
-        if (galleryData.images) {
-            galleryData.images.forEach(function(image) {
-                replaceImage(image);
-            });
-        }
+        galleryData.images?.forEach(replaceImage);
+        galleryData.initialImages?.forEach(replaceImage);
+    });
+JS;
 
-        if (galleryData.initialImages) {
-            galleryData.initialImages.forEach(function(image) {
-                replaceImage(image);
-            });
-        }
-    });</script>
+echo $secureRenderer->renderTag('script', [], $script, false);

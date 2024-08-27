@@ -1,15 +1,35 @@
-<?php declare(strict_types=1); ?> <script>
-    function hasWebP() {
-        var elem = document.createElement('canvas');
+<?php
 
-        if (!!(elem.getContext && elem.getContext('2d'))) {
-            return elem.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+declare(strict_types=1);
+
+/**
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+
+$script = <<<JS
+    (() => {
+        let _hasWebP = null;
+        window.hasWebP = () => {
+            if (_hasWebP !== null) {
+                return _hasWebP;
+            }
+
+            var elem = document.createElement('canvas');
+
+            if (!!(elem.getContext && elem.getContext('2d'))) {
+                _hasWebP = elem.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+            } else {
+                _hasWebP = false;
+            }
+            return _hasWebP;
         }
-        return false;
-    }
 
-    if (hasWebP()) {
-        document.body.classList.add("webp");
-    } else {
-        document.body.classList.add("no-webp");
-    }</script>
+        if (window.hasWebP()) {
+            document.body.classList.add("webp");
+        } else {
+            document.body.classList.add("no-webp");
+        }
+    })();
+JS;
+
+echo $secureRenderer->renderTag('script', [], $script, false);
