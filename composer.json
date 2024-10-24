@@ -1,53 +1,71 @@
 {
-  "name": "yireo/magento2-webp2",
-  "license": "OSL-3.0",
-  "version": "0.14.2",
-  "type": "magento2-module",
-  "homepage": "https://www.yireo.com/software/magento-extensions/webp2",
-  "description": "Magento 2 module to add WebP support to the Magento frontend",
-  "keywords": [
-    "composer-installer",
-    "magento",
-    "Magento 2",
-    "Exception",
-    "Yireo"
-  ],
-  "authors": [
-    {
-      "name": "Jisse Reitsma (Yireo)",
-      "email": "jisse@yireo.com"
-    }
-  ],
-  "require": {
-    "yireo/magento2-next-gen-images": "~0.3",
-    "yireo/magento2-csp-utilities": "^1.0",
-    "magento/framework": "^101.0.1|^101.1|^102.0|^103.0",
-    "magento/module-backend": "^100.0|^101.0|^102.0",
-    "magento/module-config": "^101.0",
-    "magento/module-store": "^101.0",
-    "rosell-dk/webp-convert": "^2.0",
-    "psr/log": "^1 || ^2 || ^3",
-    "php": ">=7.4.0",
-    "ext-json": "*",
-    "ext-pcre": "*",
-    "ext-gd": "*"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "^9.0|^10.0|^11.0",
-    "phpstan/phpstan": "^0.12.32",
-    "bitexpert/phpstan-magento": "^0.3.0",
-    "yireo/magento2-integration-test-helper": "^0.0.8"
-  },
-  "suggest": {
-    "yireo/magento2-webp2-for-hyva": "Additional fixes with Yireo Webp2 for Hyva",
-    "yireo/magento2-webp2-graph-ql": "GraphQL endpoints for Yireo Webp2"
-  },
-  "autoload": {
-    "psr-4": {
-      "Yireo\\Webp2\\": ""
+    "name": "yireo/magento2-webp2",
+    "license": "OSL-3.0",
+    "version": "0.14.3",
+    "type": "magento2-module",
+    "homepage": "https://www.yireo.com/software/magento-extensions/webp2",
+    "description": "Magento 2 module to add WebP support to the Magento frontend",
+    "keywords": [
+        "composer-installer",
+        "magento",
+        "Magento 2",
+        "Exception",
+        "Yireo"
+    ],
+    "authors": [
+        {
+            "name": "Jisse Reitsma (Yireo)",
+            "email": "jisse@yireo.com"
+        }
+    ],
+    "require": {
+        "yireo/magento2-next-gen-images": "~0.3",
+        "yireo/magento2-csp-utilities": "^1.0",
+        "magento/framework": "^101.0.1|^101.1|^102.0|^103.0",
+        "magento/module-backend": "^100.0|^101.0|^102.0",
+        "magento/module-config": "^101.0",
+        "magento/module-store": "^101.0",
+        "rosell-dk/webp-convert": "^2.0",
+        "psr/log": "^1 || ^2 || ^3",
+        "php": ">=7.4.0",
+        "ext-json": "*",
+        "ext-pcre": "*",
+        "ext-gd": "*"
     },
-    "files": [
-      "registration.php"
+    "require-dev": {
+        "phpunit/phpunit": "^9.0|^10.0|^11.0",
+        "phpstan/phpstan": "^0.12.32",
+        "bitexpert/phpstan-magento": "^0.3.0",
+        "yireo/magento2-integration-test-helper": "^0.0.8"
+    },
+    "suggest": {
+        "yireo/magento2-webp2-for-hyva": "Additional fixes with Yireo Webp2 for Hyva",
+        "yireo/magento2-webp2-graph-ql": "GraphQL endpoints for Yireo Webp2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Yireo\\Webp2\\": ""
+        },
+        "files": [
+            "registration.php"
+        ]
+    },
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/jissereitsma"
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/yireo"
+        },
+        {
+            "type": "paypal",
+            "url": "https://www.paypal.me/yireo"
+        },
+        {
+            "type": "other",
+            "url": "https://www.buymeacoffee.com/jissereitsma"
+        }
     ]
-  }
 }

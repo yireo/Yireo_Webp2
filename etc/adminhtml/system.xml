@@ -10,6 +10,10 @@
             <resource>Yireo_Webp2::config</resource>
             <group id="settings" translate="label" type="text" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Settings</label>
+                <field id="funding" type="note" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Funding</label>
+                    <frontend_model>Yireo\Webp2\Config\Frontend\Funding</frontend_model>
+                </field>
                 <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
