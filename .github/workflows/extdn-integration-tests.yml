@@ -35,16 +35,16 @@ jobs:
       COMPOSER_NAME: ${{ secrets.COMPOSER_NAME }}
       MAGENTO_POST_INSTALL_SCRIPT: .github/workflows/extdn-integration-tests-post-install.sh
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Cache Composer dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: /tmp/composer-cache
           key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
       - uses: extdn/github-actions-m2/magento-integration-tests/8.3@master
         env:
-          MAGENTO_VERSION: '2.4.7'
+          MAGENTO_VERSION: '2.4.7-p3'
         with:
           magento_pre_install_script: .github/workflows/extdn-integration-tests-pre-install.sh
           magento_post_install_script: .github/workflows/extdn-integration-tests-post-install.sh
