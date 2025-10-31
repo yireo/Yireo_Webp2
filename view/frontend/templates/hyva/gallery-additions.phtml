@@ -1,36 +1,55 @@
 <script>
+    const yireoWebp2ReplaceImage = function(image) {
+        if (image.full && image.full_webp) {
+            image.full = image.full_webp;
+            delete image.full_webp;
+        }
+
+        if (image.img && image.img_webp) {
+            image.img = image.img_webp;
+            delete image.img_webp;
+        }
+
+        if (image.thumb && image.thumb_webp) {
+            image.thumb = image.thumb_webp;
+            delete image.thumb_webp;
+        }
+
+        return image;
+    }
+
+    document.addEventListener('configurable-options-init', ({detail: optionConfig}) => {
+        if (typeof hasWebP != 'function') {
+            console.error('[Yireo_WebP2] JavaScript function "hasWebP" does not exist');
+            return;
+        }
+
+        console.log('[Yireo_WebP2] optionConfig', optionConfig);
+
+
+        if (optionConfig.images) {
+            Object.entries(optionConfig.images).forEach(([key, image]) => {
+                optionConfig.images[key] = yireoWebp2ReplaceImage(image);
+            });
+        }
+    });
+
     document.addEventListener('gallery-init', ({detail: galleryData}) => {
         if (typeof hasWebP != 'function') {
             console.error('[Yireo_WebP2] JavaScript function "hasWebP" does not exist');
             return;
         }
 
-        function replaceImage(image) {
-            if (image.full && image.full_webp) {
-                image.full = image.full_webp;
-                delete image.full_webp;
-            }
-
-            if (image.img && image.img_webp) {
-                image.img = image.img_webp;
-                delete image.img_webp;
-            }
-
-            if (image.thumb && image.thumb_webp) {
-                image.thumb = image.thumb_webp;
-                delete image.thumb_webp;
-            }
-        }
-
         if (galleryData.images) {
             galleryData.images.forEach(function(image) {
-                replaceImage(image);
+                yireoWebp2ReplaceImage(image);
             });
         }
 
         if (galleryData.initialImages) {
             galleryData.initialImages.forEach(function(image) {
-                replaceImage(image);
+                yireoWebp2ReplaceImage(image);
             });
         }
+
     });</script>
