@@ -24,12 +24,12 @@
             return;
         }
 
-        console.log('[Yireo_WebP2] optionConfig', optionConfig);
-
-
         if (optionConfig.images) {
-            Object.entries(optionConfig.images).forEach(([key, image]) => {
-                optionConfig.images[key] = yireoWebp2ReplaceImage(image);
+            Object.entries(optionConfig.images).forEach(([key, imageArray]) => {
+                Object.entries(imageArray).forEach(([index, image]) => {
+                    imageArray[index] = yireoWebp2ReplaceImage(image);
+                });
+                optionConfig.images[key] = imageArray;
             });
         }
     });
