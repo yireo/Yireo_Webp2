@@ -1,5 +1,5 @@
 <script>
-    const yireoWebp2ReplaceImage = function(image) {
+    const yireoWebp2ReplaceImage = function (image) {
         if (image.full && image.full_webp) {
             image.full = image.full_webp;
             delete image.full_webp;
@@ -17,6 +17,19 @@
 
         return image;
     }
+
+    document.addEventListener('after-product-item-image-update', ({detail: element}) => {
+        if (typeof hasWebP != 'function') {
+            console.error('[Yireo_WebP2] JavaScript function "hasWebP" does not exist');
+            return;
+        }
+
+        const imageUrl = element.src;
+        const webpUrl = imageUrl.replace(/.jpg$/, '.webp');
+        const picture = element.closest('picture');
+        const webpSource = picture.querySelector('source[type="image/webp"]');
+        webpSource.srcset = webpUrl;
+    });
 
     document.addEventListener('configurable-options-init', ({detail: optionConfig}) => {
         if (typeof hasWebP != 'function') {
@@ -41,13 +54,13 @@
         }
 
         if (galleryData.images) {
-            galleryData.images.forEach(function(image) {
+            galleryData.images.forEach(function (image) {
                 yireoWebp2ReplaceImage(image);
             });
         }
 
         if (galleryData.initialImages) {
-            galleryData.initialImages.forEach(function(image) {
+            galleryData.initialImages.forEach(function (image) {
                 yireoWebp2ReplaceImage(image);
             });
         }
