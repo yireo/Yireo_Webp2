@@ -8,9 +8,10 @@ use WebPConvert\Convert\Exceptions\ConversionFailed\InvalidInput\InvalidImageTyp
 use WebPConvert\Convert\Exceptions\ConversionFailedException;
 use Yireo\NextGenImages\Convertor\ConvertorInterface;
 use Yireo\NextGenImages\Exception\ConvertorException;
+use Yireo\NextGenImages\Image\Image;
+use Yireo\NextGenImages\Image\ImageFactory;
 use Yireo\NextGenImages\Image\TargetImageFactory;
 use Yireo\NextGenImages\Util\File;
-use Yireo\NextGenImages\Image\Image;
 use Yireo\Webp2\Config\Config;
 use Yireo\Webp2\Exception\InvalidConvertorException;
 use WebPConvert\Exceptions\InvalidInput\InvalidImageTypeException as InvalidInputImageTypeException;
@@ -39,22 +40,30 @@ class Convertor implements ConvertorInterface
     private $targetImageFactory;
 
     /**
+     * @var ImageFactory
+     */
+    private $imageFactory;
+
+    /**
      * Convertor constructor.
      * @param Config $config
      * @param File $imageFile
      * @param ConvertWrapper $convertWrapper
      * @param TargetImageFactory $targetImageFactory
+     * @param ImageFactory $imageFactory
      */
     public function __construct(
         Config $config,
         File $imageFile,
         ConvertWrapper $convertWrapper,
-        TargetImageFactory $targetImageFactory
+        TargetImageFactory $targetImageFactory,
+        ImageFactory $imageFactory
     ) {
         $this->config = $config;
         $this->imageFile = $imageFile;
         $this->convertWrapper = $convertWrapper;
         $this->targetImageFactory = $targetImageFactory;
+        $this->imageFactory = $imageFactory;
     }
 
     /**
@@ -81,6 +90,8 @@ class Convertor implements ConvertorInterface
         if (!$result && !$this->imageFile->fileExists($webpImage->getPath())) {
             throw new ConvertorException('WebP path "'.$webpImage->getPath().'" does not exist after conversion');
         }
+
+        $webpImage->setSrcSet($this->convertSrcSet($image));
 
         return $webpImage;
     }
@@ -114,5 +125,28 @@ class Convertor implements ConvertorInterface
         }
 
         return true;
+    }
+
+    private function convertSrcSet(Image $image): string
+    {
+        $srcSetImages = explode(',', $image->getSrcSet());
+        $webpImageSrcSet = '';
+        foreach ($srcSetImages as $srcSetImage) {
+            $pieces = explode(' ', trim($srcSetImage));
+            $imageUrl = $pieces[0];
+            $descriptor = $pieces[1] ?? 0;
+
+            $srcSetImage = $this->imageFactory->createFromUrl($imageUrl);
+            $srcSetWebpImage = $this->targetImageFactory->create($srcSetImage, 'webp');
+            $result = $this->convert($srcSetImage->getPath(), $srcSetWebpImage->getPath());
+
+            if (!$result && !$this->imageFile->fileExists($srcSetWebpImage->getPath())) {
+                throw new ConvertorException('WebP path "'.$srcSetWebpImage->getPath().'" does not exist after conversion');
+            }
+
+            $webpImageSrcSet .= ($webpImageSrcSet ? ', ' : '') . $srcSetWebpImage->getUrl() . ' ' . ($descriptor ?: '');
+        }
+
+        return $webpImageSrcSet;
     }
 }
