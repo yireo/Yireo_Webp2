@@ -1,0 +1,37 @@
+name: Magento 2 Unit Tests
+on: ['push', 'pull_request']
+
+jobs:
+  unit-tests:
+    name: Magento 2 Unit Tests
+    #runs-on: self-hosted
+    runs-on: ubuntu-latest
+    container:
+        image: yireo/magento2installed:2.4.8-p3
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Configure GitLab
+        run: |
+          test -n "${{ secrets.GITLAB_TOKEN }}" || exit 0
+          cd /tmp/magento
+          composer config --auth gitlab-token.gitlab.yireo.com ${{ secrets.GITLAB_TOKEN }}
+          composer config repositories.loki-checkout composer https://gitlab.yireo.com/api/v4/group/loki-checkout/-/packages/composer/packages.json
+
+      - name: Add module source
+        run: |
+          export COMPOSER_NAME=`cat .module.ini | grep COMPOSER_NAME | cut -f2 -d= | tr -d '"'`
+          test -z "$COMPOSER_NAME}" && (echo "No composer name found" && exit 1)
+          cp -R $GITHUB_WORKSPACE /tmp/magento/package-source
+          cd /tmp/magento
+          composer config repositories.local-source path package-source/
+          composer require --prefer-source -W -- $COMPOSER_NAME:@dev
+
+      - name: Run Magento 2 Unit Tests
+        run: |
+          test -d $GITHUB_WORKSPACE/Test/Unit || exit 0
+          export COMPOSER_NAME=`cat .module.ini | grep COMPOSER_NAME | cut -f2 -d= | tr -d '"'`
+          cd /tmp/magento/dev/tests/unit/
+          php -d memory_limit=4G ../../../vendor/bin/phpunit -c phpunit.xml.dist ../../../vendor/$COMPOSER_NAME/Test/Unit
+ 

@@ -1,0 +1,63 @@
+name: Magento 2 Static Tests
+on: ['push', 'pull_request']
+
+jobs:
+  phpcs:
+    name: Magento PHPCS
+    runs-on: ubuntu-latest
+    container:
+        image: yireo/magento2installed:2.4.8-p3
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Run Magento 2 PHPCS Tests
+        run: |
+          PHPCS_LEVEL=${{ env.PHPCS_LEVEL }}
+          test -z "$PHPCS_LEVEL" && PHPCS_LEVEL=$(jq -r '.phpcs_severity // 10' MODULE.json)
+          test -z "$PHPCS_LEVEL" && PHPCS_LEVEL=10
+          echo "Testing for PHPCS severity $PHPCS_LEVEL"
+          cd /tmp/magento
+          php vendor/bin/phpcs --standard=Magento2 --ignore=Test/,node_modules/ --colors --extensions=php,phtml --severity=$PHPCS_LEVEL ${GITHUB_WORKSPACE}
+
+  phpstan:
+    name: Magento PHPStan
+    runs-on: ubuntu-latest
+    container:
+        image: yireo/magento2installed:2.4.8-p3
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Configure GitLab
+        run: |
+          test -n "${{ secrets.GITLAB_TOKEN }}" || exit 0
+          cd /tmp/magento
+          composer config gitlab-domains gitlab.yireo.com
+          composer config --auth gitlab-token.gitlab.yireo.com ${{ secrets.GITLAB_TOKEN }}
+          composer config repositories.loki-checkout composer https://gitlab.yireo.com/api/v4/group/loki-checkout/-/packages/composer/packages.json
+
+      - name: Add module source
+        run: |
+          export COMPOSER_NAME=`cat .module.ini | grep COMPOSER_NAME | cut -f2 -d= | tr -d '"'`
+          export COMPOSER_DEV_REQUIREMENTS=`jq -r '.["require-dev"] // {} | to_entries | map("\(.key):\(.value)") | join(" ")' composer.json`
+          cp -R ${GITHUB_WORKSPACE} /tmp/magento/package-source
+          cd /tmp/magento
+          composer config repositories.local-source path package-source/
+          composer config --no-plugins allow-plugins true
+          composer remove --dev magento/magento-coding-standard
+          test -z "$COMPOSER_DEV_REQUIREMENTS" || composer require --dev $COMPOSER_DEV_REQUIREMENTS
+          composer require --dev --prefer-source -- phpstan/phpstan:^2.0 bitexpert/phpstan-magento:^0.42 phpstan/extension-installer
+          composer require --prefer-source -- ${COMPOSER_NAME}:@dev yireo/magento2-integration-test-helper
+
+      - name: Run Magento 2 PHPStan Tests
+        run: |
+          export COMPOSER_NAME=`cat .module.ini | grep COMPOSER_NAME | cut -f2 -d= | tr -d '"'`
+          export PHPSTAN_LEVEL=$(jq -r '.phpstan_level // 1' MODULE.json)
+          test -z "$PHPSTAN_LEVEL" && PHPSTAN_LEVEL=1
+          test -f /tmp/magento/phpstan.neon || echo 'parameters:' > /tmp/magento/phpstan.neon
+          echo "Testing for PHPStan level $PHPSTAN_LEVEL"
+          cd /tmp/magento
+          export MODULE_PATH=$(realpath vendor/${COMPOSER_NAME})
+          php -d memory_limit=4G vendor/bin/phpstan analyse --level $PHPSTAN_LEVEL $MODULE_PATH
+
