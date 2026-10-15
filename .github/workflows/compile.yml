@@ -10,6 +10,10 @@ jobs:
         magento_version: ['2.4.7-p7', '2.4.8-p1', '2.4.8-p4', '2.4.9']
     container:
       image: yireo/magento2installed:${{ matrix.magento_version }}
+      credentials:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+      options: --user root
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -41,6 +45,7 @@ jobs:
           cd /tmp/magento
           composer config gitlab-domains gitlab.yireo.com
           composer config --global --auth gitlab-token.gitlab.yireo.com "${{ secrets.GITLAB_TOKEN }}"
+          composer config repositories.loki-extensions composer https://gitlab.yireo.com/api/v4/group/loki-extensions/-/packages/composer/packages.json
           composer config repositories.loki-third-party composer https://gitlab.yireo.com/api/v4/group/loki-third-party/-/packages/composer/packages.json
           composer config repositories.loki-checkout composer https://gitlab.yireo.com/api/v4/group/loki-checkout/-/packages/composer/packages.json
           composer config repositories.loki-checkout-dev composer https://gitlab.yireo.com/api/v4/group/loki-checkout-dev/-/packages/composer/packages.json

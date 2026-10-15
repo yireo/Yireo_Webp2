@@ -1,15 +1,15 @@
 name: Playwright test
-on: ['push', 'pull_request']
+on: [push, pull_request]
 
 jobs:
   playwright:
     runs-on: ubuntu-latest
+    timeout-minutes: ${{ fromJSON(vars.PLAYWRIGHT_JOB_TIMEOUT || '45') }}
     container:
-      image: mcr.microsoft.com/playwright:v1.62.0-noble
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
       options: --user root
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
-        - /tmp/ci-magento:/tmp/magento
 
     env:
       GIT_DEPTH: 1
@@ -39,31 +39,22 @@ jobs:
       OPENSEARCH_PORT: "9200"
       OPENSEARCH_JAVA_OPTS: "-Xms128m -Xmx128m"
       OPENSEARCH_INITIAL_ADMIN_PASSWORD: "admin"
-      MAGENTO_VERSION: "2.4.8-p3"
-      DISABLE_INVENTORY: true
-      DISABLE_GRAPHQL: true
-      DISABLE_ADOBE: true
+      MAGENTO_VERSION: ${{ vars.MAGENTO_VERSION || '2.4.8-p3' }}
+      DISABLE_INVENTORY: ${{ vars.DISABLE_INVENTORY || false }}
+      DISABLE_GRAPHQL: ${{ vars.DISABLE_GRAPHQL || false }}
+      DISABLE_ADOBE: ${{ vars.DISABLE_ADOBE || false }}
       GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
 
     services:
       php:
-        image: yireo/magento2installed:2.4.8-p3
-        options: -v /tmp/ci-magento:/shared/magento
+        image: yireo/magento2installed:${{ vars.MAGENTO_VERSION || '2.4.8-p3' }}
+        credentials:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
         env:
-          MYSQL_HOST: "mysql"
-          MYSQL_USER: "magento2"
-          MYSQL_PASSWORD: "magento2"
-          MYSQL_DATABASE: "magento2"
-          MYSQL_ROOT_PASSWORD: "root"
-          MYSQL_PORT: "3306"
-          OPENSEARCH_HOST: "opensearch"
-          OPENSEARCH_PORT: "9200"
-          OPENSEARCH_JAVA_OPTS: "-Xms128m -Xmx128m"
-          OPENSEARCH_INITIAL_ADMIN_PASSWORD: "admin"
-          MAGENTO_VERSION: "2.4.8-p3"
-          DISABLE_INVENTORY: true
-          DISABLE_GRAPHQL: true
-          DISABLE_ADOBE: true
+          GIT_DEPTH: 1
+          GIT_STRATEGY: fetch
+          DOCKER_HOST: unix:///var/run/docker.sock
           MAGENTO_BASE_URL: "http://php:8888/"
           MAGENTO_BACKEND_FRONTNAME: "admin"
           MAGENTO_ADMIN_FIRSTNAME: "CI"
@@ -78,30 +69,44 @@ jobs:
           MAGENTO_SEARCH_ENGINE: "opensearch"
           COMPOSER_ALLOW_SUPERUSER: "1"
           COMPOSER_MEMORY_LIMIT: "-1"
+          MYSQL_HOST: "mysql"
+          MYSQL_USER: "magento2"
+          MYSQL_PASSWORD: "magento2"
+          MYSQL_DATABASE: "magento2"
+          MYSQL_ROOT_PASSWORD: "root"
+          MYSQL_PORT: "3306"
+          OPENSEARCH_HOST: "opensearch"
+          OPENSEARCH_PORT: "9200"
+          OPENSEARCH_JAVA_OPTS: "-Xms128m -Xmx128m"
+          OPENSEARCH_INITIAL_ADMIN_PASSWORD: "admin"
+          MAGENTO_VERSION: ${{ vars.MAGENTO_VERSION || '2.4.8-p3' }}
+          DISABLE_INVENTORY: ${{ vars.DISABLE_INVENTORY || false }}
+          DISABLE_GRAPHQL: ${{ vars.DISABLE_GRAPHQL || false }}
+          DISABLE_ADOBE: ${{ vars.DISABLE_ADOBE || false }}
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
 
       mysql:
         image: yireo/mariadb:10
+        credentials:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
         env:
           MYSQL_DATABASE: magento2
           MYSQL_USER: magento2
           MYSQL_PASSWORD: magento2
           MYSQL_ROOT_PASSWORD: root
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=1s
-          --health-timeout=5s
-          --health-retries=3
 
       redis:
         image: redis:latest
-        options: >-
-          --health-cmd="redis-cli ping"
-          --health-interval=1s
-          --health-timeout=5s
-          --health-retries=3
+        credentials:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       opensearch:
         image: yireo/opensearch
+        credentials:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
         env:
           OPENSEARCH_JAVA_OPTS: "-Xms256m -Xmx256m"
           OPENSEARCH_INITIAL_ADMIN_PASSWORD: "admin"
@@ -124,7 +129,7 @@ jobs:
           fetch-depth: 1
 
       - name: Detecting Playwright tests
-        run: test -d $GITHUB_WORKSPACE/Test/Playwright || echo "SKIP_JOB=true" >> $GITHUB_ENV || true
+        run: find $GITHUB_WORKSPACE/Test/Playwright -name '*spec.ts' -not -path '*/node_modules/*' 2>/dev/null | grep -q . || echo "SKIP_JOB=true" >> $GITHUB_ENV
 
       - name: Configure Git safe directory
         if: env.SKIP_JOB != 'true'
@@ -142,7 +147,12 @@ jobs:
           if docker ps --filter "name=^php$" --filter "status=running" --format '{{.Names}}' | grep -qx 'php'; then
             PHP_CONTAINER="php"
           else
-            PHP_CONTAINER=$(docker ps -q --filter "ancestor=yireo/magento2installed:2.4.8-p3" --filter "status=running" | head -1)
+            PHP_CONTAINER=$(docker ps -q --filter "ancestor=yireo/magento2installed:${MAGENTO_VERSION}" --filter "status=running" | head -1)
+          fi
+          if [ -z "$PHP_CONTAINER" ]; then
+            echo "ERROR: no running container found for image yireo/magento2installed:${MAGENTO_VERSION}"
+            docker ps
+            exit 1
           fi
           echo "PHP_CONTAINER=$PHP_CONTAINER" >> $GITHUB_ENV
           echo "Using PHP container: $PHP_CONTAINER"
@@ -163,10 +173,14 @@ jobs:
             $PHP_CONTAINER bash -lc '
             cd /tmp/magento
             composer config gitlab-domains gitlab.yireo.com
+            composer config gitlab-protocol http
             composer config --global --auth gitlab-token.gitlab.yireo.com "${{ secrets.GITLAB_TOKEN }}"
+            composer config repositories.loki-extensions composer https://gitlab.yireo.com/api/v4/group/loki-extensions/-/packages/composer/packages.json
             composer config repositories.loki-third-party composer https://gitlab.yireo.com/api/v4/group/loki-third-party/-/packages/composer/packages.json
             composer config repositories.loki-checkout composer https://gitlab.yireo.com/api/v4/group/loki-checkout/-/packages/composer/packages.json
             composer config repositories.loki-checkout-dev composer https://gitlab.yireo.com/api/v4/group/loki-checkout-dev/-/packages/composer/packages.json
+            composer config repositories.loki-functional-tests vcs https://gitlab.yireo.com/loki-extensions/Loki_FunctionalTests.git
+            composer config repositories.loki-checkout-functional-tests vcs https://gitlab.yireo.com/loki-checkout-dev/LokiCheckout_FunctionalTests.git
           '
 
       - name: Configure Magento Marketplace
@@ -193,6 +207,9 @@ jobs:
             $PHP_CONTAINER bash -lc '
             cd /tmp/magento
             composer config --global --auth github-oauth.github.com "${{ secrets.COMPOSER_GITHUB_TOKEN }}"
+            for HYVA_PACKAGE in magento2-default-theme-csp magento2-theme-module magento2-base-layout-reset magento2-email-module magento2-graphql-tokens magento2-graphql-view-model magento2-order-cancellation-webapi magento2-mollie-theme-bundle magento2-compat-module-fallback; do
+              composer config repositories.hyva-${HYVA_PACKAGE} vcs https://github.com/hyva-themes/${HYVA_PACKAGE}.git
+            done
             test -f /tmp/magento/package-source/.github/workflows/composer-additional.sh && source /tmp/magento/package-source/.github/workflows/composer-additional.sh || true
             test -f /tmp/magento/package-source/.github/workflows/composer-${MAGENTO_VERSION}.sh && source /tmp/magento/package-source/.github/workflows/composer-${MAGENTO_VERSION}.sh || true
           '
@@ -206,39 +223,62 @@ jobs:
             -e MAGENTO_MODULE="$MAGENTO_MODULE" \
             -e MAGENTO_VERSION="$MAGENTO_VERSION" \
             $PHP_CONTAINER bash -lc '
+            set -e
             cd /tmp/magento
             composer config repositories.local-source path /tmp/magento/package-source
-            composer require -n --prefer-source -- "${COMPOSER_NAME}:@dev" loki-checkout/magento2-core-cli:@dev loki-checkout/magento2-sample-data:@dev loki-checkout/magento2-functional-tests:@dev yireo/magento2-enable-module-sequence:@dev
+            EXTRA_PACKAGES=""
+            case "${COMPOSER_NAME}" in
+              loki-checkout/*) EXTRA_PACKAGES="loki-checkout/magento2-functional-tests:@dev" ;;
+            esac
+            composer require -n --prefer-source -- \
+              "${COMPOSER_NAME}:@dev" ${EXTRA_PACKAGES} \
+              loki/magento2-functional-tests:dev-main \
+              yireo/magento2-enable-module-sequence:@dev \
+              hyva-themes/magento2-default-theme-csp \
+              hyva-themes/magento2-theme-module \
+              hyva-themes/magento2-base-layout-reset \
+              hyva-themes/magento2-email-module \
+              hyva-themes/magento2-graphql-tokens \
+              hyva-themes/magento2-graphql-view-model \
+              hyva-themes/magento2-order-cancellation-webapi \
+              hyva-themes/magento2-compat-module-fallback
           '
 
       - name: Setup Magento
         if: env.SKIP_JOB != 'true'
         run: |
+          ENV_ARGS=""
+          for VAR in $(env | grep -oE '^(MAGENTO|MYSQL|OPENSEARCH|DISABLE)_[A-Z_]+'); do
+            ENV_ARGS="$ENV_ARGS -e $VAR"
+          done
           docker exec \
             -u root \
             -e COMPOSER_NAME="$COMPOSER_NAME" \
-            -e MAGENTO_MODULE="$MAGENTO_MODULE" \
-            -e MAGENTO_VERSION="$MAGENTO_VERSION" \
+            $ENV_ARGS \
             $PHP_CONTAINER bash -lc '
+            set -e
             cd /tmp/magento
-            GITHUB_WORKSPACE=/tmp/magento/package-source /tmp/magento/package-source/.github/workflows/magento-install.sh || true
-
+            GITHUB_WORKSPACE=/tmp/magento/package-source /tmp/magento/package-source/.github/workflows/magento-install.sh
             bin/magento module:enable Yireo_EnableModuleSequence
-            bin/magento module:sequence LokiCheckout_FunctionalTests LokiCheckout_SampleData LokiCheckout_CoreCli "${MAGENTO_MODULE}"
-            bin/magento cache:flush
+            bin/magento module:enable Hyva_Theme Hyva_BaseLayoutReset Hyva_Email Hyva_GraphqlTokens Hyva_GraphqlViewModel Hyva_OrderCancellationWebapi Hyva_CompatModuleFallback
+            EXTRA_MODULES=""
+            case "${COMPOSER_NAME}" in
+              loki-checkout/*) EXTRA_MODULES="LokiCheckout_FunctionalTests" ;;
+            esac
+            bin/magento module:sequence Loki_FunctionalTests ${EXTRA_MODULES} ${MAGENTO_MODULE}
             bin/magento setup:upgrade
             bin/magento config:set dev/static/sign 0
             bin/magento setup:static-content:deploy -f --area frontend en_US
-            bin/magento loki-checkout:sample-data:add-product
-            bin/magento loki-checkout:modules:dump
-
-            bin/magento config:set loki_checkout/functional_tests/token loki
+            bin/magento loki:functional-tests:modules:dump
+            bin/magento config:set loki/functional_tests/token loki
+            bin/magento cache:flush config
           '
 
-      - name: Copy Magento to shared volume
+      - name: Copy Magento into job container
         if: env.SKIP_JOB != 'true'
         run: |
-          docker exec -u root $PHP_CONTAINER bash -lc 'mkdir -p /shared/magento && cp -R /tmp/magento/. /shared/magento/'
+          mkdir -p /tmp/magento
+          docker cp "$PHP_CONTAINER:/tmp/magento/." /tmp/magento/
 
       - name: Verify Magento installation
         if: env.SKIP_JOB != 'true'
@@ -260,17 +300,38 @@ jobs:
           done
           echo "ERROR: Magento front-end not reachable"; exit 1
 
+      - name: Load integration details
+        if: env.SKIP_JOB != 'true'
+        env:
+          INTEGRATION_DETAILS: ${{ secrets.INTEGRATION_DETAILS }}
+        shell: bash
+        run: |
+          [ -n "$INTEGRATION_DETAILS" ] || exit 0
+          while IFS= read -r line || [ -n "$line" ]; do
+            line="${line%$'\r'}"
+            case "$line" in ''|'#'*) continue ;; *=*) ;; *) echo "Skipping invalid line"; continue ;; esac
+            key="${line%%=*}"
+            value="${line#*=}"
+            echo "$key" | grep -qE '^[A-Za-z_][A-Za-z0-9_]*$' || { echo "Skipping invalid line"; continue; }
+            [ -n "$value" ] && echo "::add-mask::$value"
+            echo "$key=$value" >> "$GITHUB_ENV"
+          done <<< "$INTEGRATION_DETAILS"
+
       - name: Run Playwright tests
         if: env.SKIP_JOB != 'true'
-        working-directory: /tmp/magento/vendor/loki-checkout/magento2-functional-tests/Test/Playwright/
+        working-directory: /tmp/magento/vendor/loki/magento2-functional-tests/Test/Playwright/
+        env:
+          TEST_TIMEOUT: ${{ vars.TEST_TIMEOUT || '60000' }}
+          PLAYWRIGHT_RETRIES: ${{ vars.PLAYWRIGHT_RETRIES || '1' }}
+          PLAYWRIGHT_MAX_FAILURES: ${{ vars.PLAYWRIGHT_MAX_FAILURES || '5' }}
         run: |
           echo "Installing npm dependencies..."
           npm install
           npx playwright install chromium
 
-          echo "Creating .env file..."
-          printf "TEST_URL=http://php:8888/\nTEST_TOKEN=loki\n" > .env
+          echo "Creating /tmp/magento/.env.playwright..."
+          printf "TEST_URL=%s\nTEST_TOKEN=loki\nMODULE_NAME=%s\n" "${MAGENTO_BASE_URL}" "${MAGENTO_MODULE}" > /tmp/magento/.env.playwright
 
           echo "Running Playwright tests for project ${MAGENTO_MODULE}"
-          CI=true TEST_TOKEN=loki MAGENTO_ROOT=/tmp/magento npx playwright test --project=${MAGENTO_MODULE}
+          CI=true TEST_URL="${MAGENTO_BASE_URL}" TEST_TOKEN=loki MAGENTO_ROOT=/tmp/magento TEST_TIMEOUT="${TEST_TIMEOUT}" npx playwright test --project=${MAGENTO_MODULE} --retries="${PLAYWRIGHT_RETRIES}" --max-failures="${PLAYWRIGHT_MAX_FAILURES}"
 

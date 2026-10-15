@@ -6,10 +6,17 @@ jobs:
     name: Magento 2 Integration Tests
     runs-on: ubuntu-latest
     container:
-      image: yireo/magento2installed:2.4.8-p3
+      image: yireo/magento2installed:2.4.8-p5
+      credentials:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+      options: --user root
     services:
       mysql:
         image: yireo/mariadb:10
+        credentials:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_USER: magento2
@@ -18,6 +25,9 @@ jobs:
         options: --tmpfs /tmp:rw --tmpfs /var/lib/mysql:rw --health-cmd="mysqladmin ping"
       opensearch:
         image: yireo/opensearch:latest
+        credentials:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
         env:
           'discovery.type': single-node
           ES_JAVA_OPTS: "-Xms256m -Xmx256m"
@@ -40,11 +50,11 @@ jobs:
 
       - name: Apply patch for reporting memory under Alpine
         if: env.SKIP_JOB != 'true'
-        run: cd /tmp/magento && curl -fsSL https://patch-diff.githubusercontent.com/raw/magento/magento2/pull/39216.diff | git apply || true
+        run: cd /tmp/magento && cat /tmp/magento/patches/39216.diff | git apply || true
 
       - name: Apply patch for changing MySQL client configuration
         if: env.SKIP_JOB != 'true'
-        run: cd /tmp/magento && curl -fsSL https://patch-diff.githubusercontent.com/raw/magento/magento2/pull/40410.diff | git apply || true
+        run: cd /tmp/magento && cat /tmp/magento/patches/40410.diff | git apply || true
 
       - name: Setting up module variables
         if: env.SKIP_JOB != 'true'
