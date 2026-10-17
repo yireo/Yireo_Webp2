@@ -9,10 +9,10 @@ class ImageWithCustomStyleTest extends Common
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoCache all disabled
-     * @@magentoConfigFixture current_store yireo_nextgenimages/settings/enabled 1
-     * @@magentoConfigFixture current_store yireo_nextgenimages/settings/convert_images 1
-     * @@magentoConfigFixture current_store yireo_webp2/settings/enabled 1
-     * @@magentoConfigFixture current_store dev/static/sign 0
+     * @magentoConfigFixture current_store yireo_nextgenimages/settings/enabled 1
+     * @magentoConfigFixture current_store yireo_nextgenimages/settings/convert_images 1
+     * @magentoConfigFixture current_store yireo_webp2/settings/enabled 1
+     * @magentoConfigFixture current_store dev/static/sign 0
      */
     public function testIfHtmlContainsImageWithCustomStyle()
     {
