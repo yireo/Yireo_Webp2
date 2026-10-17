@@ -85,13 +85,15 @@ class Convertor implements ConvertorInterface
         // @todo: https://gitlab.hyva.io/hyva-themes/hyva-compat/magento2-yireo-next-gen-images/-/blob/main/src/Plugin/ConverterPlugin.php#L50
 
         $webpImage = $this->targetImageFactory->create($image, 'webp');
-        $result = $this->convert($image->getPath(), $webpImage->getPath());
+        $this->convert($image->getPath(), $webpImage->getPath());
 
-        if (!$result && !$this->imageFile->fileExists($webpImage->getPath())) {
+        if (!$this->imageFile->fileExists($webpImage->getPath())) {
             throw new ConvertorException('WebP path "'.$webpImage->getPath().'" does not exist after conversion');
         }
 
-        $webpImage->setSrcSet($this->convertSrcSet($image));
+        if (!empty($image->getSrcSet())) {
+            $webpImage->setSrcSet($this->convertSrcSet($image));
+        }
 
         return $webpImage;
     }
@@ -138,9 +140,9 @@ class Convertor implements ConvertorInterface
 
             $srcSetImage = $this->imageFactory->createFromUrl($imageUrl);
             $srcSetWebpImage = $this->targetImageFactory->create($srcSetImage, 'webp');
-            $result = $this->convert($srcSetImage->getPath(), $srcSetWebpImage->getPath());
+            $this->convert($srcSetImage->getPath(), $srcSetWebpImage->getPath());
 
-            if (!$result && !$this->imageFile->fileExists($srcSetWebpImage->getPath())) {
+            if (!$this->imageFile->fileExists($srcSetWebpImage->getPath())) {
                 throw new ConvertorException('WebP path "'.$srcSetWebpImage->getPath().'" does not exist after conversion');
             }
 
