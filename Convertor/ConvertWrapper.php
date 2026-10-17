@@ -47,6 +47,10 @@ class ConvertWrapper
      */
     public function convert(string $sourceImageFilename, string $destinationImageFilename): void
     {
+        // WebPConvert removes the destination when a conversion fails, so keep a backup of an existing WebP image
+        $backupFilename = $this->backup($destinationImageFilename);
+        $converted = false;
+
         $options = $this->getOptions();
         foreach ($this->config->getConvertors() as $convertor){
             $options['converter'] = $convertor;
@@ -59,8 +63,40 @@ class ConvertWrapper
                 $this->logger->debug($e->getMessage(), $e->getTrace());
                 continue;
             }
+
+            $converted = true;
             break;
         }
+
+        $this->restore($backupFilename, $destinationImageFilename, $converted);
+    }
+
+    private function backup(string $filename): ?string
+    {
+        if (!is_file($filename)) {
+            return null;
+        }
+
+        $backupFilename = $filename . '.' . uniqid() . '.bak';
+        if (!copy($filename, $backupFilename)) {
+            return null;
+        }
+
+        return $backupFilename;
+    }
+
+    private function restore(?string $backupFilename, string $filename, bool $converted): void
+    {
+        if ($backupFilename === null) {
+            return;
+        }
+
+        if ($converted || is_file($filename)) {
+            unlink($backupFilename);
+            return;
+        }
+
+        rename($backupFilename, $filename);
     }
 
     /**
