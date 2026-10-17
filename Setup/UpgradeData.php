@@ -54,8 +54,8 @@ class UpgradeData implements UpgradeDataInterface
         foreach ($items as $item) {
             $data = $item->getData();
             $this->storageWriter->delete($data['path'], $data['scope'], $data['scope_id']);
-            $newPath = str_replace($oldPath, $newPath, $data['path']);
-            $this->storageWriter->save($newPath, $data['value'], $data['scope'], $data['scope_id']);
+            $newItemPath = str_replace($oldPath, $newPath, $data['path']);
+            $this->storageWriter->save($newItemPath, $data['value'], $data['scope'], $data['scope_id']);
         }
 
         $setup->endSetup();
