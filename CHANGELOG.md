@@ -5,6 +5,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Test controller `webp/test/mail` accepted every token except the valid one
+- Never return a WebP image that does not exist after conversion
+- Keep an existing WebP image when all convertors fail
+- Do not convert an empty `srcset`
+- Migration of old configuration paths in `UpgradeData` mangled all but the first path
+- Undefined variable in test template `multiple_existing_picturesets.phtml`
+- Integration test configuration fixtures were ignored because of `@@` annotations
+
+### Added
+- Additional unit tests, integration tests and Playwright tests for Luma and Hyvä
 
 ## [0.14.3] - 24 October 2024
 ### Fixed
