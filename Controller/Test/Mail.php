@@ -98,7 +98,7 @@ class Mail extends Action
     {
         $token = (string)$this->request->getParam('token');
         $cryptKey = (string)$this->config->get('crypt/key');
-        if ($token === $cryptKey) {
+        if ($token === '' || $cryptKey === '' || !hash_equals($cryptKey, $token)) {
             return $this->sendResult(['msg' => 'Invalid token']);
         }
 
