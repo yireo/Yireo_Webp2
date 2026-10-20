@@ -33,8 +33,6 @@
         "yireo/magento2-next-gen-images": "^0.5.16"
     },
     "require-dev": {
-        "bitexpert/phpstan-magento": "^0.3.0",
-        "phpstan/phpstan": "^0.12.32",
         "phpunit/phpunit": "^9.0|^10.0|^11.0",
         "yireo/magento2-integration-test-helper": "~0.0",
         "loki/magento2-functional-tests": "@dev"
