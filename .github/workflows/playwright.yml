@@ -43,14 +43,14 @@ jobs:
       DISABLE_INVENTORY: ${{ vars.DISABLE_INVENTORY || false }}
       DISABLE_GRAPHQL: ${{ vars.DISABLE_GRAPHQL || false }}
       DISABLE_ADOBE: ${{ vars.DISABLE_ADOBE || false }}
-      GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+      GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN || '' }}
 
     services:
       php:
         image: yireo/magento2installed:${{ vars.MAGENTO_VERSION || '2.4.8-p3' }}
         credentials:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME || '' }}
+          password: ${{ secrets.DOCKERHUB_TOKEN || '' }}
         env:
           GIT_DEPTH: 1
           GIT_STRATEGY: fetch
@@ -83,13 +83,13 @@ jobs:
           DISABLE_INVENTORY: ${{ vars.DISABLE_INVENTORY || false }}
           DISABLE_GRAPHQL: ${{ vars.DISABLE_GRAPHQL || false }}
           DISABLE_ADOBE: ${{ vars.DISABLE_ADOBE || false }}
-          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN || '' }}
 
       mysql:
         image: yireo/mariadb:10
         credentials:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME || '' }}
+          password: ${{ secrets.DOCKERHUB_TOKEN || '' }}
         env:
           MYSQL_DATABASE: magento2
           MYSQL_USER: magento2
@@ -99,14 +99,14 @@ jobs:
       redis:
         image: redis:latest
         credentials:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME || '' }}
+          password: ${{ secrets.DOCKERHUB_TOKEN || '' }}
 
       opensearch:
         image: yireo/opensearch
         credentials:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME || '' }}
+          password: ${{ secrets.DOCKERHUB_TOKEN || '' }}
         env:
           OPENSEARCH_JAVA_OPTS: "-Xms256m -Xmx256m"
           OPENSEARCH_INITIAL_ADMIN_PASSWORD: "admin"
@@ -206,9 +206,9 @@ jobs:
             -e MAGENTO_VERSION="$MAGENTO_VERSION" \
             $PHP_CONTAINER bash -lc '
             cd /tmp/magento
-            composer config --global --auth github-oauth.github.com "${{ secrets.COMPOSER_GITHUB_TOKEN }}"
+            composer config --global --auth github-oauth.github.com "${{ github.token }}"
             for HYVA_PACKAGE in magento2-default-theme-csp magento2-theme-module magento2-base-layout-reset magento2-email-module magento2-graphql-tokens magento2-graphql-view-model magento2-order-cancellation-webapi magento2-mollie-theme-bundle magento2-compat-module-fallback; do
-              composer config repositories.hyva-${HYVA_PACKAGE} vcs https://github.com/hyva-themes/${HYVA_PACKAGE}.git
+              composer config repositories.hyva-${HYVA_PACKAGE} "{\"type\": \"vcs\", \"url\": \"https://github.com/hyva-themes/${HYVA_PACKAGE}.git\", \"no-api\": true}"
             done
             test -f /tmp/magento/package-source/.github/workflows/composer-additional.sh && source /tmp/magento/package-source/.github/workflows/composer-additional.sh || true
             test -f /tmp/magento/package-source/.github/workflows/composer-${MAGENTO_VERSION}.sh && source /tmp/magento/package-source/.github/workflows/composer-${MAGENTO_VERSION}.sh || true
@@ -303,7 +303,7 @@ jobs:
       - name: Load integration details
         if: env.SKIP_JOB != 'true'
         env:
-          INTEGRATION_DETAILS: ${{ secrets.INTEGRATION_DETAILS }}
+          INTEGRATION_DETAILS: ${{ secrets.INTEGRATION_DETAILS || '' }}
         shell: bash
         run: |
           [ -n "$INTEGRATION_DETAILS" ] || exit 0

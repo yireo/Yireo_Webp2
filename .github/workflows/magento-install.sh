@@ -63,7 +63,7 @@ bin/magento deploy:mode:set developer
 bin/magento cache:disable full_page
 
 cd /tmp/magento/pub/
-nohup php -S 0.0.0.0:8888 >/tmp/php-server.log 2>&1 &
+nohup php -S 0.0.0.0:8888 -t /tmp/magento/pub $GITHUB_WORKSPACE/.github/workflows/php-server-router.php >/tmp/php-server.log 2>&1 &
 
 echo "Waiting for Magento front to become reachable on ${MAGENTO_BASE_URL}"
 result=0
