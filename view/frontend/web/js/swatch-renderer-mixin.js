@@ -1,8 +1,9 @@
 define([
     'jquery',
+    'underscore',
     './has-webp',
     "domReady!"
-], function ($, hasWebP) {
+], function ($, _, hasWebP) {
     'use strict';
 
     return function (widget) {
