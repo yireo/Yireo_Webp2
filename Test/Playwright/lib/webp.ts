@@ -66,6 +66,11 @@ export async function configureWebp(page: Page, payload: ConfigurePayload = {}) 
     if (themeErrors.length > 0) {
         throw new Error('Configure theme error: ' + themeErrors.join(', '));
     }
+
+    const productErrors = data.result?.product?.errors ?? [];
+    if (productErrors.length > 0) {
+        throw new Error('Configure product error: ' + productErrors.join(', '));
+    }
 }
 
 /**
