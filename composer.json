@@ -30,7 +30,7 @@
         "psr/log": "^1 || ^2 || ^3",
         "rosell-dk/webp-convert": "^2.0",
         "yireo/magento2-csp-utilities": "^1.0",
-        "yireo/magento2-next-gen-images": "~0.3"
+        "yireo/magento2-next-gen-images": "^0.5.16"
     },
     "require-dev": {
         "bitexpert/phpstan-magento": "^0.3.0",
