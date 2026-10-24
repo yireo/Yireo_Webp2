@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 // phpcs:ignoreFile
 
 require 'vendor/autoload.php';

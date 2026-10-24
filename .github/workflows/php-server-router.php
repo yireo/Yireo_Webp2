@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php 
+declare(strict_types=1);
+
+// phpcs:ignoreFile
 
 /**
  * Router for the PHP built-in webserver, started with `pub/` as document root

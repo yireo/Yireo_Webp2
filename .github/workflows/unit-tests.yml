@@ -8,8 +8,8 @@ jobs:
     container:
       image: yireo/magento2installed:2.4.8-p3
       credentials:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        username: ${{ secrets.DOCKERHUB_USERNAME || '' }}
+        password: ${{ secrets.DOCKERHUB_TOKEN || '' }}
       options: --user root
     steps:
       - name: Checkout sources
@@ -50,7 +50,7 @@ jobs:
         if: env.SKIP_JOB != 'true'
         run: |
           cd /tmp/magento
-          composer config --global --auth github-oauth.github.com "${{ secrets.COMPOSER_GITHUB_TOKEN }}"
+          composer config --global --auth github-oauth.github.com "${{ github.token }}"
           test -f $GITHUB_WORKSPACE/.github/workflows/composer-additional.sh && source $GITHUB_WORKSPACE/.github/workflows/composer-additional.sh || true
           test -f $GITHUB_WORKSPACE/.github/workflows/composer-${MAGENTO_VERSION}.sh && source $GITHUB_WORKSPACE/.github/workflows/composer-${MAGENTO_VERSION}.sh || true
 

@@ -11,8 +11,8 @@ jobs:
     container:
       image: yireo/magento2installed:${{ matrix.magento_version }}
       credentials:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        username: ${{ secrets.DOCKERHUB_USERNAME || '' }}
+        password: ${{ secrets.DOCKERHUB_TOKEN || '' }}
       options: --user root
     steps:
       - name: Checkout sources
@@ -60,9 +60,23 @@ jobs:
         if: env.SKIP_JOB != 'true'
         run: |
           cd /tmp/magento
-          composer config --global --auth github-oauth.github.com "${{ secrets.COMPOSER_GITHUB_TOKEN }}"
+          composer config --global --auth github-oauth.github.com "${{ github.token }}"
           test -f $GITHUB_WORKSPACE/.github/workflows/composer-additional.sh && source $GITHUB_WORKSPACE/.github/workflows/composer-additional.sh || true
           test -f $GITHUB_WORKSPACE/.github/workflows/composer-${MAGENTO_VERSION}.sh && source $GITHUB_WORKSPACE/.github/workflows/composer-${MAGENTO_VERSION}.sh || true
+
+      - name: Validate Composer GitHub token
+        env:
+          GITHUB_TOKEN: ${{ github.token || '' }}
+        run: |
+            test -n "$GITHUB_TOKEN" || { echo "::error::GitHub token is empty"; exit 1 }
+            STATUS=$(curl -sS -o /dev/null -w "%{http_code}" -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/user)
+            echo "GitHub API status: $STATUS"
+
+      - name: Check GitHub API rate limit
+        env:
+          GITHUB_TOKEN: ${{ github.token || '' }}
+        run: |
+          curl -sS -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/rate_limit | jq '.resources.core'
 
       - name: Add module source
         if: env.SKIP_JOB != 'true'
