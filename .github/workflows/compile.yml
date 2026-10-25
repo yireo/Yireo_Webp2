@@ -68,7 +68,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token || '' }}
         run: |
-            test -n "$GITHUB_TOKEN" || { echo "::error::GitHub token is empty"; exit 1 }
+            test -n "$GITHUB_TOKEN" || { echo "::error::GitHub token is empty"; exit 1; }
             STATUS=$(curl -sS -o /dev/null -w "%{http_code}" -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/user)
             echo "GitHub API status: $STATUS"
 
