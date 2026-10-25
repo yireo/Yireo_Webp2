@@ -60,6 +60,7 @@ jobs:
         if: env.SKIP_JOB != 'true'
         run: |
           cd /tmp/magento
+          composer self-update --2
           composer config --global --auth github-oauth.github.com "${{ github.token }}"
           test -f $GITHUB_WORKSPACE/.github/workflows/composer-additional.sh && source $GITHUB_WORKSPACE/.github/workflows/composer-additional.sh || true
           test -f $GITHUB_WORKSPACE/.github/workflows/composer-${MAGENTO_VERSION}.sh && source $GITHUB_WORKSPACE/.github/workflows/composer-${MAGENTO_VERSION}.sh || true
