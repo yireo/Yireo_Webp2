@@ -7,5 +7,7 @@
         "Magento_Backend",
         "Magento_Config",
         "Magento_Store"
-    ]
+    ],
+    "phpcs_severity": "9",
+    "phpstan_level": "1"
 }
