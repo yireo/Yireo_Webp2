@@ -134,7 +134,7 @@ class Convertor implements ConvertorInterface
         $srcSetImages = explode(',', $image->getSrcSet());
         $webpImageSrcSet = '';
         foreach ($srcSetImages as $srcSetImage) {
-            $pieces = explode(' ', trim($srcSetImage));
+            $pieces = explode(' ', trim($srcSetImage, " \n\r\t\v\0"));
             $imageUrl = $pieces[0];
             $descriptor = $pieces[1] ?? 0;
 

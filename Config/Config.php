@@ -144,7 +144,7 @@ class Config implements ArgumentInterface
         $array = [];
         $strings = explode(',', $string);
         foreach ($strings as $string) {
-            $string = trim($string);
+            $string = trim($string, " \n\r\t\v\0");
             if ($string) {
                 $array[] = $string;
             }
