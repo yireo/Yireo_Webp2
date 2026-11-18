@@ -1,16 +1,55 @@
 name: Magento 2 Integration Tests
-on: ['push', 'pull_request']
+on:
+  push:
+    branches: [main, master]
+    tags: ['*']
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
+  detect:
+    name: Detect integration tests
+    runs-on: ubuntu-latest
+    outputs:
+      has_tests: ${{ steps.check.outputs.has_tests }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          sparse-checkout: Test/Integration
+
+      - name: Check for integration tests
+        id: check
+        shell: bash
+        run: |
+          if [ -d "$GITHUB_WORKSPACE/Test/Integration" ]; then
+            echo "has_tests=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::No integration tests found in Test/Integration, skipping"
+            echo "has_tests=false" >> "$GITHUB_OUTPUT"
+          fi
+
   integration-tests:
     name: Magento 2 Integration Tests
+    needs: detect
+    if: needs.detect.outputs.has_tests == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: ${{ fromJSON(vars.INTEGRATION_JOB_TIMEOUT || '45') }}
     container:
-      image: yireo/magento2installed:2.4.8-p5
+      image: yireo/magento2installed:${{ vars.MAGENTO_VERSION || '2.4.8-p5' }}
       credentials:
         username: ${{ secrets.DOCKERHUB_USERNAME || '' }}
         password: ${{ secrets.DOCKERHUB_TOKEN || '' }}
       options: --user root
+    env:
+      MAGENTO_VERSION: ${{ vars.MAGENTO_VERSION || '2.4.8-p5' }}
+      COMPOSER_CACHE_DIR: /tmp/composer-cache
     services:
       mysql:
         image: yireo/mariadb:10
@@ -22,7 +61,7 @@ jobs:
           MYSQL_USER: magento2
           MYSQL_PASSWORD: magento2
           MYSQL_DATABASE: magento2
-        options: --tmpfs /tmp:rw --tmpfs /var/lib/mysql:rw --health-cmd="mysqladmin ping"
+        options: --tmpfs /tmp:rw --tmpfs /var/lib/mysql:rw --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=10
       opensearch:
         image: yireo/opensearch:latest
         credentials:
@@ -30,76 +69,75 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN || '' }}
         env:
           'discovery.type': single-node
-          ES_JAVA_OPTS: "-Xms256m -Xmx256m"
-        options: --health-cmd="curl localhost:9200/_cluster/health?wait_for_status=yellow&timeout=60s" --health-interval=10s --health-timeout=5s --health-retries=3
+          OPENSEARCH_JAVA_OPTS: "-Xms256m -Xmx256m"
+          OPENSEARCH_INITIAL_ADMIN_PASSWORD: "admin"
+        options: --health-cmd="curl localhost:9200/_cluster/health?wait_for_status=yellow&timeout=60s" --health-interval=10s --health-timeout=5s --health-retries=10
       redis:
-        image: redis
-        options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
+        image: redis:7
+        options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 10
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v4
-
-      - name: Detecting integration tests
-        run: |
-          test -d $GITHUB_WORKSPACE/Test/Integration || echo "SKIP_JOB=true" >> $GITHUB_ENV
+        uses: actions/checkout@v7
 
       - name: Cleanup PHP
-        if: env.SKIP_JOB != 'true'
+        run: rm -f /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
+      - name: Apply Magento patches
+        shell: bash
         run: |
-          test -f /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && rm -f /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini || true
-
-      - name: Apply patch for reporting memory under Alpine
-        if: env.SKIP_JOB != 'true'
-        run: cd /tmp/magento && cat /tmp/magento/patches/39216.diff | git apply || true
-
-      - name: Apply patch for changing MySQL client configuration
-        if: env.SKIP_JOB != 'true'
-        run: cd /tmp/magento && cat /tmp/magento/patches/40410.diff | git apply || true
+          cd /tmp/magento
+          for PATCH in patches/39216.diff patches/40410.diff; do
+            if [ ! -f "$PATCH" ]; then
+              echo "Patch $PATCH not found, skipping"
+            elif git apply -R --check "$PATCH" 2>/dev/null; then
+              echo "Patch $PATCH already applied"
+            else
+              git apply "$PATCH"
+              echo "Applied patch $PATCH"
+            fi
+          done
 
       - name: Setting up module variables
-        if: env.SKIP_JOB != 'true'
         run: |
-          echo COMPOSER_NAME=`jq -e '.name' composer.json -r` >> $GITHUB_ENV
-          echo MAGENTO_MODULE=`jq -e '.module_name' MODULE.json -r` >> $GITHUB_ENV
+          echo "COMPOSER_NAME=$(jq -er '.name' composer.json)" >> "$GITHUB_ENV"
+          echo "MAGENTO_MODULE=$(jq -er '.module_name' MODULE.json)" >> "$GITHUB_ENV"
 
-      - name: Configure GitLab
-        if: env.SKIP_JOB != 'true'
-        run: |
-          test -n "${{ secrets.GITLAB_TOKEN }}" || exit 0
-          cd /tmp/magento
-          composer config --auth gitlab-token.gitlab.yireo.com "${{ secrets.GITLAB_TOKEN }}"
-          composer config repositories.loki-third-party composer https://gitlab.yireo.com/api/v4/group/loki-third-party/-/packages/composer/packages.json
-          composer config repositories.loki-checkout composer https://gitlab.yireo.com/api/v4/group/loki-checkout/-/packages/composer/packages.json
-          composer config repositories.loki-checkout-dev composer https://gitlab.yireo.com/api/v4/group/loki-checkout-dev/-/packages/composer/packages.json
+      - name: Configure Composer
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+          LOKI_REPO_USERNAME: ${{ secrets.LOKI_REPO_USERNAME }}
+          LOKI_REPO_PASSWORD: ${{ secrets.LOKI_REPO_PASSWORD }}
+          MAGENTO_MARKETPLACE_PUBLIC_KEY: ${{ secrets.MAGENTO_MARKETPLACE_PUBLIC_KEY }}
+          MAGENTO_MARKETPLACE_PRIVATE_KEY: ${{ secrets.MAGENTO_MARKETPLACE_PRIVATE_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: bash "$GITHUB_WORKSPACE/.github/workflows/composer-setup.sh"
 
-      - name: Configure Magento Marketplace
-        if: env.SKIP_JOB != 'true'
-        run: |
-          test -n "${{ secrets.MAGENTO_MARKETPLACE_PUBLIC_KEY }}" || exit 0
-          composer config --global --auth http-basic.repo.magento.com "${{ secrets.MAGENTO_MARKETPLACE_PUBLIC_KEY }}" "${{ secrets.MAGENTO_MARKETPLACE_PRIVATE_KEY }}"
-
-      - name: Configure composer
-        if: env.SKIP_JOB != 'true'
-        run: |
-          cd /tmp/magento
-          composer config --global --auth github-oauth.github.com "${{ github.token }}"
-          test -f $GITHUB_WORKSPACE/.github/workflows/composer-additional.sh && source $GITHUB_WORKSPACE/.github/workflows/composer-additional.sh || true
-          test -f $GITHUB_WORKSPACE/.github/workflows/composer-${MAGENTO_VERSION}.sh && source $GITHUB_WORKSPACE/.github/workflows/composer-${MAGENTO_VERSION}.sh || true
+      - name: Restore Composer cache
+        if: github.event.pull_request.head.repo.fork != true && !env.ACT
+        uses: actions/cache@v4
+        with:
+          path: /tmp/composer-cache
+          key: composer-integration-${{ env.MAGENTO_VERSION }}-${{ hashFiles('composer.json') }}
+          restore-keys: |
+            composer-integration-${{ env.MAGENTO_VERSION }}-
 
       - name: Add module source
-        if: env.SKIP_JOB != 'true'
         run: |
-          cp -R ${GITHUB_WORKSPACE} /tmp/magento/package-source
+          cp -R "$GITHUB_WORKSPACE" /tmp/magento/package-source
           cd /tmp/magento
           composer config repositories.local-source path package-source/
-          composer require -n --prefer-source -- ${COMPOSER_NAME}:@dev yireo/magento2-integration-test-helper
+          composer require -n --prefer-dist -- "${COMPOSER_NAME}:@dev" yireo/magento2-integration-test-helper
 
       - name: Run Magento 2 Integration Tests
-        if: env.SKIP_JOB != 'true'
+        shell: bash
         run: |
+          cd /tmp/magento
+          bin/magento module:enable --all
           cd /tmp/magento/dev/tests/integration/
-          cp -R ${GITHUB_WORKSPACE}/.github/workflows/integration-tests/* .
-          php ../../../vendor/bin/phpunit --atleast-version 9 && cp phpunit9.xml phpunit.xml
-          php ../../../vendor/bin/phpunit --atleast-version 10 && cp phpunit10.xml phpunit.xml
-          php -d memory_limit=-1 ../../../vendor/bin/phpunit -c phpunit.xml ../../../vendor/$COMPOSER_NAME/Test/Integration
-
+          cp -R "$GITHUB_WORKSPACE"/.github/workflows/integration-tests/* .
+          if php ../../../vendor/bin/phpunit --atleast-version 10; then
+            cp phpunit10.xml phpunit.xml
+          elif php ../../../vendor/bin/phpunit --atleast-version 9; then
+            cp phpunit9.xml phpunit.xml
+          fi
+          MAGENTO_MODULE_FOLDER="vendor/${COMPOSER_NAME}" php -d memory_limit=-1 ../../../vendor/bin/phpunit -c phpunit.xml "../../../vendor/${COMPOSER_NAME}/Test/Integration"

@@ -32,6 +32,15 @@ fi
 
 DISABLE_MODULES=`php $GITHUB_WORKSPACE/.github/workflows/get-modules.php disable-graphql=$DISABLE_GRAPHQL disable-inventory=$DISABLE_INVENTORY disable-adobe=$DISABLE_ADOBE`
  
+SECURE_ARGS=()
+case "${MAGENTO_BASE_URL}" in
+  https://*)
+    USE_HTTPS=1
+    SECURE_ARGS=(--base-url-secure="${MAGENTO_BASE_URL}" --use-secure=1 --use-secure-admin=1)
+    ;;
+  *) USE_HTTPS=0 ;;
+esac
+
 cd /tmp/magento
 php -dmemory_limit=-1 bin/magento setup:install \
   --base-url="${MAGENTO_BASE_URL}" \
@@ -57,22 +66,45 @@ php -dmemory_limit=-1 bin/magento setup:install \
   --session-save-redis-port=6379 \
   --cache-backend-redis-server=redis \
   --cache-backend-redis-port=6379 \
+  "${SECURE_ARGS[@]}" \
   --disable-modules="$DISABLE_MODULES"
 
 bin/magento deploy:mode:set developer
 bin/magento cache:disable full_page
 
 cd /tmp/magento/pub/
-nohup php -S 0.0.0.0:8888 -t /tmp/magento/pub $GITHUB_WORKSPACE/.github/workflows/php-server-router.php >/tmp/php-server.log 2>&1 &
+if [ "$USE_HTTPS" -eq 1 ]; then
+  nohup php -S 127.0.0.1:8080 -t /tmp/magento/pub $GITHUB_WORKSPACE/.github/workflows/php-server-router.php >/tmp/php-server.log 2>&1 &
+
+  HTTPS_HOST_PORT="${MAGENTO_BASE_URL#https://}"
+  HTTPS_HOST_PORT="${HTTPS_HOST_PORT%%/*}"
+  HTTPS_PORT="${HTTPS_HOST_PORT##*:}"
+  test "$HTTPS_PORT" = "$HTTPS_HOST_PORT" && HTTPS_PORT=443
+
+  openssl req -x509 -nodes -newkey rsa:2048 -days 7 \
+    -keyout /tmp/magento-tls.key -out /tmp/magento-tls.crt \
+    -subj "/CN=localhost" \
+    -addext "subjectAltName=DNS:localhost,DNS:php,IP:127.0.0.1"
+  cat /tmp/magento-tls.key /tmp/magento-tls.crt > /tmp/magento-tls.pem
+
+  nohup socat OPENSSL-LISTEN:${HTTPS_PORT},fork,reuseaddr,cert=/tmp/magento-tls.pem,verify=0 TCP:127.0.0.1:8080 >/tmp/socat.log 2>&1 &
+else
+  nohup php -S 0.0.0.0:8888 -t /tmp/magento/pub $GITHUB_WORKSPACE/.github/workflows/php-server-router.php >/tmp/php-server.log 2>&1 &
+fi
 
 echo "Waiting for Magento front to become reachable on ${MAGENTO_BASE_URL}"
 result=0
 for i in {1..60}; do
-  if curl -s "${MAGENTO_BASE_URL}" 2>1 >/dev/null; then
+  if curl -k -s "${MAGENTO_BASE_URL}" >/dev/null 2>&1; then
     echo " OK, available"; result=1; break;
   fi
   echo -n "."
   sleep 1
 done
-test $result -eq 0 && echo "Not available" && cat /tmp/php-server.log && exit 1
+if [ $result -eq 0 ]; then
+  echo "Not available"
+  cat /tmp/php-server.log
+  test -f /tmp/socat.log && cat /tmp/socat.log
+  exit 1
+fi
 exit 0

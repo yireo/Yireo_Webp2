@@ -1,96 +1,105 @@
 name: Magento 2 DI compilation
-on: ['push', 'pull_request']
+on:
+  push:
+    branches: [main, master]
+    tags: ['*']
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
+  detect:
+    name: Detect Magento versions
+    runs-on: ubuntu-latest
+    outputs:
+      versions: ${{ steps.versions.outputs.versions }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          sparse-checkout: |
+            MODULE.json
+          sparse-checkout-cone-mode: false
+
+      - name: Determine Magento versions
+        id: versions
+        shell: bash
+        run: |
+          ALL='["2.4.7-p10", "2.4.8-p5", "2.4.9"]'
+          if [ ! -f MODULE.json ]; then
+            echo "::notice::No MODULE.json found, skipping compilation"
+            echo "versions=[]" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          VERSIONS=$(jq -c --argjson all "$ALL" '(.skip_magento_versions // []) as $skip | $all - $skip' MODULE.json)
+          echo "Magento versions: $VERSIONS"
+          echo "versions=$VERSIONS" >> "$GITHUB_OUTPUT"
+
   compile:
     name: Magento 2 DI compilation
+    needs: detect
+    if: needs.detect.outputs.versions != '[]'
     runs-on: ubuntu-latest
+    timeout-minutes: ${{ fromJSON(vars.COMPILE_JOB_TIMEOUT || '30') }}
     strategy:
+      fail-fast: false
       matrix:
-        magento_version: ['2.4.7-p7', '2.4.8-p1', '2.4.8-p4', '2.4.9']
+        magento_version: ${{ fromJSON(needs.detect.outputs.versions) }}
     container:
       image: yireo/magento2installed:${{ matrix.magento_version }}
       credentials:
         username: ${{ secrets.DOCKERHUB_USERNAME || '' }}
         password: ${{ secrets.DOCKERHUB_TOKEN || '' }}
       options: --user root
+    env:
+      MAGENTO_VERSION: ${{ matrix.magento_version }}
+      COMPOSER_CACHE_DIR: /tmp/composer-cache
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v4
-
-      - name: Testing for MODULE.json file
-        run: |
-          (test -f MODULE.json || echo "SKIP_JOB=true" >> $GITHUB_ENV) || true
-
-      - name: Check Magento version
-        if: env.SKIP_JOB != 'true'
-        run: |
-          jq -e --arg v "${{ matrix.magento_version }}" '.skip_magento_versions[]? | select(. == $v)' MODULE.json && echo "SKIP_JOB=true" >> $GITHUB_ENV || true
+        uses: actions/checkout@v7
 
       - name: Cleanup PHP
-        if: env.SKIP_JOB != 'true'
-        run: |
-          test -f /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && rm -f /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini || true
+        run: rm -f /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
       - name: Setting up module variables
-        if: env.SKIP_JOB != 'true'
         run: |
-          echo COMPOSER_NAME=`jq '.name' composer.json -r` >> $GITHUB_ENV
-          echo MAGENTO_MODULE=`jq '.module_name' MODULE.json -r` >> $GITHUB_ENV
+          echo "COMPOSER_NAME=$(jq -r '.name' composer.json)" >> "$GITHUB_ENV"
+          echo "MAGENTO_MODULE=$(jq -r '.module_name' MODULE.json)" >> "$GITHUB_ENV"
 
-      - name: Configure GitLab
-        if: env.SKIP_JOB != 'true'
-        run: |
-          test -n "${{ secrets.GITLAB_TOKEN }}" || exit 0
-          cd /tmp/magento
-          composer config gitlab-domains gitlab.yireo.com
-          composer config --global --auth gitlab-token.gitlab.yireo.com "${{ secrets.GITLAB_TOKEN }}"
-          composer config repositories.loki-extensions composer https://gitlab.yireo.com/api/v4/group/loki-extensions/-/packages/composer/packages.json
-          composer config repositories.loki-third-party composer https://gitlab.yireo.com/api/v4/group/loki-third-party/-/packages/composer/packages.json
-          composer config repositories.loki-checkout composer https://gitlab.yireo.com/api/v4/group/loki-checkout/-/packages/composer/packages.json
-          composer config repositories.loki-checkout-dev composer https://gitlab.yireo.com/api/v4/group/loki-checkout-dev/-/packages/composer/packages.json
-
-      - name: Configure Magento Marketplace
-        if: env.SKIP_JOB != 'true'
-        run: |
-          test -n "${{ secrets.MAGENTO_MARKETPLACE_PUBLIC_KEY }}" || exit 0
-          composer config --global --auth http-basic.repo.magento.com "${{ secrets.MAGENTO_MARKETPLACE_PUBLIC_KEY }}" "${{ secrets.MAGENTO_MARKETPLACE_PRIVATE_KEY }}"
-
-      - name: Configure composer
-        if: env.SKIP_JOB != 'true'
-        run: |
-          cd /tmp/magento
-          composer self-update --2
-          composer config --global --auth github-oauth.github.com "${{ github.token }}"
-          test -f $GITHUB_WORKSPACE/.github/workflows/composer-additional.sh && source $GITHUB_WORKSPACE/.github/workflows/composer-additional.sh || true
-          test -f $GITHUB_WORKSPACE/.github/workflows/composer-${MAGENTO_VERSION}.sh && source $GITHUB_WORKSPACE/.github/workflows/composer-${MAGENTO_VERSION}.sh || true
-
-      - name: Validate Composer GitHub token
+      - name: Configure Composer
         env:
-          GITHUB_TOKEN: ${{ github.token || '' }}
-        run: |
-            test -n "$GITHUB_TOKEN" || { echo "::error::GitHub token is empty"; exit 1; }
-            STATUS=$(curl -sS -o /dev/null -w "%{http_code}" -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/user)
-            echo "GitHub API status: $STATUS"
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+          LOKI_REPO_USERNAME: ${{ secrets.LOKI_REPO_USERNAME }}
+          LOKI_REPO_PASSWORD: ${{ secrets.LOKI_REPO_PASSWORD }}
+          MAGENTO_MARKETPLACE_PUBLIC_KEY: ${{ secrets.MAGENTO_MARKETPLACE_PUBLIC_KEY }}
+          MAGENTO_MARKETPLACE_PRIVATE_KEY: ${{ secrets.MAGENTO_MARKETPLACE_PRIVATE_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+          VALIDATE_GITHUB_TOKEN: "1"
+        run: bash "$GITHUB_WORKSPACE/.github/workflows/composer-setup.sh"
 
-      - name: Check GitHub API rate limit
-        env:
-          GITHUB_TOKEN: ${{ github.token || '' }}
-        run: |
-          curl -sS -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/rate_limit | jq '.resources.core'
+      - name: Restore Composer cache
+        if: github.event.pull_request.head.repo.fork != true && !env.ACT
+        uses: actions/cache@v4
+        with:
+          path: /tmp/composer-cache
+          key: composer-compile-${{ matrix.magento_version }}-${{ hashFiles('composer.json') }}
+          restore-keys: |
+            composer-compile-${{ matrix.magento_version }}-
 
       - name: Add module source
-        if: env.SKIP_JOB != 'true'
         run: |
-          cp -R ${GITHUB_WORKSPACE} /tmp/magento/package-source
+          cp -R "$GITHUB_WORKSPACE" /tmp/magento/package-source
           cd /tmp/magento
           composer config repositories.local-source path package-source/
-          composer require -n --prefer-source ${COMPOSER_NAME}:@dev
+          composer require -n --prefer-dist -- "${COMPOSER_NAME}:@dev"
 
       - name: Run Magento 2 compilation
-        if: env.SKIP_JOB != 'true'
         run: |
           cd /tmp/magento
           bin/magento module:enable --all
           php -dzend.enable_gc=0 -drealpath_cache_size=64M -drealpath_cache_ttl=7200 -dopcache.enable_cli=1 -dopcache.memory_consumption=512 -dopcache.interned_strings_buffer=64 -dopcache.max_accelerated_files=100000 -dmemory_limit=-1 bin/magento setup:di:compile
-
