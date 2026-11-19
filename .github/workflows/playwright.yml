@@ -78,16 +78,12 @@ jobs:
     services:
       php:
         image: yireo/magento2installed:${{ vars.MAGENTO_VERSION || '2.4.8-p5' }}
-        credentials:
-          username: ${{ secrets.DOCKERHUB_USERNAME || '' }}
-          password: ${{ secrets.DOCKERHUB_TOKEN || '' }}
+        credentials: ${{ secrets.DOCKERHUB_USERNAME && fromJSON(format('{{"username":"{0}","password":"{1}"}}', secrets.DOCKERHUB_USERNAME, secrets.DOCKERHUB_TOKEN)) || null }}
         env: *magento-env
 
       mysql:
         image: yireo/mariadb:10
-        credentials:
-          username: ${{ secrets.DOCKERHUB_USERNAME || '' }}
-          password: ${{ secrets.DOCKERHUB_TOKEN || '' }}
+        credentials: ${{ secrets.DOCKERHUB_USERNAME && fromJSON(format('{{"username":"{0}","password":"{1}"}}', secrets.DOCKERHUB_USERNAME, secrets.DOCKERHUB_TOKEN)) || null }}
         env:
           MYSQL_DATABASE: magento2
           MYSQL_USER: magento2
@@ -97,16 +93,12 @@ jobs:
 
       redis:
         image: redis:7
-        credentials:
-          username: ${{ secrets.DOCKERHUB_USERNAME || '' }}
-          password: ${{ secrets.DOCKERHUB_TOKEN || '' }}
+        credentials: ${{ secrets.DOCKERHUB_USERNAME && fromJSON(format('{{"username":"{0}","password":"{1}"}}', secrets.DOCKERHUB_USERNAME, secrets.DOCKERHUB_TOKEN)) || null }}
         options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
 
       opensearch:
         image: yireo/opensearch
-        credentials:
-          username: ${{ secrets.DOCKERHUB_USERNAME || '' }}
-          password: ${{ secrets.DOCKERHUB_TOKEN || '' }}
+        credentials: ${{ secrets.DOCKERHUB_USERNAME && fromJSON(format('{{"username":"{0}","password":"{1}"}}', secrets.DOCKERHUB_USERNAME, secrets.DOCKERHUB_TOKEN)) || null }}
         env:
           OPENSEARCH_JAVA_OPTS: "-Xms128m -Xmx128m"
           OPENSEARCH_INITIAL_ADMIN_PASSWORD: "admin"

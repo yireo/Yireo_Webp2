@@ -23,15 +23,15 @@ if [ "${VALIDATE_GITHUB_TOKEN:-0}" = "1" ]; then
 fi
 
 if [ -n "${GITLAB_TOKEN:-}" ]; then
-  composer config gitlab-domains gitlab.yireo.com
-  composer config --global --auth gitlab-token.gitlab.yireo.com "$GITLAB_TOKEN"
-  composer config repositories.loki-extensions composer https://gitlab.yireo.com/api/v4/group/loki-extensions/-/packages/composer/packages.json
-  composer config repositories.loki-third-party composer https://gitlab.yireo.com/api/v4/group/loki-third-party/-/packages/composer/packages.json
-  composer config repositories.loki-checkout composer https://gitlab.yireo.com/api/v4/group/loki-checkout/-/packages/composer/packages.json
-  composer config repositories.loki-checkout-dev composer https://gitlab.yireo.com/api/v4/group/loki-checkout-dev/-/packages/composer/packages.json
+  composer config gitlab-domains gitlab.loki-extensions.com
+  composer config --global --auth gitlab-token.gitlab.loki-extensions.com "$GITLAB_TOKEN"
+  composer config repositories.loki-extensions composer https://gitlab.loki-extensions.com/api/v4/group/loki-extensions/-/packages/composer/packages.json
+  composer config repositories.loki-third-party composer https://gitlab.loki-extensions.com/api/v4/group/loki-third-party/-/packages/composer/packages.json
+  composer config repositories.loki-checkout composer https://gitlab.loki-extensions.com/api/v4/group/loki-checkout/-/packages/composer/packages.json
+  composer config repositories.loki-checkout-dev composer https://gitlab.loki-extensions.com/api/v4/group/loki-checkout-dev/-/packages/composer/packages.json
   if [ "${WITH_FUNCTIONAL_TEST_REPOS:-0}" = "1" ]; then
-    composer config repositories.loki-functional-tests vcs https://gitlab.yireo.com/loki-extensions/Loki_FunctionalTests.git
-    composer config repositories.loki-checkout-functional-tests vcs https://gitlab.yireo.com/loki-checkout-dev/LokiCheckout_FunctionalTests.git
+    composer config repositories.loki-functional-tests vcs https://gitlab.loki-extensions.com/loki-extensions/Loki_FunctionalTests.git
+    composer config repositories.loki-checkout-functional-tests vcs https://gitlab.loki-extensions.com/loki-checkout-dev/LokiCheckout_FunctionalTests.git
   fi
 fi
 

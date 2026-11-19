@@ -52,9 +52,7 @@ jobs:
         magento_version: ${{ fromJSON(needs.detect.outputs.versions) }}
     container:
       image: yireo/magento2installed:${{ matrix.magento_version }}
-      credentials:
-        username: ${{ secrets.DOCKERHUB_USERNAME || '' }}
-        password: ${{ secrets.DOCKERHUB_TOKEN || '' }}
+      credentials: ${{ secrets.DOCKERHUB_USERNAME && fromJSON(format('{{"username":"{0}","password":"{1}"}}', secrets.DOCKERHUB_USERNAME, secrets.DOCKERHUB_TOKEN)) || null }}
       options: --user root
     env:
       MAGENTO_VERSION: ${{ matrix.magento_version }}

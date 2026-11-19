@@ -20,9 +20,7 @@ jobs:
     timeout-minutes: ${{ fromJSON(vars.STATIC_JOB_TIMEOUT || '30') }}
     container:
       image: yireo/magento2installed:${{ vars.MAGENTO_VERSION || '2.4.8-p5' }}
-      credentials:
-        username: ${{ secrets.DOCKERHUB_USERNAME || '' }}
-        password: ${{ secrets.DOCKERHUB_TOKEN || '' }}
+      credentials: ${{ secrets.DOCKERHUB_USERNAME && fromJSON(format('{{"username":"{0}","password":"{1}"}}', secrets.DOCKERHUB_USERNAME, secrets.DOCKERHUB_TOKEN)) || null }}
       options: --user root
     steps:
       - name: Checkout sources
@@ -48,9 +46,7 @@ jobs:
     timeout-minutes: ${{ fromJSON(vars.STATIC_JOB_TIMEOUT || '30') }}
     container:
       image: yireo/magento2installed:${{ vars.MAGENTO_VERSION || '2.4.8-p5' }}
-      credentials:
-        username: ${{ secrets.DOCKERHUB_USERNAME || '' }}
-        password: ${{ secrets.DOCKERHUB_TOKEN || '' }}
+      credentials: ${{ secrets.DOCKERHUB_USERNAME && fromJSON(format('{{"username":"{0}","password":"{1}"}}', secrets.DOCKERHUB_USERNAME, secrets.DOCKERHUB_TOKEN)) || null }}
       options: --user root
     env:
       MAGENTO_VERSION: ${{ vars.MAGENTO_VERSION || '2.4.8-p5' }}

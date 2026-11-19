@@ -43,9 +43,7 @@ jobs:
     timeout-minutes: ${{ fromJSON(vars.INTEGRATION_JOB_TIMEOUT || '45') }}
     container:
       image: yireo/magento2installed:${{ vars.MAGENTO_VERSION || '2.4.8-p5' }}
-      credentials:
-        username: ${{ secrets.DOCKERHUB_USERNAME || '' }}
-        password: ${{ secrets.DOCKERHUB_TOKEN || '' }}
+      credentials: ${{ secrets.DOCKERHUB_USERNAME && fromJSON(format('{{"username":"{0}","password":"{1}"}}', secrets.DOCKERHUB_USERNAME, secrets.DOCKERHUB_TOKEN)) || null }}
       options: --user root
     env:
       MAGENTO_VERSION: ${{ vars.MAGENTO_VERSION || '2.4.8-p5' }}
@@ -53,9 +51,7 @@ jobs:
     services:
       mysql:
         image: yireo/mariadb:10
-        credentials:
-          username: ${{ secrets.DOCKERHUB_USERNAME || '' }}
-          password: ${{ secrets.DOCKERHUB_TOKEN || '' }}
+        credentials: ${{ secrets.DOCKERHUB_USERNAME && fromJSON(format('{{"username":"{0}","password":"{1}"}}', secrets.DOCKERHUB_USERNAME, secrets.DOCKERHUB_TOKEN)) || null }}
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_USER: magento2
@@ -64,9 +60,7 @@ jobs:
         options: --tmpfs /tmp:rw --tmpfs /var/lib/mysql:rw --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=10
       opensearch:
         image: yireo/opensearch:latest
-        credentials:
-          username: ${{ secrets.DOCKERHUB_USERNAME || '' }}
-          password: ${{ secrets.DOCKERHUB_TOKEN || '' }}
+        credentials: ${{ secrets.DOCKERHUB_USERNAME && fromJSON(format('{{"username":"{0}","password":"{1}"}}', secrets.DOCKERHUB_USERNAME, secrets.DOCKERHUB_TOKEN)) || null }}
         env:
           'discovery.type': single-node
           OPENSEARCH_JAVA_OPTS: "-Xms256m -Xmx256m"
