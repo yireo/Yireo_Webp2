@@ -16,6 +16,7 @@
                 <quality_level>80</quality_level>
                 <convertors>cwebp,gd,imagick,wpc,ewww</convertors>
                 <encoding>lossy</encoding>
+                <test_pages>0</test_pages>
             </settings>
         </yireo_webp2>
     </default>

@@ -17,6 +17,7 @@ export const defaultConfig = {
     'yireo_webp2/settings/enabled': 1,
     'yireo_webp2/settings/encoding': 'lossy',
     'yireo_webp2/settings/quality_level': 80,
+    'yireo_webp2/settings/test_pages': 1,
     'yireo_nextgenimages/settings/enabled': 1,
     'yireo_nextgenimages/settings/convert_images': 1,
     'yireo_nextgenimages/settings/target_directory': 'same_as_source',
