@@ -57,10 +57,10 @@ class ConvertWrapper
             try {
                 WebPConvert::convert($sourceImageFilename, $destinationImageFilename, $options);
             } catch (ConversionFailedException $e) {
-                $this->logger->debug($e->getMessage() . ' - ' . $e->description, $e->getTrace());
+                $this->logger->debug($e->getMessage() . ' - ' . $e->description, ['exception' => $e]);
                 continue;
             } catch (\Exception $e) {
-                $this->logger->debug($e->getMessage(), $e->getTrace());
+                $this->logger->debug($e->getMessage(), ['exception' => $e]);
                 continue;
             }
 
