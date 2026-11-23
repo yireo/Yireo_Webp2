@@ -1,10 +1,14 @@
 # Magento 2 module for WebP
 
 <!-- badges.specs.start -->
+<div class="github-specs-badges">
+
 ![Magento version](https://img.shields.io/badge/Magento-2.4.6%20%7C%202.4.9-orange)
 ![PHP version](https://img.shields.io/badge/PHP-8.2%E2%80%938.5-777BB4)
 ![License](https://img.shields.io/badge/License-OSL--3.0-blue)
 ![Latest Version](https://img.shields.io/packagist/v/yireo/magento2-webp2)
+
+</div>
 <!-- badges.specs.end -->
 
 <img src="https://img.shields.io/packagist/dt/yireo/magento2-webp2"/> <img src="https://img.shields.io/packagist/v/yireo/magento2-webp2"/> <img src="https://img.shields.io/github/languages/top/yireo/Yireo_Webp2"/> <img src="https://img.shields.io/github/last-commit/yireo/Yireo_Webp2" /> <img src="https://img.shields.io/github/sponsors/yireo"/> <img src="https://img.shields.io/badge/Hyva_Themes-Supported-3df0af.svg?longCache=true" /> <img src="https://img.shields.io/twitter/follow/yireo?style=social" />
@@ -188,9 +192,13 @@ If some images are converted but others are not, please supply the following det
 ## Current status
 
 <!-- badges.test.start -->
+<div class="github-pipeline-badges">
+
 ![Static Tests](https://img.shields.io/github/actions/workflow/status/yireo/Yireo_Webp2/static-tests.yml?label=static-tests)
 ![Unit Tests](https://img.shields.io/github/actions/workflow/status/yireo/Yireo_Webp2/unit-tests.yml?label=unit-tests)
 ![Integration Tests](https://img.shields.io/github/actions/workflow/status/yireo/Yireo_Webp2/integration-tests.yml?label=integration-tests)
 ![Playwright](https://img.shields.io/github/actions/workflow/status/yireo/Yireo_Webp2/playwright.yml?label=playwright)
 ![DI Compilation](https://img.shields.io/github/actions/workflow/status/yireo/Yireo_Webp2/compile.yml?label=compile)
+
+</div>
 <!-- badges.test.end -->
