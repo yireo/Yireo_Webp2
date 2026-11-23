@@ -18,6 +18,7 @@ class AddCspInlineScriptsTest extends TestCase
         $html = '<script>alert(1)</script>';
         $this->assertSame($html, $plugin->afterToHtml($this->getBlock('foo.bar'), $html));
         $this->assertSame($html, $plugin->afterToHtml($this->getBlock(null), $html));
+        $this->assertSame($html, $plugin->afterToHtml($this->getBlock('foo_yireo_webp2.bar'), $html));
     }
 
     public function testAfterToHtmlReplacesInlineScriptsOfWebp2Blocks()
