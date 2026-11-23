@@ -237,6 +237,9 @@ class ConvertorTest extends TestCase
         $targetImageFactory = $this->createMock(TargetImageFactory::class);
         $targetImageFactory->method('create')->willReturn($webpImageFile);
         $imageFactory = $this->createMock(ImageFactory::class);
+        $imageFactory->method('createFromUrl')->willReturnCallback(function (string $url) {
+            return new Image('/tmp/pub' . $url, $url);
+        });
 
         $convertor = new Convertor(
             $config,
@@ -281,6 +284,28 @@ class ConvertorTest extends TestCase
             '/tmp/pub/test/foobar.webp',
             '/tmp/pub/test/foobar-2x.webp',
         ], $convertedPaths);
+    }
+
+    public function testItWillNotConvertSrcSetImageWithUnsupportedMimetype()
+    {
+        $imageFile = $this->createMock(File::class);
+        $imageFile->method('fileExists')->willReturn(true);
+        $imageFile->method('needsConversion')->willReturn(true);
+
+        $imageFactory = $this->createMock(ImageFactory::class);
+        $imageFactory->method('createFromUrl')->willReturnCallback(function (string $url) {
+            return new Image('/tmp/pub' . $url, $url);
+        });
+
+        $convertWrapper = $this->createMock(ConvertWrapper::class);
+        $convertWrapper->expects($this->once())->method('convert');
+
+        $convertor = $this->getConvertor($this->getConfigMock(), $imageFile, $convertWrapper, null, $imageFactory);
+        $image = new Image('/tmp/pub/test/foobar.jpg', '/test/foobar.jpg', '/test/foobar.gif 2x');
+
+        $this->expectException(ConvertorException::class);
+        $this->expectExceptionMessage('The mimetype "image/gif" is not supported');
+        $convertor->convertImage($image);
     }
 
     public function testItWillNotConvertSrcSetWhenEmpty()

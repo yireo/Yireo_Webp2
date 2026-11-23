@@ -78,9 +78,7 @@ class Convertor implements ConvertorInterface
             throw new ConvertorException('WebP conversion is not enabled');
         }
 
-        if (!in_array($image->getMimetype(), ['image/jpeg', 'image/jpg', 'image/png'])) {
-            throw new ConvertorException('The mimetype "'.$image->getMimetype().'" is not supported');
-        }
+        $this->assertSupportedMimetype($image);
 
         // @todo: https://gitlab.hyva.io/hyva-themes/hyva-compat/magento2-yireo-next-gen-images/-/blob/main/src/Plugin/ConverterPlugin.php#L50
 
@@ -129,6 +127,17 @@ class Convertor implements ConvertorInterface
         return true;
     }
 
+    /**
+     * @param Image $image
+     * @throws ConvertorException
+     */
+    private function assertSupportedMimetype(Image $image): void
+    {
+        if (!in_array($image->getMimetype(), ['image/jpeg', 'image/jpg', 'image/png'])) {
+            throw new ConvertorException('The mimetype "'.$image->getMimetype().'" is not supported');
+        }
+    }
+
     private function convertSrcSet(Image $image): string
     {
         $srcSetImages = explode(',', $image->getSrcSet());
@@ -139,6 +148,7 @@ class Convertor implements ConvertorInterface
             $descriptor = $pieces[1] ?? 0;
 
             $srcSetImage = $this->imageFactory->createFromUrl($imageUrl);
+            $this->assertSupportedMimetype($srcSetImage);
             $srcSetWebpImage = $this->targetImageFactory->create($srcSetImage, 'webp');
             $this->convert($srcSetImage->getPath(), $srcSetWebpImage->getPath());
 
