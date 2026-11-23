@@ -5,17 +5,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-### Fixed
-- Test controller `webp/test/mail` accepted every token except the valid one
-- Never return a WebP image that does not exist after conversion
-- Keep an existing WebP image when all convertors fail
-- Do not convert an empty `srcset`
-- Migration of old configuration paths in `UpgradeData` mangled all but the first path
-- Undefined variable in test template `multiple_existing_picturesets.phtml`
-- Integration test configuration fixtures were ignored because of `@@` annotations
 
-### Added
-- Additional unit tests, integration tests and Playwright tests for Luma and Hyvä
+## [0.14.4] - 23 November 2026
+### Security
+- Remove test controller `webp/test/mail`, which let unauthenticated visitors send store emails (inverted token check)
+- Only allow test controller `webp/test/images` in developer mode or with flag `yireo_webp2/settings/test_pages`
+- Only add CSP nonces to blocks with a name starting with `yireo_webp2.`
+- Escape block names and layout handles in test templates
+
+### Fixed
+- Check mimetype of `srcset` images before conversion
+- Never return a WebP image that does not exist, keep an existing WebP image when all convertors fail
+- Migrate every old configuration path correctly in `UpgradeData`
+- Add missing underscore dependency to gallery and swatch mixins
+- Nest ACL resource `Yireo_Webp2::config` under `Magento_Config::config`
+- Add support for converting `srcset`, require `yireo/magento2-next-gen-images` ^0.5.16
+- Remove PHP 8.1 support, add PHP 8.5 support
 
 ## [0.14.3] - 24 October 2024
 ### Fixed
