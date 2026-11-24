@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Yireo\NextGenImages\Block\Adminhtml\System\Config\ModuleVersion;
 use Yireo\NextGenImages\Convertor\ConvertorListing;
 use Yireo\Webp2\Convertor\Convertor;
-use Yireo\Webp2\Plugin\AddCspInlineScripts;
 
 class DiConfigurationTest extends TestCase
 {
@@ -34,11 +33,12 @@ class DiConfigurationTest extends TestCase
     /**
      * @magentoAppArea frontend
      */
-    public function testIfPluginIsRegisteredInFrontend()
+    public function testIfNoPluginIsRegisteredOnEveryTemplateBlock()
     {
         $pluginList = Bootstrap::getObjectManager()->get(PluginListInterface::class);
-        $pluginInfo = $pluginList->get(Template::class, []);
-        $this->assertArrayHasKey('Yireo_Webp2::addCspInlineScripts', $pluginInfo);
-        $this->assertSame(AddCspInlineScripts::class, $pluginInfo['Yireo_Webp2::addCspInlineScripts']['instance']);
+        $pluginInfo = (array)$pluginList->get(Template::class, []);
+        foreach (array_keys($pluginInfo) as $pluginName) {
+            $this->assertStringStartsNotWith('Yireo_Webp2::', (string)$pluginName);
+        }
     }
 }

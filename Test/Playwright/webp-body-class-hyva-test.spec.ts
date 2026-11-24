@@ -33,7 +33,7 @@ test.describe('WebP body class (Hyva)', function () {
         await expect(page.locator('body')).not.toHaveClass(/(^|\s)webp(\s|$)/);
     });
 
-    test('adds a CSP nonce to the inline script', async function ({page}) {
+    test('renders the inline script via the secure renderer', async function ({page}) {
         const allowedNonces = await gotoAndGetCspNonces(page, '/');
         await expectBodyClass(page, 'webp');
 
@@ -43,10 +43,10 @@ test.describe('WebP body class (Hyva)', function () {
         );
 
         expect(scriptNonces).toHaveLength(1);
-        expect(scriptNonces[0], 'Nonce of the inline script').not.toBe('');
 
-        // The storefront policy only lists nonces when it does not allow 'unsafe-inline'
+        // Magento only adds a nonce when the storefront policy does not allow 'unsafe-inline'
         if (allowedNonces.length > 0) {
+            expect(scriptNonces[0], 'Nonce of the inline script').not.toBe('');
             expect(allowedNonces).toContain(scriptNonces[0]);
         }
     });
