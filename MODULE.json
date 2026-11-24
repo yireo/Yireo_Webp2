@@ -5,7 +5,6 @@
         "Magento_Backend",
         "Magento_Config",
         "Magento_Store",
-        "Yireo_CspUtilities",
         "Yireo_NextGenImages"
     ],
     "phpcs_severity": "9",
@@ -49,7 +48,6 @@
         "Magento_Swatches",
         "Magento_Theme",
         "Magento_Variable",
-        "Yireo_CspUtilities",
         "Yireo_IntegrationTestHelper",
         "Yireo_NextGenImages"
     ],
