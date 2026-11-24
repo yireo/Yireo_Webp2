@@ -6,6 +6,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.14.5] - 24 November 2026
+### Security
+- Drop `srcset` descriptors that are not a width or pixel density, which allowed XSS via a decoded descriptor
+- Only convert images inside the `pub`, media and static folders, never inside protected media folders like `customer` or `downloadable`
+- Only open test controller `webp/test/images` with flag `yireo_webp2/settings/test_pages` (no longer in developer mode) and only for GET requests
+- Render inline scripts with the secure renderer, instead of a plugin on every template block; `yireo/magento2-csp-utilities` is no longer required
+- Require `yireo/magento2-next-gen-images` ^0.5.18 for the upstream path and escaping fixes
+
+### Added
+- Validate quality level and select convertors from a list
+
+### Removed
+- Remove cloud convertors `wpc` and `ewww`, which upload images to a third party; stored values are ignored
+
+### Fixed
+- Do not break the page when a `srcset` image can not be resolved
+- Keep backups of WebP images in `var/tmp` instead of the public folder
+
 ## [0.14.4] - 23 November 2026
 ### Security
 - Remove test controller `webp/test/mail`, which let unauthenticated visitors send store emails (inverted token check)
