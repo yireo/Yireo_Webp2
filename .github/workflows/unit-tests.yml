@@ -20,7 +20,7 @@ jobs:
     outputs:
       has_tests: ${{ steps.check.outputs.has_tests }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           sparse-checkout: Test/Unit
 
@@ -50,7 +50,7 @@ jobs:
       COMPOSER_CACHE_DIR: /tmp/composer-cache
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Cleanup PHP
         run: rm -f /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
@@ -72,7 +72,7 @@ jobs:
 
       - name: Restore Composer cache
         if: github.event.pull_request.head.repo.fork != true && !env.ACT
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: /tmp/composer-cache
           key: composer-unit-${{ env.MAGENTO_VERSION }}-${{ hashFiles('composer.json') }}

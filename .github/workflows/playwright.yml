@@ -19,7 +19,7 @@ jobs:
     outputs:
       has_tests: ${{ steps.check.outputs.has_tests }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           sparse-checkout: Test/Playwright
 
@@ -106,7 +106,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 1
 
@@ -160,7 +160,7 @@ jobs:
 
       - name: Restore Composer cache
         if: github.event.pull_request.head.repo.fork != true && !env.ACT
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: /tmp/composer-cache
           key: composer-playwright-${{ env.MAGENTO_VERSION }}-${{ hashFiles('composer.json') }}
@@ -187,14 +187,13 @@ jobs:
             composer config repositories.local-source path /tmp/magento/package-source
             EXTRA_PACKAGES=""
             case "${COMPOSER_NAME}" in
-              loki-checkout/*) EXTRA_PACKAGES="loki-checkout/magento2-functional-tests:dev-main" ;;
+              loki-checkout/*) 
+                EXTRA_PACKAGES="loki-checkout/magento2-core-cli loki-checkout/magento2-csp loki-checkout/magento2-functional-tests:dev-main loki-checkout/magento2-luma loki-checkout/magento2-hyva loki-checkout/magento2-sample-data"
+                ;;
             esac
             composer require -n --prefer-dist -- \
               "${COMPOSER_NAME}:@dev" ${EXTRA_PACKAGES} \
               loki/magento2-functional-tests:dev-main \
-              loki-checkout/magento2-luma:@dev \
-              loki-checkout/magento2-sample-data:@dev \
-              loki-checkout/magento2-hyva:@dev \
               yireo/magento2-enable-module-sequence:@dev \
               hyva-themes/magento2-default-theme-csp \
               hyva-themes/magento2-theme-module \
@@ -227,9 +226,11 @@ jobs:
             bin/magento module:enable Yireo_EnableModuleSequence
             EXTRA_MODULES=""
             case "${COMPOSER_NAME}" in
-              loki-checkout/*) EXTRA_MODULES="LokiCheckout_FunctionalTests" ;;
+              loki-checkout/*)
+                EXTRA_MODULES="LokiCheckout_CoreCli LokiCheckout_Csp LokiCheckout_FunctionalTests LokiCheckout_Luma LokiCheckout_Hyva LokiCheckout_SampleData"
+                ;;
             esac
-            bin/magento module:sequence Loki_FunctionalTests LokiCheckout_SampleData LokiCheckout_Luma Hyva_Theme Hyva_BaseLayoutReset Hyva_Email Hyva_GraphqlTokens Hyva_GraphqlViewModel Hyva_OrderCancellationWebapi Hyva_CompatModuleFallback ${EXTRA_MODULES} ${MAGENTO_MODULE}
+            bin/magento module:sequence Loki_FunctionalTests Hyva_Theme Hyva_BaseLayoutReset Hyva_Email Hyva_GraphqlTokens Hyva_GraphqlViewModel Hyva_OrderCancellationWebapi Hyva_CompatModuleFallback ${EXTRA_MODULES} ${MAGENTO_MODULE}
             bin/magento setup:upgrade
             bin/magento config:set dev/static/sign 0
             bin/magento setup:static-content:deploy -f --area frontend --area adminhtml en_US
@@ -254,7 +255,7 @@ jobs:
 
       - name: Restore npm cache
         if: ${{ !env.ACT }}
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ~/.npm
           key: npm-${{ steps.npm-cache-key.outputs.hash }}
