@@ -20,7 +20,8 @@
                 </field>
                 <field id="quality_level" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Quality level</label>
-                    <comment><![CDATA[Between 0 and 100]]></comment>
+                    <comment><![CDATA[Between 1 and 100]]></comment>
+                    <validate>validate-digits validate-digits-range digits-range-1-100</validate>
                     <depends>
                         <field id="*/*/enabled">1</field>
                     </depends>
@@ -32,9 +33,11 @@
                         <field id="*/*/enabled">1</field>
                     </depends>
                 </field>
-                <field id="convertors" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="convertors" translate="label" type="multiselect" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Convertors</label>
-                    <comment><![CDATA[Allowed values: cwebp,gd,imagick,wpc,ewww]]></comment>
+                    <source_model>Yireo\Webp2\Model\Config\Source\Convertors</source_model>
+                    <can_be_empty>1</can_be_empty>
+                    <comment><![CDATA[When none is selected, all convertors are tried.]]></comment>
                     <depends>
                         <field id="*/*/enabled">1</field>
                     </depends>
