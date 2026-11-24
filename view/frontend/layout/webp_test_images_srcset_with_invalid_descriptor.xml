@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" layout="empty">
+    <body>
+        <referenceContainer name="main">
+            <block name="webp-srcset-with-invalid-descriptor" template="Yireo_Webp2::test/srcset_with_invalid_descriptor.phtml" before="-">
+                <arguments>
+                    <argument name="image_provider" xsi:type="object">Yireo\Webp2\Test\Utils\ImageProvider</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

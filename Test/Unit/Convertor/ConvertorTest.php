@@ -2,6 +2,9 @@
 
 namespace Yireo\Webp2\Test\Unit\Convertor;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Driver\File as FileDriver;
+use Magento\Framework\View\Asset\File\NotFoundException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WebPConvert\Convert\Exceptions\ConversionFailed\InvalidInput\InvalidImageTypeException;
@@ -225,6 +228,7 @@ class ConvertorTest extends TestCase
         $imageFile->method('needsConversion')->willReturn(true);
 
         $webpImageFile = $this->createMock(Image::class);
+        $webpImageFile->method('getPath')->willReturn('/tmp/pub/test/foobar.webp');
         $webpImageFile->method('getUrl')->willReturnOnConsecutiveCalls(
             '/test/foobar-small.webp',
             '/test/foobar-medium.webp',
@@ -246,7 +250,9 @@ class ConvertorTest extends TestCase
             $imageFile,
             $convertWrapper,
             $targetImageFactory,
-            $imageFactory
+            $imageFactory,
+            $this->getDirectoryList(),
+            $this->createMock(FileDriver::class)
         );
 
         $image = new Image('/tmp/pub/test/foobar.jpg', '/test/foobar.jpg', $givenSrcSet);
@@ -326,6 +332,107 @@ class ConvertorTest extends TestCase
     }
 
     /**
+     * @dataProvider getMaliciousDescriptors
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getMaliciousDescriptors')]
+    public function testItWillDropInvalidSrcSetDescriptors(string $srcSet, string $expectedSrcSet)
+    {
+        $imageFile = $this->createMock(File::class);
+        $imageFile->method('fileExists')->willReturn(true);
+        $imageFile->method('needsConversion')->willReturn(true);
+
+        $imageFactory = $this->createMock(ImageFactory::class);
+        $imageFactory->method('createFromUrl')->willReturnCallback(function (string $url) {
+            return new Image('/tmp/pub' . $url, $url);
+        });
+
+        $convertor = $this->getConvertor($this->getConfigMock(), $imageFile, null, null, $imageFactory);
+        $image = new Image('/tmp/pub/test/foobar.jpg', '/test/foobar.jpg', $srcSet);
+
+        $this->assertSame($expectedSrcSet, $convertor->convertImage($image)->getSrcSet());
+    }
+
+    public static function getMaliciousDescriptors(): array
+    {
+        return [
+            'attribute breakout' => ['/test/a.jpg 1x"onerror="alert(1)', '/test/a.webp '],
+            'tag breakout' => ['/test/a.jpg 2x"><script>alert(1)</script>', '/test/a.webp '],
+            'valid width' => ['/test/a.jpg 640w', '/test/a.webp 640w'],
+            'valid density' => ['/test/a.jpg 1.5x', '/test/a.webp 1.5x'],
+        ];
+    }
+
+    /**
+     * @dataProvider getDisallowedPaths
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getDisallowedPaths')]
+    public function testConvertImageRejectsDisallowedPaths(string $path, string $expectedMessage)
+    {
+        $imageFile = $this->createMock(File::class);
+        $imageFile->method('fileExists')->willReturn(true);
+        $imageFile->method('needsConversion')->willReturn(true);
+        $convertWrapper = $this->createMock(ConvertWrapper::class);
+        $convertWrapper->expects($this->never())->method('convert');
+
+        $convertor = $this->getConvertor($this->getConfigMock(), $imageFile, $convertWrapper);
+
+        $this->expectException(ConvertorException::class);
+        $this->expectExceptionMessage($expectedMessage);
+        $convertor->convertImage(new Image($path, '/foobar.jpg'));
+    }
+
+    public static function getDisallowedPaths(): array
+    {
+        return [
+            'traversal out of pub' => ['/tmp/pub/../../etc/foobar.jpg', 'is outside of the media and static folders'],
+            'traversal via media' => ['/tmp/pub/media/../../app/foobar.jpg', 'is outside of the media and static folders'],
+            'outside pub' => ['/var/www/app/etc/foobar.png', 'is outside of the media and static folders'],
+            'customer media' => ['/tmp/pub/media/customer/a/b/foobar.jpg', 'is inside a protected media folder'],
+            'customer address media' => ['/tmp/pub/media/customer_address/foobar.jpg', 'is inside a protected media folder'],
+            'custom options media' => ['/tmp/pub/media/custom_options/quote/foobar.jpg', 'is inside a protected media folder'],
+            'downloadable media' => ['/tmp/pub/media/downloadable/files/foobar.jpg', 'is inside a protected media folder'],
+            'import media' => ['/tmp/pub/media/import/foobar.jpg', 'is inside a protected media folder'],
+            'traversal into customer media' => ['/tmp/pub/media/catalog/../customer/foobar.jpg', 'is inside a protected media folder'],
+        ];
+    }
+
+    public function testConvertImageAllowsMediaAndStaticPaths()
+    {
+        $imageFile = $this->createMock(File::class);
+        $imageFile->method('fileExists')->willReturn(true);
+        $imageFile->method('needsConversion')->willReturn(true);
+        $convertWrapper = $this->createMock(ConvertWrapper::class);
+        $convertWrapper->expects($this->exactly(3))->method('convert');
+
+        $convertor = $this->getConvertor($this->getConfigMock(), $imageFile, $convertWrapper);
+        $convertor->convertImage(new Image('/tmp/pub/media/catalog/product/foobar.jpg', '/foobar.jpg'));
+        $convertor->convertImage(new Image('/tmp/pub/media/customer-images/foobar.jpg', '/foobar.jpg'));
+        $convertor->convertImage(new Image('/tmp/pub/static/frontend/Magento/luma/foobar.png', '/foobar.png'));
+    }
+
+    public function testItWillWrapNotFoundExceptionOfSrcSetImage()
+    {
+        $imageFile = $this->createMock(File::class);
+        $imageFile->method('fileExists')->willReturn(true);
+        $imageFile->method('needsConversion')->willReturn(true);
+
+        $imageFactory = $this->createMock(ImageFactory::class);
+        $imageFactory->method('createFromUrl')
+            ->willThrowException(new NotFoundException('URL is not a local file'));
+
+        $convertor = $this->getConvertor($this->getConfigMock(), $imageFile, null, null, $imageFactory);
+        $image = new Image(
+            '/tmp/pub/test/foobar.jpg',
+            '/test/foobar.jpg',
+            '/test/foobar.jpg, https://cdn.example.com/foobar.jpg 2x'
+        );
+
+        $this->expectException(ConvertorException::class);
+        $this->expectExceptionMessage('Unable to convert srcset image: URL is not a local file');
+        $convertor->convertImage($image);
+    }
+
+    /**
      * @param bool $enabled
      * @param bool $allowImageCreation
      * @return Config&MockObject
@@ -375,7 +482,25 @@ class ConvertorTest extends TestCase
             $file ?? $this->createMock(File::class),
             $convertWrapper ?? $this->createMock(ConvertWrapper::class),
             $targetImageFactory ?? $this->getTargetImageFactory(),
-            $imageFactory ?? $this->createMock(ImageFactory::class)
+            $imageFactory ?? $this->createMock(ImageFactory::class),
+            $this->getDirectoryList(),
+            $this->createMock(FileDriver::class)
         );
+    }
+
+    /**
+     * @return DirectoryList&MockObject
+     */
+    private function getDirectoryList(): DirectoryList
+    {
+        $directoryList = $this->createMock(DirectoryList::class);
+        $directoryList->method('getRoot')->willReturn('/tmp');
+        $directoryList->method('getPath')->willReturnMap([
+            [DirectoryList::PUB, '/tmp/pub'],
+            [DirectoryList::MEDIA, '/tmp/pub/media'],
+            [DirectoryList::STATIC_VIEW, '/tmp/pub/static'],
+        ]);
+
+        return $directoryList;
     }
 }

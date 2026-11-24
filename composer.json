@@ -24,7 +24,7 @@
         "psr/log": "^1 || ^2 || ^3",
         "rosell-dk/webp-convert": "^2.0",
         "yireo/magento2-csp-utilities": "^1.0",
-        "yireo/magento2-next-gen-images": "^0.5.16"
+        "yireo/magento2-next-gen-images": "^0.5.18"
     },
     "require-dev": {
         "loki/magento2-functional-tests": "@dev",

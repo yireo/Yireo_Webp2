@@ -1,0 +1,10 @@
+<?php declare(strict_types=1);
+
+/** @var $block \Magento\Framework\View\Element\Template */
+/** @var $escaper \Magento\Framework\Escaper */
+/** @var $imageProvider \Yireo\Webp2\Test\Utils\ImageProvider */
+$imageProvider = $block->getImageProvider();
+$imageUrl = $block->getViewFileUrl('Yireo_Webp2/' . $imageProvider->getImage());
+$srcSet = $imageUrl . ' 1x"onerror="alert(1)';
+?>
+<div><img src="<?= $escaper->escapeUrl($imageUrl) ?>" srcset="<?= $escaper->escapeHtmlAttr($srcSet) ?>" width="100" height="100"/></div>
