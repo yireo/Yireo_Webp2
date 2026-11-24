@@ -2,6 +2,8 @@
 
 namespace Yireo\Webp2\Test\Unit\Convertor;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Driver\File as FileDriver;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Yireo\Webp2\Config\Config;
@@ -12,19 +14,43 @@ class ConvertWrapperTest extends TestCase
 {
     private string $tmpDir = '';
 
+    private string $backupDir = '';
+
     protected function setUp(): void
     {
         $this->tmpDir = sys_get_temp_dir() . '/yireo-webp2-' . uniqid();
+        $this->backupDir = sys_get_temp_dir() . '/yireo-webp2-var-tmp-' . uniqid();
         mkdir($this->tmpDir);
     }
 
     protected function tearDown(): void
     {
-        foreach (glob($this->tmpDir . '/*') as $file) {
-            unlink($file);
-        }
+        foreach ([$this->tmpDir, $this->backupDir . '/yireo_webp2', $this->backupDir] as $folder) {
+            if (!is_dir($folder)) {
+                continue;
+            }
 
-        rmdir($this->tmpDir);
+            foreach (glob($folder . '/*') as $file) {
+                if (is_file($file)) {
+                    unlink($file);
+                }
+            }
+
+            rmdir($folder);
+        }
+    }
+
+    private function getConvertWrapper(Config $config, ?LoggerInterface $logger = null): ConvertWrapper
+    {
+        $directoryList = $this->createMock(DirectoryList::class);
+        $directoryList->method('getPath')->willReturnMap([[DirectoryList::TMP, $this->backupDir]]);
+
+        return new ConvertWrapper(
+            $config,
+            $logger ?? $this->createMock(LoggerInterface::class),
+            new FileDriver(),
+            $directoryList
+        );
     }
 
     public function testGetOptions()
@@ -33,7 +59,7 @@ class ConvertWrapperTest extends TestCase
         $config->method('getQualityLevel')->willReturn(75);
         $config->method('getEncoding')->willReturn('lossless');
 
-        $convertWrapper = new ConvertWrapper($config, $this->createMock(LoggerInterface::class));
+        $convertWrapper = $this->getConvertWrapper($config);
         $this->assertSame([
             'quality' => 'auto',
             'max-quality' => 75,
@@ -46,7 +72,7 @@ class ConvertWrapperTest extends TestCase
         $config = $this->createMock(Config::class);
         $config->method('getEncoding')->willThrowException(new InvalidConvertorException('Invalid encoding'));
 
-        $convertWrapper = new ConvertWrapper($config, $this->createMock(LoggerInterface::class));
+        $convertWrapper = $this->getConvertWrapper($config);
         $this->expectException(InvalidConvertorException::class);
         $convertWrapper->getOptions();
     }
@@ -61,7 +87,7 @@ class ConvertWrapperTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->exactly(2))->method('debug');
 
-        $convertWrapper = new ConvertWrapper($config, $logger);
+        $convertWrapper = $this->getConvertWrapper($config, $logger);
         $convertWrapper->convert($this->tmpDir . '/non-existing.jpg', $this->tmpDir . '/non-existing.webp');
         $this->assertFileDoesNotExist($this->tmpDir . '/non-existing.webp');
     }
@@ -78,12 +104,36 @@ class ConvertWrapperTest extends TestCase
         $config->method('getEncoding')->willReturn('lossy');
         $config->method('getConvertors')->willReturn(['gd', 'wpc']);
 
-        $convertWrapper = new ConvertWrapper($config, $this->createMock(LoggerInterface::class));
+        $convertWrapper = $this->getConvertWrapper($config);
         $convertWrapper->convert($source, $destination);
 
         $this->assertFileExists($destination);
         $this->assertSame('existing webp', file_get_contents($destination));
         $this->assertSame(['source.jpg', 'source.webp'], array_map('basename', glob($this->tmpDir . '/*')));
+        $this->assertSame([], glob($this->backupDir . '/yireo_webp2/*'));
+    }
+
+    public function testConvertDoesNotFailWhenBackupFolderIsNotWritable()
+    {
+        $source = $this->tmpDir . '/source.jpg';
+        $destination = $this->tmpDir . '/source.webp';
+        file_put_contents($source, 'not an image');
+        file_put_contents($destination, 'existing webp');
+        file_put_contents($this->backupDir, 'a file instead of a folder');
+
+        $config = $this->createMock(Config::class);
+        $config->method('getQualityLevel')->willReturn(80);
+        $config->method('getEncoding')->willReturn('lossy');
+        $config->method('getConvertors')->willReturn(['gd']);
+
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects($this->once())->method('warning')
+            ->with($this->stringStartsWith('Unable to backup WebP image'));
+
+        $this->getConvertWrapper($config, $logger)->convert($source, $destination);
+        unlink($this->backupDir);
+
+        $this->assertSame(['source.jpg'], array_map('basename', glob($this->tmpDir . '/*')));
     }
 
     public function testConvertCreatesWebpImageWithGd()
@@ -106,7 +156,7 @@ class ConvertWrapperTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->never())->method('debug');
 
-        $convertWrapper = new ConvertWrapper($config, $logger);
+        $convertWrapper = $this->getConvertWrapper($config, $logger);
         $convertWrapper->convert($source, $destination);
 
         $this->assertFileExists($destination);

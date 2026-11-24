@@ -4,6 +4,9 @@ declare(strict_types=1);
 namespace Yireo\Webp2\Convertor;
 
 use Exception;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\Driver\File as FileDriver;
 use Psr\Log\LoggerInterface;
 use WebPConvert\Convert\Exceptions\ConversionFailed\InvalidInput\InvalidImageTypeException;
 use WebPConvert\Convert\Exceptions\ConversionFailedException;
@@ -27,15 +30,32 @@ class ConvertWrapper
     private $logger;
 
     /**
+     * @var FileDriver
+     */
+    private $fileDriver;
+
+    /**
+     * @var DirectoryList
+     */
+    private $directoryList;
+
+    /**
      * ConvertWrapper constructor.
      * @param Config $config
+     * @param LoggerInterface $logger
+     * @param FileDriver $fileDriver
+     * @param DirectoryList $directoryList
      */
     public function __construct(
         Config $config,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        FileDriver $fileDriver,
+        DirectoryList $directoryList
     ) {
         $this->config = $config;
         $this->logger = $logger;
+        $this->fileDriver = $fileDriver;
+        $this->directoryList = $directoryList;
     }
 
     /**
@@ -73,12 +93,17 @@ class ConvertWrapper
 
     private function backup(string $filename): ?string
     {
-        if (!is_file($filename)) {
-            return null;
-        }
+        try {
+            if (!$this->fileDriver->isFile($filename)) {
+                return null;
+            }
 
-        $backupFilename = $filename . '.' . uniqid() . '.bak';
-        if (!copy($filename, $backupFilename)) {
+            $backupFolder = $this->directoryList->getPath(DirectoryList::TMP) . '/yireo_webp2';
+            $this->fileDriver->createDirectory($backupFolder);
+            $backupFilename = $backupFolder . '/' . hash('sha256', $filename) . '.' . uniqid('', true) . '.bak';
+            $this->fileDriver->copy($filename, $backupFilename);
+        } catch (FileSystemException $exception) {
+            $this->logger->warning('Unable to backup WebP image: ' . $exception->getMessage());
             return null;
         }
 
@@ -91,12 +116,16 @@ class ConvertWrapper
             return;
         }
 
-        if ($converted || is_file($filename)) {
-            unlink($backupFilename);
-            return;
-        }
+        try {
+            if ($converted || $this->fileDriver->isFile($filename)) {
+                $this->fileDriver->deleteFile($backupFilename);
+                return;
+            }
 
-        rename($backupFilename, $filename);
+            $this->fileDriver->rename($backupFilename, $filename);
+        } catch (FileSystemException $exception) {
+            $this->logger->warning('Unable to restore WebP image: ' . $exception->getMessage());
+        }
     }
 
     /**
