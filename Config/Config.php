@@ -12,6 +12,10 @@ use Yireo\Webp2\Exception\InvalidConvertorException;
 
 class Config implements ArgumentInterface
 {
+    public const CONVERTORS = ['cwebp', 'gd', 'imagick'];
+
+    private const REMOVED_CONVERTORS = ['wpc', 'ewww'];
+
     /**
      * @var ScopeConfigInterface
      */
@@ -83,15 +87,15 @@ class Config implements ArgumentInterface
      */
     public function getConvertors(): array
     {
-        $allConvertors = ['cwebp', 'gd', 'imagick', 'wpc', 'ewww'];
         $storedConvertors = $this->getValue('yireo_webp2/settings/convertors');
         $storedConvertors = $this->stringToArray((string)$storedConvertors);
+        $storedConvertors = array_values(array_diff($storedConvertors, self::REMOVED_CONVERTORS));
         if (empty($storedConvertors)) {
-            return $allConvertors;
+            return self::CONVERTORS;
         }
 
         foreach ($storedConvertors as $storedConvertor) {
-            if (!in_array($storedConvertor, $allConvertors)) {
+            if (!in_array($storedConvertor, self::CONVERTORS, true)) {
                 throw new InvalidConvertorException('Invalid convertor: "' . $storedConvertor . '"');
             }
         }

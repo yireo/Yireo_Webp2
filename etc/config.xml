@@ -14,7 +14,7 @@
             <settings>
                 <enabled>1</enabled>
                 <quality_level>80</quality_level>
-                <convertors>cwebp,gd,imagick,wpc,ewww</convertors>
+                <convertors>cwebp,gd,imagick</convertors>
                 <encoding>lossy</encoding>
                 <test_pages>0</test_pages>
             </settings>

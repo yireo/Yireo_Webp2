@@ -82,7 +82,16 @@ class ConfigTest extends TestCase
     public function testGetConvertorsReturnsAllConvertorsWhenEmpty()
     {
         $config = $this->getConfig('');
-        $this->assertSame(['cwebp', 'gd', 'imagick', 'wpc', 'ewww'], $config->getConvertors());
+        $this->assertSame(['cwebp', 'gd', 'imagick'], $config->getConvertors());
+    }
+
+    public function testGetConvertorsSkipsRemovedCloudConvertors()
+    {
+        $config = $this->getConfig('cwebp,gd,imagick,wpc,ewww');
+        $this->assertSame(['cwebp', 'gd', 'imagick'], $config->getConvertors());
+
+        $config = $this->getConfig('wpc,ewww');
+        $this->assertSame(['cwebp', 'gd', 'imagick'], $config->getConvertors());
     }
 
     public function testGetConvertorsTrimsAndSkipsEmptyValues()

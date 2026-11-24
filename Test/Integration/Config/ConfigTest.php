@@ -13,7 +13,7 @@ class ConfigTest extends TestCase
         $config = Bootstrap::getObjectManager()->create(Config::class);
         $this->assertTrue($config->enabled());
         $this->assertSame(80, $config->getQualityLevel());
-        $this->assertSame(['cwebp', 'gd', 'imagick', 'wpc', 'ewww'], $config->getConvertors());
+        $this->assertSame(['cwebp', 'gd', 'imagick'], $config->getConvertors());
         $this->assertSame('lossy', $config->getEncoding());
     }
 
