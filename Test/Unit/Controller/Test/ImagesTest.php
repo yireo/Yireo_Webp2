@@ -3,9 +3,10 @@
 namespace Yireo\Webp2\Test\Unit\Controller\Test;
 
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\State;
 use Magento\Framework\Controller\Result\Forward;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\View\Result\Page;
@@ -15,10 +16,7 @@ use Yireo\Webp2\Controller\Test\Images;
 
 class ImagesTest extends TestCase
 {
-    /**
-     * @dataProvider getNonDeveloperModes
-     */
-    public function testIfNonDeveloperModeForwardsToNoRoute(string $mode)
+    public function testIfDisabledTestPagesForwardToNoRoute()
     {
         $forward = $this->createMock(Forward::class);
         $forward->expects($this->once())->method('forward')->with('noroute')->willReturnSelf();
@@ -32,7 +30,6 @@ class ImagesTest extends TestCase
         $controller = new Images(
             $this->getContext($resultFactory),
             $pageFactory,
-            $this->getState($mode),
             $this->getScopeConfig(false)
         );
         $this->assertSame($forward, $controller->execute());
@@ -49,13 +46,12 @@ class ImagesTest extends TestCase
         $controller = new Images(
             $this->getContext($this->createMock(ResultFactory::class)),
             $pageFactory,
-            $this->getState(State::MODE_PRODUCTION),
             $this->getScopeConfig(true)
         );
         $this->assertSame($page, $controller->execute());
     }
 
-    public function testIfDeveloperModeAddsSanitizedHandle()
+    public function testIfTestPagesAddSanitizedHandle()
     {
         $page = $this->createMock(Page::class);
         $page->expects($this->once())->method('addHandle')->with('webp_test_images_multiple_images');
@@ -70,18 +66,15 @@ class ImagesTest extends TestCase
         $controller = new Images(
             $context,
             $pageFactory,
-            $this->getState(State::MODE_DEVELOPER),
-            $this->getScopeConfig(false)
+            $this->getScopeConfig(true)
         );
         $this->assertSame($page, $controller->execute());
     }
 
-    public static function getNonDeveloperModes(): array
+    public function testIfControllerOnlyAcceptsGetRequests()
     {
-        return [
-            [State::MODE_PRODUCTION],
-            [State::MODE_DEFAULT],
-        ];
+        $this->assertTrue(is_subclass_of(Images::class, HttpGetActionInterface::class));
+        $this->assertFalse(is_subclass_of(Images::class, HttpPostActionInterface::class));
     }
 
     private function getScopeConfig(bool $testPages): ScopeConfigInterface
@@ -89,13 +82,6 @@ class ImagesTest extends TestCase
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $scopeConfig->method('isSetFlag')->with('yireo_webp2/settings/test_pages')->willReturn($testPages);
         return $scopeConfig;
-    }
-
-    private function getState(string $mode): State
-    {
-        $state = $this->createMock(State::class);
-        $state->method('getMode')->willReturn($mode);
-        return $state;
     }
 
     private function getContext(ResultFactory $resultFactory, ?RequestInterface $request = null): Context

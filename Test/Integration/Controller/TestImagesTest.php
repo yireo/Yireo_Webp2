@@ -9,6 +9,7 @@ class TestImagesTest extends Common
 {
     /**
      * @magentoAppArea frontend
+     * @magentoConfigFixture current_store yireo_webp2/settings/test_pages 1
      */
     public function testIfCaseParameterIsSanitized()
     {
@@ -25,8 +26,20 @@ class TestImagesTest extends Common
 
     /**
      * @magentoAppArea frontend
+     * @magentoConfigFixture current_store yireo_webp2/settings/test_pages 0
+     */
+    public function testIfTestPagesAreNotFoundWithoutFlag()
+    {
+        $this->getRequest()->setParam('case', 'multiple_images');
+        $this->dispatch('webp/test/images');
+        $this->assertSame(404, $this->getResponse()->getHttpResponseCode());
+    }
+
+    /**
+     * @magentoAppArea frontend
      * @magentoConfigFixture current_store yireo_nextgenimages/settings/enabled 1
      * @magentoConfigFixture current_store yireo_webp2/settings/enabled 1
+     * @magentoConfigFixture current_store yireo_webp2/settings/test_pages 1
      */
     public function testIfUnknownImageIsNotReplaced()
     {

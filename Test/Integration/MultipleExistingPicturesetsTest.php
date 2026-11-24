@@ -9,6 +9,7 @@ class MultipleExistingPicturesetsTest extends Common
      * @magentoConfigFixture current_store yireo_nextgenimages/settings/enabled 1
      * @magentoConfigFixture current_store yireo_nextgenimages/settings/convert_images 1
      * @magentoConfigFixture current_store yireo_webp2/settings/enabled 1
+     * @magentoConfigFixture current_store yireo_webp2/settings/test_pages 1
      */
     public function testIfExistingPictureTagsAreNotWrappedAgain()
     {
