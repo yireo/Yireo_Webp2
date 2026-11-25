@@ -19,7 +19,19 @@ $documentRoot = $_SERVER['DOCUMENT_ROOT'];
 $path = (string)parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 if ($path !== '/' && is_file($documentRoot . $path)) {
-    return false;
+    if (strtolower(pathinfo($path, PATHINFO_EXTENSION)) !== 'php') {
+        return false;
+    }
+
+    if (!in_array($path, ['/index.php', '/static.php', '/get.php', '/health_check.php'], true)) {
+        http_response_code(404);
+        return true;
+    }
+
+    if ($path !== '/index.php') {
+        require $documentRoot . $path;
+        return true;
+    }
 }
 
 if (str_starts_with($path, '/static/')) {

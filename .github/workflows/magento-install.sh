@@ -89,7 +89,7 @@ if [ "$USE_HTTPS" -eq 1 ]; then
 
   nohup socat OPENSSL-LISTEN:${HTTPS_PORT},fork,reuseaddr,cert=/tmp/magento-tls.pem,verify=0 TCP:127.0.0.1:8080 >/tmp/socat.log 2>&1 &
 else
-  nohup php -S 0.0.0.0:8888 -t /tmp/magento/pub $GITHUB_WORKSPACE/.github/workflows/php-server-router.php >/tmp/php-server.log 2>&1 &
+  nohup php -S "${PHP_SERVER_HOST:-127.0.0.1}:8888" -t /tmp/magento/pub $GITHUB_WORKSPACE/.github/workflows/php-server-router.php >/tmp/php-server.log 2>&1 &
 fi
 
 echo "Waiting for Magento front to become reachable on ${MAGENTO_BASE_URL}"

@@ -59,9 +59,14 @@ jobs:
         run: rm -f /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
       - name: Setting up module variables
+        shell: bash
         run: |
-          echo "COMPOSER_NAME=$(jq -r '.name' composer.json)" >> "$GITHUB_ENV"
-          echo "MAGENTO_MODULE=$(jq -r '.module_name' MODULE.json)" >> "$GITHUB_ENV"
+          COMPOSER_NAME=$(jq -er '.name' composer.json)
+          MAGENTO_MODULE=$(jq -r '.module_name // empty' MODULE.json 2>/dev/null || true)
+          [[ "$COMPOSER_NAME" =~ ^[a-z0-9_.-]+/[a-z0-9_.-]+$ ]] || { echo "::error::Invalid composer name"; exit 1; }
+          [[ -z "$MAGENTO_MODULE" || "$MAGENTO_MODULE" =~ ^[A-Za-z0-9]+_[A-Za-z0-9]+$ ]] || { echo "::error::Invalid module name"; exit 1; }
+          echo "COMPOSER_NAME=$COMPOSER_NAME" >> "$GITHUB_ENV"
+          echo "MAGENTO_MODULE=$MAGENTO_MODULE" >> "$GITHUB_ENV"
 
       - name: Configure Composer
         env:
@@ -75,7 +80,7 @@ jobs:
 
       - name: Restore Composer cache
         if: github.event.pull_request.head.repo.fork != true && !env.ACT
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: /tmp/composer-cache
           key: composer-phpstan-${{ env.MAGENTO_VERSION }}-${{ hashFiles('composer.json') }}

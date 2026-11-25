@@ -97,7 +97,7 @@ jobs:
         options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
 
       opensearch:
-        image: yireo/opensearch
+        image: yireo/opensearch:latest
         credentials: ${{ secrets.DOCKERHUB_USERNAME && fromJSON(format('{{"username":"{0}","password":"{1}"}}', secrets.DOCKERHUB_USERNAME, secrets.DOCKERHUB_TOKEN)) || null }}
         env:
           OPENSEARCH_JAVA_OPTS: "-Xms128m -Xmx128m"
@@ -114,9 +114,14 @@ jobs:
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Setting up module variables
+        shell: bash
         run: |
-          echo "COMPOSER_NAME=$(jq -r '.name' composer.json)" >> "$GITHUB_ENV"
-          echo "MAGENTO_MODULE=$(jq -r '.module_name' MODULE.json)" >> "$GITHUB_ENV"
+          COMPOSER_NAME=$(jq -er '.name' composer.json)
+          MAGENTO_MODULE=$(jq -er '.module_name' MODULE.json)
+          [[ "$COMPOSER_NAME" =~ ^[a-z0-9_.-]+/[a-z0-9_.-]+$ ]] || { echo "::error::Invalid composer name"; exit 1; }
+          [[ "$MAGENTO_MODULE" =~ ^[A-Za-z0-9]+_[A-Za-z0-9]+$ ]] || { echo "::error::Invalid module name"; exit 1; }
+          echo "COMPOSER_NAME=$COMPOSER_NAME" >> "$GITHUB_ENV"
+          echo "MAGENTO_MODULE=$MAGENTO_MODULE" >> "$GITHUB_ENV"
           PHP_CONTAINER="${{ job.services.php.id }}"
           if [ -z "$PHP_CONTAINER" ] && [ -n "$ACT" ]; then
             # act does not expose service container IDs, so look it up via the job network
@@ -160,7 +165,7 @@ jobs:
 
       - name: Restore Composer cache
         if: github.event.pull_request.head.repo.fork != true && !env.ACT
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: /tmp/composer-cache
           key: composer-playwright-${{ env.MAGENTO_VERSION }}-${{ hashFiles('composer.json') }}
@@ -234,7 +239,9 @@ jobs:
             bin/magento setup:upgrade
             bin/magento config:set dev/static/sign 0
             bin/magento setup:static-content:deploy -f --area frontend --area adminhtml en_US
-            bin/magento loki-checkout:sample-data:install
+            case "${COMPOSER_NAME}" in
+              loki-checkout/*) bin/magento loki-checkout:sample-data:install ;;
+            esac
             bin/magento loki:functional-tests:modules:dump
             bin/magento config:set loki/functional_tests/token loki
             bin/magento cache:flush config
@@ -255,7 +262,7 @@ jobs:
 
       - name: Restore npm cache
         if: ${{ !env.ACT }}
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: ~/.npm
           key: npm-${{ steps.npm-cache-key.outputs.hash }}
@@ -274,6 +281,17 @@ jobs:
           done
           echo "ERROR: Magento front-end not reachable"; exit 1
 
+      - name: Install Playwright dependencies
+        working-directory: /tmp/magento/vendor/loki/magento2-functional-tests/Test/Playwright/
+        run: |
+          echo "Installing npm dependencies..."
+          if [ -f package-lock.json ]; then
+            npm ci --prefer-offline --ignore-scripts
+          else
+            npm install --prefer-offline --no-audit --no-fund --ignore-scripts
+          fi
+          npx playwright install --only-shell chromium
+
       - name: Run Playwright tests
         working-directory: /tmp/magento/vendor/loki/magento2-functional-tests/Test/Playwright/
         env:
@@ -285,14 +303,6 @@ jobs:
           PLAYWRIGHT_MAX_FAILURES: ${{ vars.PLAYWRIGHT_MAX_FAILURES || '5' }}
           NODE_TLS_REJECT_UNAUTHORIZED: "0"
         run: |
-          echo "Installing npm dependencies..."
-          if [ -f package-lock.json ]; then
-            npm ci --prefer-offline
-          else
-            npm install --prefer-offline --no-audit --no-fund
-          fi
-          npx playwright install --only-shell chromium
-
           echo "Creating /tmp/magento/.env.playwright..."
           printf "TEST_URL=%s\nTEST_TOKEN=loki\nMODULE_NAME=%s\n" "${MAGENTO_BASE_URL}" "${MAGENTO_MODULE}" > /tmp/magento/.env.playwright
 
