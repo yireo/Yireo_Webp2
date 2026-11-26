@@ -1,0 +1,68 @@
+schema_version: 1.6.0
+id: YIREO-WEBP2-2026-001
+aliases:
+  - GHSA-3mj6-wqch-58mf
+published: '2026-11-25T08:22:24Z'
+modified: '2026-11-25T08:22:24Z'
+summary: 'Cross-site scripting via srcset descriptors and conversion of files outside of the public folder'
+details: |-
+  ### Impact
+
+  `Yireo_Webp2` is the WebP convertor for `Yireo_NextGenImages`, which replaces `<img>` tags in the frontend HTML with `<picture>` elements. Two vulnerabilities in `Yireo_NextGenImages` are reachable through this module; the root cause of both is described in the advisories of `yireo/magento2-next-gen-images`:
+
+  - **Cross-site scripting** ([GHSA-8x2r-2fw8-v55f](https://github.com/yireo/Yireo_NextGenImages/security/advisories/GHSA-8x2r-2fw8-v55f)): since 0.14.4, `Convertor::convertImage()` converts the images of a `srcset` and copied every descriptor (like `2x`) as-is into the `srcset` of the WebP `<source>` tag. Because the descriptor comes from the decoded DOM and `Yireo_NextGenImages` printed it unescaped, an `<img srcset>` value like `/media/a.jpg 1x&quot;onerror=&quot;alert(1)` injected JavaScript into the page.
+  - **Path traversal** ([GHSA-77c5-w5f2-x74r](https://github.com/yireo/Yireo_NextGenImages/security/advisories/GHSA-77c5-w5f2-x74r)): `Convertor::convertImage()` read and wrote whatever path `Yireo_NextGenImages` resolved from an image URL, including paths outside of the public folder (`/media/../../app/image.jpg`) and images in protected media folders like `media/customer` and `media/downloadable`, whose converted copies could become publicly accessible.
+
+  Both require that someone can get an `<img src>` or `srcset` value into a rendered frontend page, for instance through content contributors or extensions that render user-supplied image URLs.
+
+  ### Patches
+
+  Fixed in **0.14.5**, together with `yireo/magento2-next-gen-images` **0.5.18** (required by 0.14.5):
+
+  - `srcset` descriptors other than a width (`640w`) or pixel density (`2x`) are dropped;
+  - only images inside the `pub`, media and static folders are converted, never inside `media/customer`, `media/customer_address`, `media/custom_options`, `media/downloadable` or `media/import`;
+  - the test controller `webp/test/images` is only available with the flag `yireo_webp2/settings/test_pages`, also in developer mode.
+
+  ```
+  composer require yireo/magento2-webp2:^0.14.5 yireo/magento2-next-gen-images:^0.5.18
+  bin/magento setup:upgrade
+  ```
+
+  ### Workarounds
+
+  Upgrade `yireo/magento2-next-gen-images` to 0.5.18, which fixes the root cause of both issues, or disable image creation with `bin/magento config:set yireo_nextgenimages/settings/convert_images 0` and flush the cache.
+
+  ### References
+
+  - Fix: https://github.com/yireo/Yireo_Webp2/commit/9baf4ba
+  - Release: https://github.com/yireo/Yireo_Webp2/releases/tag/0.14.5
+  - https://github.com/yireo/Yireo_NextGenImages/security/advisories/GHSA-8x2r-2fw8-v55f
+  - https://github.com/yireo/Yireo_NextGenImages/security/advisories/GHSA-77c5-w5f2-x74r
+severity:
+  -
+    type: CVSS_V3
+    score: 'CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N'
+affected:
+  -
+    package:
+      ecosystem: Packagist
+      name: yireo/magento2-webp2
+    ranges:
+      -
+        type: ECOSYSTEM
+        events:
+          -
+            introduced: '0'
+          -
+            fixed: 0.14.5
+references:
+  -
+    type: PACKAGE
+    url: 'https://github.com/yireo/Yireo_Webp2'
+  -
+    type: ADVISORY
+    url: 'https://github.com/yireo/Yireo_Webp2/security/advisories/GHSA-3mj6-wqch-58mf'
+database_specific:
+  cwe_ids:
+    - CWE-22
+    - CWE-79

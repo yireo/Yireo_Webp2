@@ -1,0 +1,64 @@
+schema_version: 1.6.0
+id: YIREO-WEBP2-2026-002
+aliases:
+  - GHSA-hcg6-4mm4-2x26
+published: '2026-11-23T19:05:17Z'
+modified: '2026-11-23T19:05:17Z'
+summary: 'Unauthenticated visitors can make the store send emails through /webp/test/mail (inverted token check)'
+details: |-
+  ### Impact
+
+  The frontend controller `Yireo\Webp2\Controller\Test\Mail` (route `/webp/test/mail`) was meant to send a test email only when the request parameter `token` matched the Magento encryption key (`crypt/key` in `app/etc/env.php`). The check was inverted: the request was refused only when the token *was* the encryption key. Any other value, including no token at all, went on to send mail.
+
+  An unauthenticated visitor can therefore make the store render and send an email on every request:
+
+  - The email template is chosen by the request parameter `email` (default `sales_email_invoice_template`); any existing template id can be used.
+  - Sender and recipient are both fixed to the store's general contact (`trans_email_ident/general`), so this is **not** an open relay to third parties.
+  - The JSON response returns the general contact name and email address.
+
+  The result is mailbox flooding of the store's general contact address, consumption of SMTP or transactional-email-provider quota, and server load from template rendering. The route is registered on every install with the module enabled; no configuration, developer mode or login is required. Outgoing mail must not be disabled (`system/smtp/disable` = 0, the default).
+
+  ### Patches
+
+  Fixed in **0.14.4**. The controller `webp/test/mail` has been removed. In the same release, the test controller `webp/test/images` is only available in developer mode or with the configuration flag `yireo_webp2/settings/test_pages`.
+
+  ```
+  composer require yireo/magento2-webp2:^0.14.4
+  bin/magento setup:upgrade
+  ```
+
+  ### Workarounds
+
+  If you cannot upgrade, block the path `/webp/test/mail` (and `/webp/test/images`) in your web server or Varnish configuration, or delete `Controller/Test/Mail.php` from the installed module and flush the cache / recompile DI.
+
+  ### References
+
+  - Fix: https://github.com/yireo/Yireo_Webp2/commit/5f766dd
+  - Release: https://github.com/yireo/Yireo_Webp2/releases/tag/0.14.4
+severity:
+  -
+    type: CVSS_V3
+    score: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L'
+affected:
+  -
+    package:
+      ecosystem: Packagist
+      name: yireo/magento2-webp2
+    ranges:
+      -
+        type: ECOSYSTEM
+        events:
+          -
+            introduced: 0.4.3
+          -
+            fixed: 0.14.4
+references:
+  -
+    type: PACKAGE
+    url: 'https://github.com/yireo/Yireo_Webp2'
+  -
+    type: ADVISORY
+    url: 'https://github.com/yireo/Yireo_Webp2/security/advisories/GHSA-hcg6-4mm4-2x26'
+database_specific:
+  cwe_ids:
+    - CWE-863
